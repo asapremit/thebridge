@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Bridge — Connect with Top-Tier Global Advisors & Expats</title>
+  <meta name="description" content="Stop guessing your way through. Find settled expats and accredited advisors to navigate your immigration, career, and life transitions smoothly.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- --- NAVIGATION BAR --- -->
+  <nav class="navbar" id="main-navbar">
+    <div class="container">
+      <div class="logo" id="nav-logo">
+        <div class="logo-icon"></div>
+        The Bridge
+      </div>
+      <ul class="nav-links">
+        <li class="nav-link active" data-target="home-view" id="link-home">Home</li>
+        <li class="nav-link" data-target="directory-view" id="link-directory">Browse Directory</li>
+        <li class="nav-link" data-target="stories-view" id="link-stories">Success Stories</li>
+        <li class="nav-link" data-target="advisor-view" id="link-advisor">Advisor Application</li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn btn-text" id="btn-login-open">Sign In</button>
+        <button class="btn btn-primary" id="btn-signup-open">Sign Up</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- --- VIEW CONTAINER (SPA) --- -->
+  <main class="view-container">
+
+    <!-- ==================== HOME / LANDING PAGE VIEW ==================== -
+423:     </section>
+424: 
+425:     <!-- ==================== DIRECTORY / BROWSE PAGE VIEW ==================== -->
+426:     <section class="view-section" id="directory-view">
+        <div class="container" style="position: relative;">
+          
+          <!-- Floating Offset Lifestyle Images (Grow Therapy Style) -->
+          <img class="floating-hero-img hero-img-tl" src="bridge_advisors_team.png" alt="Collaborative Advisor Network">
+          <img class="floating-hero-img hero-img-bl" src="hero_mentorship_premium_1780949063193.png" alt="Sleek Professional Mentorship Meeting">
+          <img class="floating-hero-img hero-img-tr" src="cta_mentoring_session_1780948264016.png" alt="Expat Mentor and Builder Session">
+          <img class="floating-hero-img hero-img-br" src="step_forward.png" alt="Immigrant Professional Career Launch">
+
+          <!-- Centered Main Content -->
+          <div class="hero-centered">
+            <span class="badge-primary">Get advice from people who have walked your path.</span>
+            <h1>Don't guess your way through.</h1>
+            <p class="hero-subtitle">Connect with immigrants who have already solved the problems you're facing right now.</p>
+            <!-- Hero Quiz Bar — Grow Therapy style -->
+            <div class="hqbar" id="hero-quiz-widget">
+              <!-- Left: Type toggle -->
+              <div class="hqbar-toggles" onclick="event.stopPropagation();">
+                <button class="hqbar-toggle active" id="hero-toggle-peers" data-type="peers">Peer Guide</button>
+                <button class="hqbar-toggle" id="hero-toggle-advisors" data-type="advisors">Accredited</button>
+              </div>
+              <div class="hqbar-sep"></div>
+              <!-- Middle: Checkbox options & Text input -->
+              <div class="hqbar-fields">
+                <label class="hqbar-field" id="hqfield-status" onclick="event.stopPropagation(); toggleHqField('status');">
+                  <span class="hqbar-checkbox" id="hqc-status"></span>
+                  <span class="hqbar-field-label">Status &amp; Visa</span>
+                </label>
+                <div class="hqbar-sep-v"></div>
+                <label class="hqbar-field" id="hqfield-career" onclick="event.stopPropagation(); toggleHqField('career');">
+                  <span class="hqbar-checkbox" id="hqc-career"></span>
+                  <span class="hqbar-field-label">Career &amp; Job</span>
+                </label>
+                <div class="hqbar-sep-v"></div>
+                <label class="hqbar-field" id="hqfield-finance" onclick="event.stopPropagation(); toggleHqField('finance');">
+                  <span class="hqbar-checkbox" id="hqc-finance"></span>
+                  <span class="hqbar-field-label">Finance &amp; Credit</span>
+                </label>
+                <div class="hqbar-sep-v"></div>
+                <div class="hqbar-input-container" onclick="event.stopPropagation();">
+                  <input type="text" id="hqbar-text-input" placeholder="Type other use cases (e.g. job, credit)..." />
+                </div>
+              </div>
+              <!-- Right: Search CTA -->
+              <button class="hqbar-btn" id="btn-hero-search">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+                Find My Guide
+              </button>
+            </div>
+
+          </div>
+        </div>
+      <!-- Trusted Brand Logos -->
+      <section class="brand-row" id="brand-logos-row" style="background-color: var(--bg-secondary); padding: 24px 0; border-bottom: 1px solid var(--border-color);">
+        <div class="container" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; gap: 40px; overflow: hidden;">
+          <p style="font-family: var(--font-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--text-secondary); margin: 0; white-space: nowrap; flex-shrink: 0;">Advisors trusted at companies like</p>
+          
+          <div class="logo-slideshow-container">
+            <div class="logo-slideshow-track">
+              <!-- Set 1 -->
+              <span class="logo-item" style="font-family: var(--font-sans); font-weight: 800; font-size: 0.95rem; letter-spacing: -0.01em; display: inline-flex; align-items: center; gap: 6px; text-transform: none;">
+                <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle;">
+                <svg viewBox="54 36 360.02 149.84" style="width: 50px; height: 18px; display: inline-block; vertical-align: middle;">
+                  <g>
+                    <path fill="#635BFF" d="M414,113.4c0-25.6-12.4-45.8-36.1-45.8c-23.8,0-38.2,20.2-38.2,45.6c0,30.1,17,45.3,41.4,45.3 c11.9,0,20.9-2.7,27.7-6.5v-20c-6.8,3.4-14.6,5.5-24.5,5.5c-9.7,0-18.3-3.4-19.4-15.2h48.9C413.8,121,414,115.8,414,113.4z M364.6,103.9c0-11.3,6.9-16,13.2-16c6.1,0,12.6,4.7,12.6,16H364.6z"/>
+                    <path fill="#635BFF" d="M301.1,67.6c-9.8,0-16.1,4.6-19.6,7.8l-1.3-6.2h-22v116.6l25-5.3l0.1-28.3c3.6,2.6,8.9,6.3,17.7,6.3 c17.9,0,34.2-14.4,34.2-46.1C335.1,83.4,318.6,67.6,301.1,67.6z M295.1,136.5c-5.9,0-9.4-2.1-11.8-4.7l-0.1-37.1 c2.6-2.9,6.2-4.9,11.9-4.9c9.1,0,15.4,
+                    <polygon fill="#635BFF" points="223.8,61.7 248.9,56.3 248.9,36 223.8,41.3"/>
+                    <rect x="223.8" y="69.3" fill="#635BFF" width="25.1" height="87.5"/>
+                    <path fill="#635BFF" d="M196.9,76.7l-1.6-7.4h-21.6v87.5h25V97.5c5.9-7.7,15.9-6.3,19-5.2v-23C214.5,68.1,202.8,65.9,196.9,76.7z"/>
+                    <path fill="#635BFF" d="M146.9,47.6l-24.4,5.2l-0.1,80.1c0,14.8,11.1,25.7,25.9,25.7c8.2,0,14.2-1.5,17.5-3.3V135 c-3.2,1.3-19,5.9-19-8.9V90.6h19V69.3h-19L146.9,47.6z"/>
+              </span>
+              
+              <span class="logo-item" style="display: inline-flex; align-items: center; gap: 6px;">
+                <svg viewBox="54 36 360.02 149.84" style="width: 50px; height: 18px; display: inline-block; vertical-align: middle;">
+                  <g>
+                    <path fill="#635BFF" d="M414,113.4c0-25.6-12.4-45.8-36.1-45.8c-23.8,0-38.2,20.2-38.2,45.6c0,30.1,17,45.3,41.4,45.3 c11.9,0,20.9-2.7,27.7-6.5v-20c-6.8,3.4-14.6,5.5-24.5,5.5c-9.7,0-18.3-3.4-19.4-15.2h48.9C413.8,121,414,115.8,414,113.4z M364.6,103.9c0-11.3,6.9-16,13.2-16c6.1,0,12.6,4.7,12.6,16H364.6z"/>
+                    <path fill="#635BFF" d="M301.1,67.6c-9.8,0-16.1,4.6-19.6,7.8l-1.3-6.2h-22v116.6l25-5.3l0.1-28.3c3.6,2.6,8.9,6.3,17.7,6.3 c17.9,0,34.2-14.4,34.2-46.1C335.1,83.4,318.6,67.6,301.1,67.6z M295.1,136.5c-5.9,0-9.4-2.1-11.8-4.7l-0.1-37.1 c2.6-2.9,6.2-4.9,11.9-4.9c9.1,0,15.4,10.2,15.4,23.3C310.5,126.5,304.3,136.5,295.1,136.5z"/>
+                    <polygon fill="#635BFF" points="223.8,61.7 248.9,56.3 248.9,36 223.8,41.3"/>
+                    <rect x="223.8" y="69.3" fill="#635BFF" width="25.1" height="87.5"/>
+                    <path fill="#635BFF" d="M196.9,76.7l-1.6-7.4h-21.6v87.5h25V97.5c5.9-7.7,15.9-6.3,19-5.2v-23C214.5,68.1,202.8,65.9,196.9,76.7z"/>
+                    <path fill="#635BFF" d="M146.9,47.6l-24.4,5.2l-0.1,80.1c0,14.8,11.1,25.7,25.9,25.7c8.2,0,14.2-1.5,17.5-3.3V135 c-3.2,1.3-19,5.9-19-8.9V90.6h19V69.3h-19L146.9,47.6z"/>
+                    <path fill="#635BFF" d="M79.3,94.7c0-3.9,3.2-5.4,8.5-5.4c7.6,0,17.2,2.3,24.8,6.4V72.2c-8.3-3.3-16.5-4.6-24.8-4.6 C67.5,67.6,54,78.2,54,95.9c0,27.6,38,23.2,38,35.1c0,4.6-4,6.1-9.6,6.1c-8.3,0-18.9-3.4-27.3-8v23.8c9.3,4,18.7,5.7,27.3,5.7 c20.8,0,35.1-10.3,35.1-28.2C117.4,100.6,79.3,105.9,79.3,94.7z"/>
+              </span>
+              
+              <!-- Set 2 (Duplicate for continuous loop) -->
+              <span class="logo-item" style="font-family: var(--font-sans); font-weight: 800; font-size: 0.95rem; letter-spacing: -0.01em; display: inline-flex; align-items: center; gap: 6px; text-transform: none;">
+                <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle;">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                </svg>
+                Google
+              </span>
+              
+                <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle;">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                </svg>
+                Google
+              </span>
+              
+              <span class="logo-item" style="font-family: 'Lora', serif; font-weight: 600; font-size: 1rem; letter-spacing: -0.01em; text-transform: none;">
+                Goldman Sachs
+              </span>
+              
+              <span class="logo-item" style="display: inline-flex; align-items: center; gap: 6px;">
+                <svg viewBox="54 36 360.02 149.84" style="width: 50px; height: 18px; display: inline-block; vertical-align: middle;">
+                  <g>
+                    <path fill="#635BFF" d="M414,113.4c0-25.6-12.4-45.8-36.1-45.8c-23.8,0-38.2,20.2-38.2,45.6c0,30.1,17,45.3,41.4,45.3 c11.9,0,20.9-2.7,27.7-6.5v-20c-6.8,3.4-14.6,5.5-24.5,5.5c-9.7,0-18.3-3.4-19.4-15.2h48.9C413.8,121,414,115.8,414,113.4z M364.6,103.9c0-11.3,6.9-16,13.2-16c6.1,0,12.6,4.7,12.6,16H364.6z"/>
+                    <path fill="#635BFF" d="M301.1,67.6c-9.8,0-16.1,4.6-19.6,7.8l-1.3-6.2h-22v116.6l25-5.3l0.1-28.3c3.6,2.6,8.9,6.3,17.7,6.3 c17.9,0,34.2-14.4,34.2-46.1C335.1,83.4,318.6,67.6,301.1,67.6z M295.1,136.5c-5.9,0-9.4-2.1-11.8-4.7l-0.1-37.1 c2.6-2.9,6.2-4.9,11.9-4.9c9.1,0,15.4,10.2,15.4,23.3C310.5,126.5,304.3,136.5,295.1,136.5z"/>
+                    <polygon fill="#635BFF" points="223.8,61.7 248.9,56.3 248.9,36 223.8,41.3"/>
+                    <rect x="223.8" y="69.3" fill="#635BFF" width="25.1" height="87.5"/>
+                    <path fill="#635BFF" d="M196.9,76.7l-1.6-7.4h-21.6v87.5h25V97.5c5.9-7.7,15.9-6.3,19-5.2v-23C214.5,68.1,202.8,65.9,196.9,76.7z"/>
+                    <path fill="#635BFF" d="M146.9,47.6l-24.4,5.2l-0.1,80.1c0,14.8,11.1,25.7,25.9,25.7c8.2,0,14.2-1.5,17.5-3.3V135 c-3.2,1.3-19,5.9-19-8.9V90.6h19V69.3h-19L146.9,47.6z"/>
+                    <path fill="#635BFF" d="M79.3,94.7c0-3.9,3.2-5.4,8.5-5.4c7.6,0,17.2,2.3,24.8,6.4V72.2c-8.3-3.3-16.5-4.6-24.8-4.6 C67.5,67.6,54,78.2,54,95.9c0,27.6,38,23.2,38,35.1c0,4.6-4,6.1-9.6,6.1c-8.3,0-18.9-3.4-27.3-8v23.8c9.3,4,18.7,5.7,27.3,5.7 c20.8,0,35.1-10.3,35.1-28.2C117.4,100.6,79.3,105.9,79.3,94.7z"/>
+                  </g>
+             
+                booking.com
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Match Finder Survey Section -->
+      <section class="matcher-section" id="landing-matcher" style="padding: 80px 0; background-color: var(--bg-primary);">
+        <div class="container" style="max-width: 680px;">
+          <div class="matcher-card" id="home-matcher-card" style="padding: 40px 30px; background-color: var(--bg-dark); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-md); box-shadow: var(--shadow-premium);">
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- Top-Rated Global Advisors Grid -->
+      <section class="advisors-section" id="landing-advisors" style="padding: 80px 0; background-color: var(--bg-primary);">
+        <div class="container">
+          </div>
+          <div class="advisor-grid" id="home-advisors-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px;">
+            <!-- Dynamically populated by app.js -->
+          </div>
+          
+          <div style="text-align: center; margin-top: 45px;">
+            <a href="#" class="btn-view-all-experts-quiz" style="font-family: var(--font-sans); font-weight: 700; font-size: 1.0625rem; color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color var(--transition-fast); text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer;">
+              View all experts <span class="arrow" style="transition: transform var(--transition-fast); font-size: 1.15rem;">→</span>
+            </a>
+          </div>
+        </div>
+      <!-- How It Works Section -->
+      <section class="how-it-works section-padding" id="landing-how-it-works" style="background-color: var(--bg-secondary); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+        <div class="container">
+          <div class="section-header" style="text-align: center; margin-bottom: 50px;">
+            <h2 style="font-family: var(--font-heading); font-size: 2.25rem; font-weight: 700;">How it works</h2>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 12px auto 0 auto;">We've streamlined the coaching and advisory process into three high-impact steps.</p>
+          </div>
+          
+          <div class="steps-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;">
+            <div class="step-card">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                      </svg>
+                    </div>
+                    <div style="flex-grow: 1;">
+                      <span style="font-family: var(--font-sans); font-weight: 700; font-size: 1.125rem; color: var(--text-primary); display: block;">My Career</span>
+                      <span style="font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-secondary); display: block; margin-top: 4px; line-height: 1.4;">Learn how to ask for a raise, get promoted to management, and navigate buying a home.</span>
+                    </div>
+                    <span class="choice-radio"></span>
+                  </button>
+                    
+ 
+            <input type="text" id="dir-search-input" placeholder="Search by name, skills, title...">
+          </div>
+        </div>
+
+        <div class="directory-grid-container">
+          <!-- Filters Sidebar -->
+          <aside class="directory-sidebar">
+            
+            <div class="filter-group">
+              <h4>Target Country</h4>
+              <select id="filter-country" class="filter-select">
+                <option value="USA">United States</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <h4>Expertise Domain</h4>
+              <select id="filter-category" class="filter-select">
+                <option value="">All Domains</option>
+                <option value="Engineering">Software Engineering</option>
+                <option value="Product">Product Management</option>
+                <option value="Finance">Finance & Consulting</option>
+                <option value="Design">UX & Product Design</option>
+                <option value="Legal">Legal & Immigration</option>
+                <option value="Settling">Settling & Local Integration</option>
+              </select>
+            </div>
+
+            <button class="btn btn-secondary" id="btn-reset-filters" style="width: 100%; padding: 10px 0; border-radius: 8px;">Reset Filters</button>
+
+          </aside>
+
+          <!-- Directory Cards Grid -->
+          <div class="directory-results-grid" id="directory-cards-container">
+            <!-- Dynamic cards populated by app.js -->
+          </div>
+        </div>
+
+    </section>
+
+    <!-- ==================== DIRECTORY / BROWSE PAGE VIEW ==================== -->
+    <section class="view-section" id="directory-view">
+      <div class="container directory-section">
+        
+        <div class="section-header" style="margin-bottom: 40px;">
+          <h2>Browse The Bridge Network</h2>
+          <p>Find peer expat guides who offer friendly community support, or accredited advisors for professional planning.</p>
+        </div>
+
+        <div class="directory-controls">
+          <div class="directory-tabs">
+            <div class="directory-tab active" id="tab-peers" data-tab="peers">Peer Expat Guides (Engine A)</div>
+              <h2 class="story-quote">"The Bridge helped me find my voice in a new tech ecosystem."</h2>
+              <p class="story-bio">Aisha Bello moved to the United States in 2024. After months of getting ghosted on application portals, she matched with a product lead at Google who helped redefine her strategy. Within weeks, she cracked Google's interview loop and received a senior offer.</p>
+              
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <h3>150+<span class="card-badge" style="margin-left:8px;"></span></h3>
+                  <p>Accredited Advisors</p>
+                </div>
+                <div class="stat-item">
+                  <h3>12%</h3>
+                  <p>Avg. Salary Increase</p>
+                </div>
+                <div class="stat-item">
+                  <h3>45+</h3>
+                  <p>Industries Represented</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Collective -->
+      <section class="collective-section">
+        <div class="container">
+          <div class="section-header">
+            <h2>The Collective</h2>
+            <p>Meet some of our graduates and read about the incredible goals they've unlocked.</p>
+          </div>
+          
+          <div class="collective-grid">
+            
+            <div class="collective-card">
+              <div class="collective-img-box">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Jessica Martinez">
+              </div>
+          </aside>
+
+          <!-- Directory Cards Grid -->
+          <div class="directory-results-grid" id="directory-cards-container">
+            <!-- Dynamic cards populated by app.js -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== SUCCESS STORIES VIEW ==================== -->
+    <section class="view-section" id="stories-view">
+      
+      <!-- Featured Success Story -->
+      <section class="featured-story">
+        <div class="container">
+          <div class="story-card">
+            <div class="story-visual">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800" alt="Aisha Bello">
+            <h2>You are not navigating this transition alone.</h2>
+            <p>Expats who relocated successfully share how peer-to-peer mentoring transformed their traj
+
+
+
+
+
+
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Success Stories from our Members (MindPath Style) -->
+      <section class="testimonials-section" style="background-color: var(--bg-primary); padding: 100px 0; border-top: 1px solid var(--border-color);">
+        <div class="container">
+          <div class="section-header" style="text-align: center; margin-bottom: 50px;">
+            <span style="font-family: var(--font-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--accent); display: block; margin-bottom: 8px;">● Testimonials</span>
+            <h2 style="font-family: var(--font-heading); font-size: 2.25rem; font-weight: 700; color: var(--text-primary);">Success Stories from our Members</h2>
+          </div>
+
+          <div class="testimonials-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+            
+            <!-- Card 1 -->
+            <div class="testimonial-card" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 40px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between; min-height: 280px; transition: all var(--transition-smooth);">
+              <div>
+                <div class="testimonial-stars" style="color: var(--accent-gold); font
+            <div class="cta-visual">
+              <img class="cta-image" src="cta_wheat_field.png" alt="Take the First Step">
+            </div>
+      <div class="container directory-section">
+        
+        <div class="section-header" style="margin-bottom: 40px;">
+          <h2>Browse The Bridge Network</h2>
+          <p>Find peer expat guides who offer friendly community support, or accredited advisors for professional planning.</p>
+        </div>
+
+        <div class="directory-controls">
+          <div class="directory-tabs">
+            <div class="directory-tab active" id="tab-peers" data-tab="peers">Peer Expat Guides (Engine A)</div>
+            <div class="directory-tab" id="tab-advisors" data-tab="advisors">Accredited Advisors (Engine B)</div>
+          </div>
+          
+          <!-- Search box -->
+          <div class="filter-search-box" style="width: 320px; background-color: var(--bg-secondary); border: 1px solid var(--border-color);">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" id="dir-search-input" placeholder="Search by name, skills, title...">
+          </div>
+        </div>
+
+        <div class="directory-grid-container">
+          <!-- Filters Sidebar -->
+          <aside class="directory-sidebar">
+            
+            <div class="filter-group">
+              <h4>Target Country</h4>
+              <select id="filter-country" class="filter-select">
+        </div>
+      </section>
+
+      <!-- FAQ Accordion Section (MindPath Style) -->
+          <!-- Split CTA Card -->
+          <div class="split-cta-block" style="margin-top: 80px;">
+            <div class="cta-content">
+              <h2>Stop doing it the hard way.</h2>
+              <p>If you are tired of guessing how the local system works, talking to someone who has beaten it is the right move.</p>
+              <div class="intake-choices">
+                <button class="intake-choice-btn" data-key="match" data-val="advisors">
+                  <div class="choice-icon-wrapper">
+                    <svg class="choice-icon" viewBox="0 0 24 24">
+                      <line x1="12" y1="2" x2="12" y2="22"/>
+                      <line x1="5" y1="7" x2="19" y2="7"/>
+                      <path d="M5 7L2 17h6L5 7z"/>
+                      <path d="M19 7l-3 10h6l-3-10z"/>
+                      <path d="M4 22h16"/>
+                    </svg>
+                  </div>
+                  <div class="choice-label-group">
+                    <span class="choice-title">A professional advisor to guide me</span>
+                    <span class="choice-subtitle">Vetted expat finance planners, tax professionals, and credit experts.</span>
+                  </div>
+                  <span class="choice-radio"></span>
+                </button>
+                <button class="intake-choice-btn" data-key="match" data-val="peers">
+                  <div class="choice-icon-wrapper">
+                    <svg class="choice-icon" viewBox="0 0 24 24">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                  </div>
+                  <div class="choice-label-group">
+                    <span class="choice-title">Advice from someone who has done this</span>
+                    <span class="choice-subtitle">Expat peers who navigated setting up bank files, credit cards, and leases.</span>
+                  </div>
+                  <span class="choice-radio"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 6: Loading Screen (Animated Loader) -->
+          <div class="intake-loader-step" id="intake-loader" data-step="6">
+            <div class="loader-spinner"></div>
+            <h3>Curating Your Relocation Matches</h3>
+            <p class="loader-status-text" id="loader-status">Filtering expat directories...</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== DIRECTORY / BROWSE PAGE VIEW ==================== -->
+    <section class="view-section" id="directory-view">
+      <div class="container directory-section">
+        
+        <div class="section-header" style="margin-bottom: 40px;">
+          <h2>Browse The Bridge Network</h2>
+          <p>Find peer expat guides who offer friendly community support, or accredited advisors for professional planning.</p>
+        </div>
+
+        <div class="directory-controls">
+          <div class="directory-tabs">
+            <div class="directory-tab active" id="tab-peers" data-tab="peers">Peer Expat Guides (Engine A)</div>
+                No. The Bridge operates on a flat-rate monthly membership model. All bookings with accredited advisors and peer expat guides are completely included in your active subscription plan. There are no hidden fees or per-session charges.
+              </div>
+            </div>
+
+            <div class="faq-item">
+          <!-- CTA to Write Own Story -->
+          <div class="cta-block" style="background-color: var(--accent-light); color: var(--text-primary); margin-top: 80px; padding: 60px; border-radius: var(--radius-lg); text-align: center;">
+            <h2 style="font-family: var(--font-heading); font-size: 2.25rem; color: var(--accent); margin-bottom: 16px;">Write your own story.</h2>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 32px auto;">Unlock the salary bounds, network circles, and career growth you've been searching for.</p>
+                No. The Bridge operates on a flat-rate monthly membership model. All bookings with accredited advisors and peer expat guides are completely included in your active subscription plan. There are no hidden fees or per-session charges.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-header">
+                <span>How do I know if the advisor is a good match for me?</span>
+                <span class="faq-icon">+</span>
+              </div>
+              <div class="faq-content">
+                Our multi-step home matching survey analyzes your destination, target industry, and specific challenges to curate the top 3 best fits. You can browse their detailed profiles, reviews, and credentials before booking.
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+    <!-- ==================== DIRECTORY / BROWSE PAGE VIEW ==================== -->
+    <section class="view-section" id="directory-view">
+      <div class="container directory-section">
+        
+
+          <!-- Directory Cards Grid -->
+          <div class="directory-results-grid" id="directory-cards-container">
+            <!-- Dynamic cards populated by app.js -->
+          </div>
+        </div>
+          </div>
+        </div>
+
+        <div class="directory-grid-container">
+          <!-- Filters Sidebar -->
+          <aside class="directory-sidebar">
+            
+            <div class="filter-group">
+              <h4>Target Country</h4>
+              <select id="filter-country" class="filter-select">
+                <option value="USA">United States</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <h4>Expertise Domain</h4>
+              <select id="filter-category" class="filter-select">
+                <option value="">All Domains</option>
+                <option value="Engineering">Software Engineering</option>
+                <option value="Product">Product Management</option>
+                <option value="Finance">Finance & Consulting</option>
+                <option value="Design">UX & Product Design</option>
+                <option value="Legal">Legal & Immigration</option>
+                <option value="Settling">Settling & Local Integration</option>
+              </select>
+            </div>
+
+            <button class="btn btn-secondary" id="btn-reset-filters" style="width: 100%; padding: 10px 0; border-radius: 8px;">Reset Filters</button>
+
+          </aside>
+
+                <
+
+
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== SUCCESS STORIES VIEW ==================== -->
+    <section class="view-section" id="stories-view">
+      
+      <!-- Featured Success Story -->
+      <section class="featured-story">
+        <div class="container">
+          <div class="story-card">
+            <div class="story-visual">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800" alt="Aisha Bello">
+            </div>
+            <div class="story-details">
+              <h2 class="story-quote">"The Bridge helped me find my voice in a new tech ecosystem."</h2>
+              <p class="story-bio">Aisha Bello moved to the United States in 2024. After months of getting ghosted on application portals, she matched with a product lead at Google who helped redefine her strategy. Within weeks, she cracked Google's interview loop and received a senior offer.</p>
+              
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <h3>150+<span class="card-badge" style="margin-left:8px;"></span></h3>
+                  <p>Accredited Advisors</p>
+                </div>
+                <div class="stat-item">
+                  <h3>12%</h3>
+                  <p>Avg. Salary Increase</p>
+                </div>
+                <div class="stat-item">
+                  <h3>45+</h3>
+                  <p>Industries Represented</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </section>
+
+      <!-- The Collective -->
+      <section class="collective-section">
+                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400" alt="Nadia Petrov">
+              </div>
+              <div class="collective-info">
+                <p class="quote-snippet">"My advisor gave me the unwritten industry rules about banking culture. I transitioned from retail sales into mergers and acquisitions."</p>
+                <div class="collective-meta">
+                  <h4>Nadia Petrov</h4>
+                  <span>Matched with VP at Goldman Sachs</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- CTA to Write Own Story -->
+          <div class="cta-block" style="background-color: var(--accent-light); color: var(--text-primary); margin-top: 80px; padding: 60px; border-radius: var(--radius-lg); text-align: center;">
+            <h2 style="font-family: var(--font-heading); font-size: 2.25rem; color: var(--accent); margin-bottom: 16px;">Write your own story.</h2>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 32px auto;">Unlock the salary bounds, network circles, and career growth you've been searching for.</p>
+            <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+              <button class="btn btn-primary" id="btn-stories-find-advisor">Find Your Advisor</button>
+              <button class="btn btn-secondary" id="btn-stories-join-mentor" style="background-color: transparent;">Join as Advisor</button>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- --- MODALS & OVERLAYS --- -->
+
+                  <span>Matched with Staff Engineer at Stripe</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="collective-card">
+              <div class="collective-img-box">
+                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400" alt="Nadia Petrov">
+              </div>
+              <div class="collective-info">
+                <p class="quote-snippet">"My advisor gave me the unwritten industry rules about banking culture. I transitioned from retail sales into mergers and acquisitions."</p>
+                <div class="collective-meta">
+                  <h4>Nadia Petrov</h4>
+                  <span>Matched with VP at Goldman Sachs</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- CTA to Write Own Story -->
+          <div class="cta-block" style="background-color: var(--accent-light); color: var(--text-primary); margin-top: 80px; padding: 60px; border-radius: var(--radius-lg); text-align: center;">
+            <h2 style="font-family: var(--font-heading); font-size: 2.25rem; color: var(--accent); margin-bottom: 16px;">Write your own story.</h2>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 32px auto;">Unlock the salary bounds, network circles, and career growth you've been searching for.</p>
+            <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+              <button class="btn btn-primary" id="btn-stories-find-advisor">Find Your Advisor</button>
+              <button class="btn btn-secondary" id="btn-stories-join-mentor" style="background-color: transparent;">Join as Advisor</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </section>
+
+    <!-- ==================== ADVISOR APPLICATION VIEW ==================== -->
+    <section class="view-section" id="advisor-view" style="background-color: var(--bg-primary); padding: 80px 0;">
+      <div class="application-container" style="max-width: 7
+        <div class="section-header" style="text-align: center; margin-bottom: 50px;">
+          <h2 style="font-family: var(--font-heading); font-size: 2.25rem; font-weight: 700;">Apply to Join the Elite Network</h2>
+          <p style="color: var(--text-secondary); margin-top: 12px;">Share your industry expertise and help the next generation of builders bridge the gap. We accept the top 5% of global practitioners.</p>
+        </div>
+
+        <form id="advisor-form" novalidate style="display: flex; flex-direction: column; gap: 32px;">
+          
+          <!-- Card 1: Personal Information -->
+          <div class="form-card" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-sm);">
+            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; color: var(--accent);">Personal Information</h3>
+            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 24px;">Tell us about yourself so we can establish your credentials.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-row" style="display: flex; flex-direction: column; gap: 8px;">
+                  <label for="adv-first-name" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary);">First Name</label>
+                  <input type="text" id="adv-first-name" class="form-input" required placeholder="John" style="width: 100%; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px; background-color: var(--bg-primary); outline: none;">
+                </div>
+                <div class="form-row" style="display: flex; flex-direction: column; gap: 8px;">
+                  <label for="adv-last-name" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary);">Last Name</label>
+                  <input type="text" id="adv-last-name" class="form-input" required placeholder="Doe" style="width: 100%; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px; background-color: var(--bg-primary); outline: none;">
+                </div>
+              <div class="collective-img-box">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Jessica Martinez">
+              </div>
+              <div class="collective-info">
+                <p class="quote-snippet">"I doubled my base salary after my advisor guided me through a complex counter-offer process with Salesforce."</p>
+                <div class="collective-meta">
+                  <h4>Jessica Martinez</h4>
+                  <span>Matc
+          <div class="form-card" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-sm);">
+            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; color: var(--accent);">Short Answer Questions</h3>
+            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 24px;">Please help us evaluate your advising style.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+              <div class="form-row" style="display: flex; flex-direction: column; gap: 8px;">
+                <label for="adv-motivation" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary);">Why do you want to join as an advisor?</label>
+                <textarea id="adv-motivation" class="form-input" required placeholder="What motivates you to mentor others, and what makes you a great fit?" style="width: 100%; min-height: 120px; border: 1px solid var(--border-color); bor
+
+
+
+
+
+
+
+
+
+
+
+          </div>
+        </form>
+
+        <!-- Success Screen -->
+        <div class="application-success" id="wizard-success" style="display: none; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 48px; text-align: center; box-shadow: var(--shadow-md);">
+          <div class="success-icon-box" style="width: 64px; height: 64px; border-radius: 50%; background-color: var(--success-light); color: var(--success); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 36px; height: 36px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; margin-bottom: 12px;">Application Received!</h3>
+          <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto 32px auto; line-height: 1.6;">Thank you for applying to join The Bridge network. Our membership board will review your background and reach out via email within 3 business days.</p>
+          <button class="btn btn-primary" id="btn-wizard-reset" style="height: 48px; padding: 0 32px; border-radius: var(--radius-sm);">Back to Home</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- --- MODALS & OVERLAYS --- -->
+
+  <!-- STRAWBERRY.ME FULL-SCREEN INTAKE QUIZ MODAL -->
+  <div class="intake-modal" id="intake-quiz-modal">
+    <div class="intake-close" id="btn-intake-close">✕</div>
+    
+    <div class="intake-container">
+      <div class="intake-progress-bar">
+        <div class="intake-progress-fill" id="intake-progress-indicator"></div>
+      </div>
+
+      <!-- Step 1: Destination -->
+      <div class="intake-step active" data-step="1">
+        <h3>What is your target destination?</h3>
+        <p class="step-desc">Help us map out the local community matches for you.</p>
+        <div class="intake-choices">
+          <button class="intake-choice-btn" data-val="Canada">
+            <div class="choice-label-group">
+              <span class="choice-title">Canada 🇨🇦</span>
+              <span class="choice-subtitle">Top destination for tech, PR points pathways, and settling expat groups.</span>
+            </div>
+            <span class="choice-arrow">→</span>
+          </button>
+          <button class="intake-choice-btn" data-val="Germany">
+            <div class="choice-label-group">
+              <span class="choice-title">Germany 🇩🇪</span>
+              <span class="choice-subtitle">Great options for European Blue Cards, study tracks, and engineering hubs.</span>
+            </div>
+            <span class="
+
+
+
+
+
+              </div>
+            </div>
+          </div>
+          
+          <!-- Submit Button -->
+          <div style="text-align: center; margin-top: 16px;">
+            <button type="button" class="btn btn-primary" id="btn-submit-application" style="height: 52px; padding: 0 48px; border-radius: var(--radius-sm); font-size: 1rem; width: 100%; background-color: var(--accent); border-color: var(--accent); color: white;">Submit Application</button>
+          </div>
+        </form>
+
+        <!-- Success Screen -->
+        <div class="application-success" id="wizard-success" style="display: none; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 48px; text-align: center; box-shadow: var(--shadow-md);">
+          <div class="success-icon-box" style="width: 64px; height: 64px; border-radius: 50%; background-color: var(--success-light); color: var(--success); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 36px; height: 36px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; margin-bottom: 12px;">Application Received!</h3>
+          <p style="color: var(--text-secondary); max-width: 500px; margin: 0 
+
+
+
+
+
+
+
+
+  <!-- --- MODALS & OVERLAYS --- -->
+
+  <!-- STRAWBERRY.ME FULL-SCREEN INTAKE QUIZ MODAL -->
+  <div class="intake-modal" id="intake-quiz-modal">
+    <div class="intake-close" id="btn-intake-close">✕</div>
+          <div style="text-align: center; margin-top: 16px;">
+            LinkedIn
+          </button>
+        </div>
+
+        <div class="divider">or sign up with email</div>
+
+        <form id="signup-form" onsubmit="event.preventDefault();">
+          <div class="form-row">
+            <label for="su-name">Full Name</label>
+            <input type="text" id="su-name" class="form-input" required placeholder="John Doe">
+          </div>
+          <div class="form-row">
+            <label for="su-email">Email Address</label>
+            <input type="email" id="su-email" class="form-input" required placeholder="john.doe@email.com">
+          </div>
+          <div class="form-row">
+            <label for="su-password">Password</label>
+            <input type="password" id="su-password" class="form-input" required placeholder="••••••••">
+          </div>
+          
+          <button type="button" class="btn btn-primary" id="btn-signup-submit" style="width: 100%; margin-top: 12px; height: 50px;">Sign Up</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGN IN / LOGIN PAGE -->
+  <section class="auth-page" id="login-view">
+    <div class="auth-close" id="btn-login-close">✕</div>
+    
+    <div class="auth-left">
+      <div class="auth-brand">
+        <div class="logo">
+          <div class="logo-icon" style="background-color: var(--accent);"></div>
+          The Bridge
+        </div>
+      </div>
+      <div class="auth-quote-box">
+        <h2 class="auth-quote">"The best way to predict your future is to <span>co-create it</span> with those who know the way."</h2>
+        <p class="auth-author">The Bridge Team</p>
+        <div class="container">
+          <div class="about-mission-box">
+            <span class="mission-tag">Our Mission</span>
+            <h2>To give everyone access to anyone, empowering each other to build a better world.</h2>
+          <p style="margin-bottom: 0;">We typically respond to support tickets and emails within 24 hours on business days. Members receive priority support queues.</p>
+        </div>
+      </section>
+    </section>
+
+  </main>
+
+  <!-- --- MODALS & OVERLAYS --- -->
+
+  <!-- INTRO.CO PROFILES MODAL -->
+  <div class="profile-modal" id="advisor-profile-modal">
+    <div class="profile-card-container">
+      <div class="profile-modal-close" id="btn-profile-close">✕</div>
+      
+      <!-- Left Column (Avatar and Rates) -->
+      <div class="profile-sidebar-col">
+
+      <div class="intake-progress-bar" style="margin-bottom: 40px;">
+        <div class="intake-progress-fill" id="intake-progress-indicator"></div>
+      </div>
+
+      <div id="intake-steps-wrapper">
+        <!-- Step 1: Focus Selection -->
+        <div class="intake-step active" data-step="1" data-step-type="focus">
+          <h3>What is your primary focus area?</h3>
+          <p class="step-desc">Select a path to start your relocation matching intake.</p>
+          <div class="intake-choices">
+            <button class="intake-choice-btn" data-next-flow="status">
+              <div class="choice-icon-wrapper">
+                <svg class="choice-icon" viewBox="0 0 24 24">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="m9 11 2 2 4-4"/>
+                </svg>
+              </div>
+              <div class="choice-label-group">
+                <span class="choice-title">My Status</span>
+                <span class="choice-subtitle">Visa extensions, family sponsorship, Green Card tr
+              </div>
+              <span class="choice-radio"></span>
+            </button>
+            <button class="intake-choice-btn" data-next-flow="career">
+              <div class="choice-icon-wrapper">
+                <svg class="choice-icon" viewBox="0 0 24 24">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+              </div>
+              <div class="choice-label-group">
+                <span class="choice-title">My Career</span>
+                <span class="choice-subtitle">Job hunting, resume updates, technical interview prep, and entrepreneurship.</span>
+              </div>
+              <span class="choice-radio"></span>
+            </button>
+            <button class="intake-choice-btn" data-next-flow="finance">
+              <div class="choice-icon-wrapper">
+                <svg class="choice-icon" viewBox="0 0 24 24">
+                  <line x1="12" y1="1" x2="12" y2="23"/>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+              </div>
+              <div class="choice-label-group">
+                <span class="choice-title">My Finance</span>
+                <span class="choice-subtitle">Expat credit building, banking setups, local investing, and wealth growth.</span>
+              </div>
+              <span class="choice-radio"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================== FLOW A: MY STATUS ==================== -->
+        <!-- Step A2: Priority -->
+        <!-- Step 1: Focus Selection -->
+        <div class="intake-step active" data-step="1" data-step-type="focus">
+          <h3>What is your primary focus area?</h3>
+          <p class="step-desc">Select a path to start your relocation matching intake.</p>
+          <div class="intake-choices">
+            <button class="intake-choice-btn" data-next-flow="status">
+              <div class="choice-icon-wrapper">
+                <svg class="choice-icon" viewBox="0 0 24 24">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="m9 11 2 2 4-4"/>
+                </svg>
+              </div>
+              <div class="choice-label-group">
+                <span class="choice-title">My Status</span>
+                <span class="choice-subtitle">Visa extensions, family sponsorship, Green Card transitions, and legal status.</span>
+              </div>
+              <span class="choice-radio"></span>
+            </button>
+            <button class="intake-choice-btn" data-next-flow="career">
+              <div class="choice-icon-wrapper">
+                <svg class="choice-icon" viewBox="0 0 24 24">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+              </div>
+
+        <!-- Step B3 [Branch 1: Hired]: Industry -->
+        <div class="intake-step" data-step="b3_hired" data-step-type="question">
+          <h3>What is your industry?</h3>
+          <p class="step-desc">Select your primary professional sector.</p>
+          <div class="intake-choices">
+            <button class="intake-choice-btn" data-key="challenge" data-val="Engineering" data-detail="Tech">
+              <div class="choice-label-group"><span class="choice-title">IT / Tech ⚙️</span><span class="choice-subtitle">Software engineering, product design, mock coding loops, and system architectures.</span></div>
+              <span class="choice-arrow">→</span>
+        <!-- Step A3: Destination -->
+        <div class="intake-step" data-step="a3" data-step-type="question">
+          <h3>What is your target destination?</h3>
+          <p class="step-desc">Help us map out the local community matches for you.</p>
+          <div class="intake-choices">
+            <button class="intake-choice-btn" data-key="country" data-val="Canada">
+              <div class="choice-label-group"><span class="choice-title">Canada 🇨🇦</span><span class="choice-subtitle">Fast-tracked PR pathways, work permits, and major tech hubs.</span></div>
+              <span class="choice-arrow">→</span>
+            </button>
+            <button class="intake-choice-btn" data-key="country" data-val="Germany">
+              <div class="choice-label-group"><span class="choice-title">Germany 🇩🇪</span><span class="choice-subtitle">European Blue Cards, jobseeker visas, and Berlin/Munich developer grids.</span></div>
+              <span class="choice-arrow">→</span>
+            </button>
+            <button class="intake-choice-btn" data-key="country" data-val="USA">
+              <div class="choice-label-group"><span class="choice-title">United States 🇺🇸</span><span class="choice-subtitle">H-1B, O-1 genius tracks, corporate sponsorships, and high-salary roles.</span></div>
+              <span class="choice-arrow">→</span>
+            </button>
+            <button class="intake-choice-btn" data-key="country" data-val="UK">
+              <div class="choice-label-group"><span class="choice-title">United Kingdom 🇬🇧</span><span class="choice-subtitle">High potential individual tracks, corporate sponsorship, and London finance hubs.</span></div>
+              <span class="choice-arrow">→</span>
+            </button>
+            <button class="intake-choice-btn" data-key="country" data-val="Netherlands">
+              <div class="choice-label-group"><span class="choice-title">Netherlands 🇳🇱</span><span class="choice-subtitle">Highly skilled migrant visas, 30% expat tax ruling, and Amsterdam hubs.</span></div>
+              <span class="choice-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step A4: Support Needs -->
+        <div class="intake-step" data-step="a4" data-step-type="question">
+          <h3>What do you need most right now?</h3>
+          <p class="step-desc">Choose the resource that would help you move forward today.</p>
+          <div class="intake-choices">
+            <button class="intake-choice-btn" data-key="match" data-val="advisors">
+              <div class="choice-icon-wrapper">
+                <svg class="choice-icon" viewBox="0 0 24 24">
+            </div>
+          </div>
+          
+          <h2 style="color: var(--text-primary); margin-bottom: 20px;">Response Times</h2>
+          <p style="margin-bottom: 0;">We typically respond to support tickets and emails within 24 hours on business days. Members receive priority support queues.</p>
+        </div>
+      </section>
+    </section>
+
+  </main>
+
+  <!-- --- MODALS & OVERLAYS --- -->
+
+  <!-- STRAWBERRY.ME FULL-SCREEN INTAKE QUIZ MODAL -->
+  <div class="intake-modal" id="intake-quiz-modal">
+    <div class="intake-close" id="btn-intake-close">✕</div>
+    
+    <div class="intake-container" style="position: relative;">
+      <!-- Back Button inside the container -->
+      <button class="survey-back-btn" id="intake-survey-back" style="display: none; position: absolute; left: 0; top: -45px; cursor: pointer;" title="Go Back">←</button>
+
+      <div class="intake-progress-bar" style="margin-bottom: 40px;">
+        <div class="intake-progress-fill" id="intake-progress-indicator"></div>
+      </div>
+        <div class="container">
+          <h1>Support <span>Notice</span></h1>
+          <p>Need help? Our team is here to support you with any questions or technical issues.</p>
+        </div>
+      </header>
+      <section style="padding: 80px 0; background-color: var(--bg-primary);">
+        <div class="container" style="max-width: 800px; margin: 0 auto; padding: 0 24px; line-height: 1.8; color: var(--text-secondary);">
+          <h2 style="color: var(--text-primary); margin-bottom: 20px;">Get in Touch</h2>
+          <p style="margin-bottom: 30px;">If you have any questions about this platform, our subscription plans, or need technical assistance, please email us directly or call our team:</p>
+          
+          <div class="form-row">
+            <label for="li-password">Password</label>
+            <input type="password" id="li-password" class="form-input" required placeholder="••••••••">
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" id="li-remember">
+              Remember me
+            </label>
+            <a href="#" class="forgot-link" id="link-goto-forgot">Forgot Password?</a>
+          </div>
+          
+          <button type="button" class="btn btn-primary" id="btn-login-submit" style="width: 100%; height: 50px;">Sign In</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORGOT PASSWORD PAGE -->
+  <section class="auth-page" id="forgot-view">
+    <div class="auth-close" id="btn-forgot-close">✕</div>
+    
+    <div class="auth-left">
+      <div class="auth-brand">
+        <div class="logo">
+          <div class="logo-icon"></div>
+          The Bridge
+        </div>
+      </div>
+      <div class="auth-quote-box">
+          <p class="step-desc">Select a path to start your relocation matching intake.</p>
+          <div class="intake-choices">
+            <button class="intake-choice-btn" data-next-flow="status">
+              <div class="choice-icon-wrapper">
+                <svg class="choice-icon" viewBox="0 0 24 24">
+              <span class="choice-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step C3: Destination -->
+        <div class="intake-step" data-step="c3" data-step-type="question">
+          <h3>What is your target destination?</h3>
+          <p class="step-desc">Help us map out the local community matches for you.</p>
+          <div class="intake-choices">
+            <button class="intake-choice-btn" data-key="country" data-val="Canada">
+              <div class="choice-label-group"><span class="choice-title">Canada 🇨🇦</span><span class="choice-subtitle">Banking setups, tax brackets, credit score transfers, and housing.</span></div>
+              <span class="choice-arrow">→</span>
+            </button>
+    </section>
+
+  </main>
+
+  <!-- --- MODALS & OVERLAYS --- -->
+
+  <!-- STRAWBERRY.ME FULL-SCREEN INTAKE QUIZ MODAL -->
+  <div class="intake-modal" id="intake-quiz-modal">
+    <div class="intake-close" id="btn-intake-close">✕</div>
+    
+    <div class="intake-container" style="position: relative;">
+      <!-- Back Button inside the container -->
+      <button class="survey-back-btn" id="intake-survey-back" style="display: none; position: absolute; left: 0; top: -45px; cursor: pointer;" title="Go Back">←</button>
+
+      <div class="intake-progress-bar" style="margin-bottom: 40px;">
+        <div class="intake-progress-fill" id="intake-progress-indicator"></div>
+      </div>
+
+      <div id="intake-steps-wrapper">
+        <!-- Step 1: Focus Selection -->
+        <div class="intake-step active" data-step="1" data-step-type="focus">
+          <h3>What is your primary focus area?</h3>
+          <p class="step-desc">Select a path to start your relocation matching intake.</p>
+          <div class="intake-choices">
+            <button class="intake-choice-btn" data-next-flow="status">
+              <div class="choice-icon-wrapper">
+                <svg class="choice-icon" viewBox="0 0 24 24">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="m9 11 2 2 4-4"/>
+                </svg>
+              </div>
+              <div class
+              <div class="choice-label-group">
+                <span class="choice-title">Advice from someone who has done this 💬</span>
+                <span class="choice-subtitle">Expat peers who navigated setting up bank files, credit cards, and leases.</span>
+              </div>
+              <span class="choice-arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6: Loading Screen (Animated Loader) -->
+      <div class="intake-loader-step" id="intake-loader" data-step="6">
+        <div class="loader-spinner"></div>
+        <h3>Curating Your Relocation Matches</h3>
+              <span class="choice-arrow">→</span>
+            </button>
+            <button class="intake-choice-btn" data-key="country" data-val="UK">
+              <div class="choice-label-group"><span class="choice-title">United Kingdom 🇬🇧</span><span class="choice-subtitle">Credit files, ISA setups, local banking apps, and London rental loops.</span></div>
+              <span class="choice-arrow">→</span>
+            </button>
+            <button class="intake-choice-btn" data-key="country" data-val="Netherlands">
+              <div class="choice-label-group"><span class="choice-title">Netherlands 🇳🇱</span><span class="choice-subtitle">DigiD registrations, BSN bank setup, 30% tax ruling calculations.</span></div>
+              <span class="choice-arrow">→</span>
+              <span class="choice-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step C4: Support Needs -->
+        <div class="intake-step" data-step="c4" data-step-type="question">
+          <h3>What do you need most right now?</h3>
+          <p class="step-desc">Select the guidance resource you prefer for financial questions.</p>
+          <div class="intake-choices">
+            <button class="intake-choice-btn" data-key="match" data-val="advisors">
+              <div class="choice-label-group">
+                <span class="choice-title">A professional advisor to guide me 🎓</span>
+                <span class="choice-subtitle">Vetted expat finance planners, tax professionals, and credit experts.</span>
+              </div>
+      </div>
+
+      <div class="footer-column">
+        <h4 style="font-family: var(--font-sans); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--accent-yellow); margin-bottom: 24px;">Legal</h4>
+        <div class="footer-links" style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: #B0B9B2;">
+          <a href="#" class="footer-nav-link" data-target="privacy-view" style="transition: all var(--transition-fast);">Privacy Policy</a>
+          <a href="#" class="footer-nav-link" data-target="terms-view" style="transition: all var(--transition-fast);">Terms & Conditions</a>
+          <a href="#" class="footer-nav-link" data-target="cookie-view" style="transition: all var(--transition-fast);">Cookie Policy</a>
+          <a href="#" class="footer-nav-link" data-target="support-view" style="transition: all var(--transition-fast);">Support Notice</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="container footer-bottom" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; font-size: 0.8125rem; color: #B0B9B2;">
+      <p>© 2026 The Bridge Network. Made with Antigravity.</p>
+      <div class="footer-legal" style="display: flex; gap: 24px;">
+        <a href="#" class="footer-nav-link" data-target="privacy-view" style="transition: all var(--transition-fast);">Privacy Policy</a>
+        <a href="#" class="footer-nav-link" data-target="terms-view" style="transition: all var(--transition-fast);">Terms of Service</a>
+        <a href="#" class="footer-nav-link" data-target="cookie-view" style="transition: all var(--transition-fast);">Cookie Settings</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js?v=2.1"></script>
+</body>
+</html>
+
+              <div class="choice-label-group"><span class="choice-title">Netherlands 🇳🇱</span><span class="choice-subtitle">Highly skilled expat setups, Amsterdam tech hubs, and tax rule advantages.</span></div>
+              <span class="choice-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step B5: Support Needs -->
+        <div class="intake-step" data-step="b5" data-step-type="question">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <svg class="choice-icon" viewBox="0 0 24 24">
+                  <line x1="12" y1="2" x2="12" y2="22"/>
+                  <line x1="5" y1="7" x2="19" y2="7"/>
+                  <path d="M5 7L2 17h6L5 7z"/>
+                  <path d="M19 7l-3 10h6l-3-10z"/>
+                  <path d="M4 22h16"/>
+                </svg>
+              </div>
+              <div class="choice-label-group">
+                <span class="choice-title">A professional advisor to guide me</span>
+                <span class="choice-subtitle">Vetted expat finance planners, tax professionals, and credit experts.</span>
+              </div>
+              <span class="choice-radio"></span>
+            </button>
+            <button class="intake-choice-btn" data-key="match" data-val="peers">
+              <div class="choice-icon-wrapper">
+                <svg class="choice-icon" viewBox="0 0 24 24">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+              </div>
+              <div class="choice-label-group">
+                <span class="choice-title">Advice from someone who has done this</span>
+                <span class="choice-subtitle">Expat peers who navigated setting up bank files, credit cards, and leases.</span>
+              </div>
+              <span class="choice-radio"></span>
+            </button>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTHENTICATION OVERLAYS -->
+  
+  <!-- SIGN UP PAGE -->
+  <section class="auth-page" id="signup-view">
+    <div class="auth-close" id="btn-signup-close">✕</div>
+    
+    <div class="auth-left">
+      <div class="auth-brand">
+        <div class="logo">
+          <div class="logo-icon"></div>
+          The Bridge
+        </div>
+      </div>
+      <div class="auth-quote-box">
+        <span class="mission-tag">Our Mission</span>
+        <h2 class="auth-quote">To give everyone access to anyone, empowering each other to build <span>a better world</span>.</h2>
+        <p class="auth-author">Connecting builders and newcomers with peer playbooks and accredited advisors who know the local rules.</p>
+      </div>
+      <p class="auth-footer-text">© 2026 The Bridge Network. All rights reserved.</p>
+    </div>
+
+    <div class="auth-right">
+      <div class="auth-form-container">
+        <div class="auth-header">
+          <h2>Create Member Account</h2>
+          <p>Already have an account? <a href="#" id="link-goto-login">Sign In</a></p>
+        </div>
+        
+        <div class="social-auth">
+          <button class="btn-social">
+            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;">
+              <path fill="#42
+          <div class="calendar-weekdays" id="profile-calendar-days">
+            <!-- Populated dynamically -->
+          </div>
+          <div class="time-slots-grid" id="profile-time-slots">
+            <!-- Populated dynamically -->
+          </div>
+          
+          <!-- Dynamic Booking Success Banner -->
+          <div class="booking-success-banner" id="booking-success-banner">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <div>
+              <h4>Booking Confirmed!</h4>
+              <p id="booking-success-text">A calendar invite has been sent to your email.</p>
+            </div>
+            <button class="intake-choice-btn" data-key="challenge" data-val="Engineering" data-detail="Construction">
+              <div class="choice-icon-wrapper">
+                <svg class="choice-icon" viewBox="0 0 24 24">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+              </div>
+              <div class="choice-label-group">
+                <span class="choice-title">Engineering / Construction</span>
+                <span class="choice-subtitle">Civil engineering, project management, and hardware design loops.</span>
+              </div>
+              <span class="choice-radio"></span>
+            </button>
+    <div class="auth-right">
+      <div class="auth-form-container">
+        <div class="auth-header">
+          <h2>Create Member Account</h2>
+          <p>Already have an account? <a href="#" id="link-goto-login">Sign In</a></p>
+        </div>
+        
+        <div class="social-auth">
+          <button class="btn-social">
+            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+            </svg>
+            Google
+          </button>
+          <button class="btn-social">
+            <svg viewBox="0 0 24 24"><path fill="#0A66C2" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            LinkedIn
+          </button>
+        </div>
+
+          <h2>Reset Your Password</h2>
+          <p>Remembered your password? <a href="#" id="link-forgot-goto-login">Sign In</a></p>
+        </div>
+        
+                  <line x1="10" y1="22" x2="14" y2="22"/>
+                </svg>
+              </div>
+              <div class="choice-label-group">
+                <span class="choice-title">I have an idea, but need a plan</span>
+                <span class="choice-subtitle">Formulating pitch decks, analyzing target markets, and selecting legal business structures.</span>
+              </div>
+              <span class="choice-radio"></span>
+            </button>
+            <button class="intake-choice-btn" data-key="challenge" data-val="Product" data-detail="Launch">
+        <a href="#" class="footer-nav-link" data-target="cookie-view" style="transition: all var(--transition-fast);">Cookie Settings</a>
+      </div>
+    </div>
+  </footer>
+
+
+    </div>
+  </div>
+
+  <!-- INTRO.CO PROFILES MODAL — Grow Therapy style -->
+  <div class="profile-modal" id="advisor-profile-modal">
+    <div class="profile-card-container">
+      <div class="profile-modal-close" id="btn-profile-close">✕</div>
+
+      <!-- Left Column: Large photo + quick info -->
+      <div class="profile-sidebar-col">
+        <div class="profile-photo-wrap">
+          <img class="profile-avatar" id="prof-avatar" src="" alt="Advisor Photo">
+          <div class="profile-verified-badge">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Verified
+          </div>
+        </div>
+
+        <div class="profile-sidebar-info">
+          <h2 id="prof-name">Jonathan Wilhite</h2>
+          <p class="profile-title-text" id="prof-title">Senior Engineer at Stripe</p>
+
+          <!-- Quick stat chips -->
+          <div class="profile-chips">
+            <span class="profile-chip">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              5.0
+            </span>
+            <span class="profile-chip" id="prof-type-chip">Accredited Advisor</span>
+            <span class="profile-chip">Virtual</span>
+          </div>
+
+     
+   
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+              </div>
+              <div class="choice-label-group">
+                <span class="choice-title">Advice from someone who has done this</span>
+                <span class="choice-subtitle">Relocated peers sharing unwritten company hiri
+        <p class="auth-author">The Bridge Team</p>
+      </div>
+      <p class="auth-footer-text">© 2026 The Bridge Network. All rights reserved.</p>
+    </div>
+
+    <div class="auth-right">
+      <div class="auth-form-container">
+        <div class="auth-header">
+          <h2>Create Member Account</h2>
+          <p>Already have an account? <a href="#" id="link-goto-login">Sign In</a></p>
+        </div>
+        
+        <div class="social-auth">
+          <button class="btn-social">
+            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+            </svg>
+            Google
+          </button>
+          <button class="btn-social">
+            <svg viewBox="0 0 24 24"><path fill="#0A66C2" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            LinkedIn
+
+        <!-- Specialties -->
+        <div class="profile-specialties" id="prof-specialties">
+          <!-- populated by JS -->
+        </div>
+
+        <!-- Booking Calendar -->
+        <div class="booking-calendar-wrapper" id="profile-booking-calendar-wrapper">
+          <h3>Select Date &amp; Time</h3>
+          <div class="calendar-weekdays" id="profile-calendar-days">
+            <!-- Populated dynamically -->
+          </div>
+          <div class="time-slots-grid" id="profile-time-slots">
+            <!-- Populated dynamically -->
+          </div>
+
+          <!-- Dynamic Booking Success Banner -->
+          <div class="booking-success-banner" id="booking-success-banner">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <div>
+              <h4>Booking Confirmed!</h4>
+              <p id="booking-success-text">A calendar invite has been sent to your email.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Packages -->
+        <div class="packages-header" id="profile-packages-header">Structured Packages &amp; Offerings</div>
+        <div class="packages-container" id="profile-packages-list">
+          <!-- Dynamic packages -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTHENTICATION OVERLAYS -->
+  
+  <!-- SIGN UP PAGE -->
+  <section class="auth-page" id="signup-view">
+    <div class="auth-close" id="btn-signup-close">✕</div>
+      <div class="profile-sidebar-col">
+        <img class="profile-avatar" id="prof-avatar" src="" alt="Advisor Avatar">
+        <div class="profile-verified-badge">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          Verified
+        </div>
+        <h2 id="prof-name">Sarah Jenkins</h2>
+        <p class="profile-title-text" id="prof-title">Product Lead at Google</p>
+        <div class="profile-rate-badge" id="prof-rate">Included<span> (Member Benefit)</span></div>
+      </div>
+
+      <!-- Right Column (Details, Packages, Booking) -->
+      <div class="profile-details-col">
+        <h3>About</h3>
+        <p class="profile-bio-text" id="prof-bio">Ex-Meta. Specialized in growth product management, API design, and system migration strategy.</p>
+        
+        <!-- Booking Calendar Grid -->
+        <div class="booking-calendar-wrapper" id="profile-booking-calendar-wrapper">
+          <h3>Select Date & Time</h3>
+          <div class="calendar-weekdays" id="profile-calendar-days">
+            <!-- Populated dynamically -->
+          </div>
+     
+  <!-- INTRO.CO PROFILES MODAL -->
+  <div class="profile-modal" id="advisor-profile-modal">
+    <div class="profile-card-container">
+      <div class="profile-modal-close" id="btn-profile-close">✕</div>
+      
+      <!-- Left Column (Avatar and Rates) -->
+      <div class="profile-sidebar-col">
+        <img class="profile-avatar" id="prof-avatar" src="" alt="Advisor Avatar">
+        <div class="profile-verified-badge">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        <div class="footer-links" style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: #B0B9B2;">
+          <a href="#" class="footer-nav-link" data-target="privacy-view" style="transition: all var(--transition-fast);">Privacy Policy</a>
+          <a href="#" class="footer-nav-link" data-target="terms-view" style="transition: all var(--transition-fast);">Terms & Conditions</a>
+          <a href="#" class="footer-nav-link" data-target="cookie-view" style="transition: all var(--transition-fast);">Cookie Policy</a>
+          <a href="#" class="footer-nav-link" data-target="support-view" style="transition: all var(--transition-fast);">Support Notice</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="container footer-bottom" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; font-size: 0.8125rem; color: #B0B9B2;">
+      <p>© 2026 The Bridge Network. Made with Antigravity.</p>
+      <div class="footer-legal" style="display: flex; gap: 24px;">
+        <a href="#" class="footer-nav-link" data-target="privacy-view" style="transition: all var(--transition-fast);">Privacy Policy</a>
+        <a href="#" class="footer-nav-link" data-target="terms-view" style="transition: all var(--transition-fast);">Terms of Service</a>
+        <a href="#" class="footer-nav-link" data-target="cookie-view" style="transition: all var(--transition-fast);">Cookie Settings</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js?v=2.1"></script>
+          <div class="logo-icon"></div>
+          The Bridge
+        </div>
+      </div>
+      <div class="auth-quote-box">
+        <span class="mission-tag">Our Mission</span>
+        <h2 class="auth-quote">To give everyone access to anyone, empowering each other to build <span>a better world</span>.</h2>
+        <p class="auth-author">Connecting builders and newcomers with peer playbooks and accredited advisors who know the local rules.</p>
+      </div>
+      <p class="auth-footer-text">© 2026 The Bridge Network. All rights reserved.</p>
+    </div>
+
+    <div class="auth-right">
+      <div class="auth-form-container">
+        <div class="auth-header">
+          <h2>Create Member Account</h2>
+          <p>Already have an account? <a href="#" id="link-goto-login">Sign In</a></p>
+        </div>
+        
+        <div class="social-auth">
+          <button class="btn-social">
+            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+            <input type="email" id="forgot-email" class="form-input" required placeholder="john.doe@email.com">
+          </div>
+          
+          <button type="button" class="btn btn-primary" id="btn-forgot-submit" style="width: 100%; margin-top: 12px; height: 50px;">Send Reset Link</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHECK EMAIL / CONFIRMATION PAGE -->
+  <section class="auth-page" id="checkemail-view">
+    <div class="auth-close" id="btn-checkemail-close">✕</div>
+    
+    <div class="auth-left">
+      <div class="auth-brand">
+        <div class="logo">
+          <div class="logo-icon" style="background-color: var(--accent);"></div>
+          The Bridge
+        </div>
+          <p>We've sent a magic link / confirmation to your email. Click the link in that email to proceed.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-checkemail-ok" style="width: 100%; height: 50px;">Return to Site</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- FOOTER --- -->
+  <footer id="main-footer" style="background-color: var(--bg-dark); padding: 80px 0; color: var(--text-light); border-top: 1px solid rgba(255,255,255,0.05);">
+    <div class="container footer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 60px;">
+      
+      <div class="footer-brand" style="grid-column: span 2;">
+        <div class="logo" id="footer-logo" style="color: var(--bg-secondary); font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+          <div class="logo-icon" style="width: 28px; height: 28px; border-radius: 50%; background-color: var(--accent-yellow); border: 2.5px solid var(--accent);"></div>
+          The Bridge
+        </div>
+        <p style="color: #B0B9B2; font-size: 0.9rem; line-height: 1.6; max-width: 340px; margin-bottom: 24px;">Connecting expats and career builders with peer playbook matches and accredited advisors who know the local rules.</p>
+        <div class="footer-contact" style="font-size: 0.875rem; color: var(--bg-secondary); margin-bottom: 20px; display: fl
+      </div>
+    </div>
+  </section>
+
+  <!-- --- FOOTER --- -->
+  <footer id="main-footer" style="background-color: var(--bg-dark); padding: 80px 0; color: var(--text-light); border-top: 1px solid rgba(255,255,255,0.05);">
+    <div class="container footer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 60px;">
+      
+      <div class="footer-brand" style="grid-column: span 2;">
+        <div class="logo" id="footer-logo" style="color: var(--bg-secondary); font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+          <div class="logo-icon" style="width: 28px; height: 28px; border-radius: 50%; background-color: var(--accent-yellow); border: 2.5px solid var(--accent);"></div>
+          The Bridge
+        </div>
+        <p style="color: #B0B9B2; font-size: 0.9rem; line-height: 1.6; max-width: 340px; margin-bottom: 24px;">Connecting expats and career builders with peer playbook matches and accredited advisors who know the local rules.</p>
+        <div class="footer-contact" style="font-size: 0.875rem; color: var(--bg-secondary); margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px;">
+          <span>✉ hello@yoursite.com</span>
+          <span>📞 +111-456-7890</span>
+        </div>
+        <div class="footer-socials" style="display: flex; gap: 16px;">
+          <a href="#" class="social-link" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; transition: all var(--transition-fast);">𝕏</a>
+          <a href="#" class="social-link" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; transition: all var(--transition-fast);">in</a>
+          <a href="#" class="social-link" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; transition: all var(--transition-fast);">📘</a>
+        </div>
+
+
+
+          <a href="#" style="transition: all var(--transition-fast);">Finance & Consulting</a>
+          <a href="#" style="transition: all var(--transition-fast);">Legal & Relocation</a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h4 style="font-family: var(--font-sans); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--accent-yellow); margin-bottom: 24px;">Legal</h4>
+        <div class="footer-links" style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: #B0B9B2;">
+          <a href="#" style="transition: all var(--transition-fast);">Privacy Policy</a>
+          <a href="#" style="transition: all var(--transition-fast);">Terms & Conditions</a>
+          <a href="#" style="transition: all var(--transition-fast);">Cookie Policy</a>
+          <a href="#" style="transition: all var(--transition-fast);">Support Notice</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="container footer-bottom" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; font-size: 0.8125rem; color: #B0B9B2;">
+      <p>© 2026 The Bridge Network. Made with Antigravity.</p>
+      <div class="footer-legal" style="display: flex; gap: 24px;">
+        <a href="#" style="transition: all var(--transition-fast);">Privacy Policy</a>
+        <a href="#" style="transition: all var(--transition-fast);">Terms of Service</a>
+        <a href="#" style="transition: all var(--transition-fast);">Cookie Settings</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <h4 style="font-family: var(--font-sans); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--accent-yellow); margin-bottom: 24px;">Quick Links</h4>
+        <div class="footer-links" style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: #B0B9B2;">
+          <a href="#" class="footer-nav-link" data-target="home-view" style="transition: all var(--transition-fast);">Home</a>
+          <a href="#" class="footer-nav-link" data-target="directory-view" style="transition: all var(--transition-fast);">Browse Directory</a>
+          <a href="#" class="footer-nav-link" data-target="about-view" style="transition: all var(--transition-fast);">Our Mission</a>
+          <a href="#" class="footer-nav-link" data-target="stories-view" style="transition: all var(--transition-fast);">Success Stories</a>
+          <a href="#" class="footer-nav-link" data-target="advisor-view" style="transition: all var(--transition-fast);">Advisor Application</a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h4 style="font-family: var(--font-sans); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--accent-yellow); margin-bottom: 24px;">Advising Domains</h4>
+        <div class="footer-links" style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: #B0B9B2;">
+          <a href="#" style="transition: all var(--transition-fast);
+
+
+          <a href="#" style="transition: all var(--transition-fast);">Legal & Relocation</a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h4 style="font-family: var(--font-sans); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--accent-yellow); margin-bottom: 24px;">Legal</h4>
+        <div class="footer-links" style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: #B0B9B2;">
+          <a href="#" style="transition: all var(--transition-fast);">Privacy Policy</a>
+          <a href="#" style="transition: all var(--transition-fast);">Terms & Conditions</a>
+          <a href="#" style="transition: all var(--transition-fast);">Cookie Policy</a>
+          <a href="#" style="transition: all var(--transition-fast);">Support Notice</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="container footer-bottom" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; font-size: 0.8125rem; color: #B0B9B2;">
+      <p>© 2026 The Bridge Network. Made with Antigravity.</p>
+      <div class="footer-legal" style="display: flex; gap: 24px;">
+        <a href="#" class="footer-nav-link" data-target="privacy-view" style="transition: all var(--transition-fast);">Privacy Policy</a>
+        <a href="#" class="footer-nav-link" data-target="terms-view" style="transition: all var(--transition-fast);">Terms of Service</a>
+        <a href="#" class="footer-nav-link" data-target="cookie-view" style="transition: all var(--transition-fast);">Cookie Settings</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js?v=1.6"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      
+      <div class="footer-column">
+        <h4 style="font-family: var(--font-sans); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--accent-yellow); margin-bottom: 24px;">Quick Links</h4>
+        <div class="footer-links" style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: #B0B9B2;">
+          <a href="#" class="footer-nav-link" data-target="home-view" style="transition: all var(--transition-fast);">Home</a>
+          <a href="#" class="footer-nav-link" data-target="directory-view" style="transition: all var(--transition-fast);">Browse Directory</a>
+          <a href="#" class="footer-nav-link" data-target="about-view" style="transition: all var(--transition-fast);">Our Mission</a>
+          <a href="#" class="footer-nav-link" data-target="stories-view" style="transition: all var(--transition-fast);">Success Stories</a>
+          <a href="#" class="footer-nav-link" data-target="advisor-view" style="transition: all var(--transition-fast);">Advisor Application</a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h4 style="font-family: var(--font-sans); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--accent-yellow); margin-bottom: 24px;">Advising Domains</h4>
+        <div class="footer-links" style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: #B0B9B2;">
+
+
+
+
+
+
+
+
+        <h4 style="font-family: var(--font-sans); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--accent-yellow); margin-bottom: 24px;">Legal</h4>
+    <div class="container footer-bottom" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; font-size: 0.8125rem; color: #B0B9B2;">
+      <p>© 2026 The Bridge Network. Made with Antigravity.</p>
+      <div class="footer-legal" style="display: flex; gap: 24px;">
+        <a href="#" class="footer-nav-link" data-target="privacy-view" style="transition: all var(--transition-fast);">Privacy Policy</a>
+        <a href="#" class="footer-nav-link" data-target="terms-view" style="transition: all var(--transition-fast);">Terms of Service</a>
+        <a href="#" class="footer-nav-link" data-target="cookie-view" style="transition: all var(--transition-fast);">Cookie Settings</a>
+      </div>
+    </div>
+  </footer>
+
+      <p>© 2026 The Bridge Network. Made with Antigravity.</p>
+      <div class="footer-legal" style="display: flex; gap: 24px;">
+        <a href="#" class="footer-nav-link" data-target="privacy-view" style="transition: all var(--transition-fast);">Privacy Policy</a>
+        <a href="#" class="footer-nav-link" data-target="terms-view" style="transition: all var(--transition-fast);">Terms of Service</a>
+        <a href="#" class="footer-nav-link" data-target="cookie-view" style="transition: all var(--transition-fast);">Cookie Settings</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js?v=2.0"></script>
+</body>
+</html>
+
+  </footer>
+
+  <script src="app.js?v=1.9"></script>
+</body>
+</html>
+

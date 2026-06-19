@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Bridge — Connect with Top Advisors</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="#183f30" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8"/></svg>
+        The Bridge
+      </div>
+      <ul class="nav-links">
+        <li><a href="#" class="nav-link active" data-target="home">Home</a></li>
+        <li><a href="#" class="nav-link" data-target="directory">Browse Directory</a></li>
+        <li><a href="#" class="nav-link" data-target="mission">Our Mission</a></li>
+        <li><a href="#" class="nav-link" data-target="stories">Success Stories</a></li>
+        <li><a href="#" class="nav-link" data-target="application">Advisor Application</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn btn-outline">Sign In</button>
+        <button class="btn btn-primary">Sign Up</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HOME VIEW -->
+  <section id="home" class="view-section active">
+    <!-- Hero -->
+    <header class="hero">
+      <!-- Floating Images -->
+      <img src="hero_candid_cafe.png" alt="Professional in cafe" class="hero-img hero-img-tl">
+      <img src="hero_video_mentoring_1780945119982.png" alt="Mentoring laptop zoom call" class="hero-img hero-img-bl">
+      <img src="hero_candid_document.png" alt="Professional with document" class="hero-img hero-img-tr">
+      <img src="hero_candid_apartment.png" alt="Professional coding in apartment" class="hero-img hero-img-br">
+
+      <div class="hero-content">
+        <div class="badge">GET ADVICE FROM PEOPLE WHO HAVE WALKED YOUR PATH.</div>
+        <h1 class="hero-title">Don't guess your way through.</h1>
+        <p class="hero-subtitle">Connect with immigrants who have already solved the problems<br>you're facing right now.</p>
+        
+        <!-- Minimalist Hero Quiz Card (Simple Survey) -->
+        <div class="hero-quiz-card">
+          <!-- Step Indicator -->
+          <div class="quiz-progress-wrapper">
+            <div class="quiz-progress-bar">
+              <div class="quiz-progress-fill" id="hero-quiz-progress" style="width: 33.3%;"></div>
+            </div>
+            <span class="quiz-step-label">Step 1 of 3</span>
+          </div>
+
+          <!-- Step 1: Focus Area -->
+          <div class="quiz-step-slide active" data-step="1">
+            <h3 class="quiz-step-title">What do you need help with?</h3>
+            <div class="quiz-choices-stack">
+              <button class="quiz-choice-row" data-focus="status">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Status & Visas</span>
+                  <span class="choice-row-desc">Get your visa approved, sort your paperwork, and navigate immigration.</span>
+                </div>
+              </button>
+              <button class="quiz-choice-row" data-focus="career">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Career & Jobs</span>
+                  <span class="choice-row-desc">Fix your resume, practice interviews, and negotiate a better salary.</span>
+                </div>
+              </button>
+              <button class="quiz-choice-row" data-focus="finance">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Finance & Credit</span>
+                  <span class="choice-row-desc">Build local credit, open bank accounts, and file local taxes.</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- FLOW A: STATUS & VISAS -->
+          <!-- Step 2-status: Main Goal -->
+          <div class="quiz-step-slide" data-step="2-status" style="display: none;">
+            <h3 class="quiz-step-title">What is your main goal right now?</h3>
+            <div class="quiz-choices-stack">
+              <button class="quiz-choice-row" data-step2="visa">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Get or renew my visa</span>
+                  <span class="choice-row-desc">Work visas, student visas, transfers, renewals.</span>
+                </div>
+              </button>
+              <button class="quiz-choice-row" data-step2="family">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Bring my family here</span>
+                  <span class="choice-row-desc">Spousal sponsorship, dependent visas, family reunification.</span>
+                </div>
+              </button>
+              <button class="quiz-choice-row" data-step2="greencard">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Get my Green Card or Citizenship</span>
+                  <span class="choice-row-desc">Permanent residency pathways, citizenship prep, naturalization.</span>
+                </div>
+              </button>
+            </div>
+            <div class="quiz-actions-row">
+              <button class="btn btn-text quiz-back-btn">Reset</button>
+            </div>
+          </div>
+
+          <!-- Step 3-status: Guidance Choice -->
+          <div class="quiz-step-slide" data-step="3-status" style="display: none;">
+            <h3 class="quiz-step-title">How do you want to move forward?</h3>
+            <div class="quiz-choices-stack">
+              <button class="quiz-choice-row" data-step3="lawyer">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">I want to hire a vetted immigration lawyer</span>
+                  <span class="choice-row-desc">Official legal advice from licensed attorneys.</span>
+                </div>
+              </button>
+              <button class="quiz-choice-row" data-step3="peer">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">I want advice from an immigrant who has already done this</span>
+                  <span class="choice-row-desc">Practical, real-world guidance from a settled expat peer.</span>
+                </div>
+              </button>
+            </div>
+            <div class="quiz-actions-row">
+              <button class="btn btn-text quiz-back-btn">Reset</button>
+              <button class="btn btn-primary quiz-submit-btn">
+                Match Me
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- FLOW B: CAREER & JOBS -->
+          <!-- Step 2-career: Career Move -->
+          <div class="quiz-step-slide" data-step="2-career" style="display: none;">
+            <h3 class="quiz-step-title">What is your next career move?</h3>
+            <div class="quiz-choices-stack">
+              <button class="quiz-choice-row" data-step2="hired">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Get hired at a top company</span>
+                  <span class="choice-row-desc">Expat job hunting, local interview prep, local resume tailoring.</span>
+                </div>
+              </button>
+              <button class="quiz-choice-row" data-step2="business">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Start my own business</span>
+                  <span class="choice-row-desc">Founding a company, founder visa pathways, investment advice.</span>
+                </div>
+              </button>
+            </div>
+            <div class="quiz-actions-row">
+              <button class="btn btn-text quiz-back-btn">Reset</button>
+            </div>
+          </div>
+
+          <!-- Step 3-career-hired: Industry Target -->
+          <div class="quiz-step-slide" data-step="3-career-hired" style="display: none;">
+            <h3 class="quiz-step-title">What industry are you targeting?</h3>
+            <div class="quiz-choices-stack">
+              <button class="quiz-choice-row" data-step3="tech">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Tech & Software</span>
+                  <span class="choice-row-desc">Software engineers, designers, product managers, data.</span>
+                </div>
+              </button>
+              <button class="quiz-choice-row" data-step3="health">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Healthcare & Medicine</span>
+                  <span class="choice-row-desc">Doctors, nurses, research, clinical, admin roles.</span>
+                </div>
+              </button>
+              <button class="quiz-choice-row" data-step3="engineering">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Engineering & Construction</span>
+                  <span class="choice-row-desc">Civil, electrical, mechanical engineers, project leads.</span>
+                </div>
+              </button>
+              <button class="quiz-choice-row" data-step3="finance_biz">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Finance & Business</span>
+                  <span class="choice-row-desc">Analysts, investment banking, consulting, marketing.</span>
+                </div>
+              </button>
+            </div>
+            <div class="quiz-actions-row">
+              <button class="btn btn-text quiz-back-btn">Reset</button>
+              <button class="btn btn-primary quiz-submit-btn">
+                Match Me
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3-career-business: Founder Stage -->
+          <div class="quiz-step-slide" data-step="3-career-business" style="display: none;">
+            <h3 class="quiz-step-title">Where are you in the process?</h3>
+            <div class="quiz-choices-stack">
+              <button class="quiz-choice-row" data-step3="playbook">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">I have an idea, but I need a playbook</span>
+                  <span class="choice-row-desc">Validation, market research, initial business planning.</span>
+                </div>
+              </button>
+              <button class="quiz-choice-row" data-step3="launch">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">I’m ready to launch and need legal/funding advice</span>
+                  <span class="choice-row-desc">Company incorporation, funding options, legal setup.</span>
+                </div>
+              </button>
+            </div>
+            <div class="quiz-actions-row">
+              <button class="btn btn-text quiz-back-btn">Reset</button>
+              <button class="btn btn-primary quiz-submit-btn">
+                Match Me
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- FLOW C: FINANCE & CREDIT -->
+          <!-- Step 2-finance: Hurdle -->
+          <div class="quiz-step-slide" data-step="2-finance" style="display: none;">
+            <h3 class="quiz-step-title">What is your biggest financial hurdle?</h3>
+            <div class="quiz-choices-stack">
+              <button class="quiz-choice-row" data-step2="credit">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Building a local credit score from zero</span>
+                  <span class="choice-row-desc">Expat credit cards, credit history transfer, opening bank accounts.</span>
+                </div>
+              </button>
+              <button class="quiz-choice-row" data-step2="investing">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Buying a home or investing my money</span>
+                  <span class="choice-row-desc">Mortgages for expats, investing, cross-border tax compliance.</span>
+                </div>
+              </button>
+            </div>
+            <div class="quiz-actions-row">
+              <button class="btn btn-text quiz-back-btn">Reset</button>
+            </div>
+          </div>
+
+          <!-- Step 3-finance: Guidance Level -->
+          <div class="quiz-step-slide" data-step="3-finance" style="display: none;">
+            <h3 class="quiz-step-title">What kind of guidance do you need?</h3>
+            <div class="quiz-choices-stack">
+              <button class="quiz-choice-row" data-step3="basics">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">A step-by-step plan to set up my basics</span>
+                  <span class="choice-row-desc">Opening expat accounts, transferring history, basic tax rules.</span>
+                </div>
+              </button>
+              <button class="quiz-choice-row" data-step3="advanced">
+                <div class="quiz-radio-indicator"></div>
+                <div class="choice-row-text">
+                  <span class="choice-row-title">Advanced strategies from a financial insider</span>
+                  <span class="choice-row-desc">Expat investment advice, multi-state tax, mortgages, wealth management.</span>
+                </div>
+              </button>
+            </div>
+            <div class="quiz-actions-row">
+              <button class="btn btn-text quiz-back-btn">Reset</button>
+              <button class="btn btn-primary quiz-submit-btn">
+                Match Me
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Brands -->
+    
+    <!-- Brands -->
+    <section class="brand-row">
+      <div class="container">
+        <span class="brand-label">ADVISORS TRUSTED AT COMPANIES LIKE</span>
+        <div class="brand-logos-wrapper">
+          <div class="brand-logos-track">
+            <!-- First set -->
+            <span class="brand-logo"><svg viewBox="0 0 100 20" fill="none"><text x="0" y="15" fill="#0080fb" font-family="sans-serif" font-weight="bold" font-size="16">Meta</text></svg></span>
+            <span class="brand-logo"><svg viewBox="0 0 120 20" fill="none"><text x="0" y="15" fill="#003580" font-family="sans-serif" font-weight="bold" font-size="16">Booking.com</text></svg></span>
+            <span class="brand-logo"><svg viewBox="0 0 100 20" fill="none"><text x="0" y="15" fill="#ea4335" font-family="sans-serif" font-weight="bold" font-size="16">Google</text></svg></span>
+            <span class="brand-logo"><svg viewBox="0 0 140 20" fill="none"><text x="0" y="15" fill="#205081" font-family="serif" font-weight="bold" font-size="16">Goldman Sachs</text></svg></span>
+            <span class="brand-logo"><svg viewBox="0 0 100 20" fill="none"><text x="0" y="15" fill="#635bff" font-family="sans-serif" font-weight="bold" font-size="16">stripe</text></svg></span>
+            <!-- Duplicate set for scrolling -->
+            <span class="brand-logo"><svg viewBox="0 0 100 20" fill="none"><text x="0" y="15" fill="#0080fb" font-family="sans-serif" font-weight="bold" font-size="16">Meta</text></svg></span>
+            <span class="brand-logo"><svg viewBox="0 0 120 20" fill="none"><text x="0" y="15" fill="#003580" font-family="sans-serif" font-weight="bold" font-size="16">Booking.com</text></svg></span>
+            <span class="brand-logo"><svg viewBox="0 0 100 20" fill="none"><text x="0" y="15" fill="#ea4335" font-family="sans-serif" font-weight="bold" font-size="16">Google</text></svg></span>
+            <span class="brand-logo"><svg viewBox="0 0 140 20" fill="none"><text x="0" y="15" fill="#205081" font-family="serif" font-weight="bold" font-size="16">Goldman Sachs</text></svg></span>
+            <span class="brand-logo"><svg viewBox="0 0 100 20" fill="none"><text x="0" y="15" fill="#635bff" font-family="sans-serif" font-weight="bold" font-size="16">stripe</text></svg></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- MEET OUR ADVISORS -->
+    <section class="section-padding advisors-section" style="background-color: var(--bg-primary);">
+      <div class="container">
+        
+        <!-- Segment 1: Available this week -->
+        <div class="advisors-carousel-container-wrapper">
+          <div class="carousel-header-wrapper">
+            <div class="section-header left-align">
+              <span class="badge">About Our Advisors</span>
+              <h2 class="section-title">Available this week &rarr;</h2>
+              <p class="section-subtitle">Connect with professionals who have already navigated the exact hurdles you're facing right now.</p>
+            </div>
+            <div class="carousel-nav-buttons">
+              <button class="carousel-nav-btn prev-btn" aria-label="Previous Advisors">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              </button>
+              <button class="carousel-nav-btn next-btn" aria-label="Next Advisors">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+          
+          <div class="advisors-carousel-container">
+            <div class="advisors-carousel-track">
+              <!-- Advisor 1 -->
+              <div class="advisor-intro-card" data-advisor-id="sarah">
+                <div class="advisor-intro-image-wrap">
+                  <img src="sarah_portrait.png" alt="Sarah Jenkins, Esq." class="portrait-card-img">
+                  <div class="portrait-verified-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  </div>
+                  <div class="portrait-availability-tag">Available Wed</div>
+                </div>
+                <div class="advisor-intro-details">
+                  <h3 class="advisor-intro-name">Sarah Jenkins, Esq.</h3>
+                  <p class="advisor-intro-title">Licensed Immigration Attorney • 8 yrs exp</p>
+                  <div class="advisor-intro-specialties">
+                    <span class="specialty-badge">Status & Visa</span>
+                    <span class="specialty-badge">O-1 & H-1B</span>
+                    <span class="specialty-badge">Green Cards</span>
+                  </div>
+                  <div class="advisor-intro-footer">
+                    <div class="advisor-intro-rating">
+                      <span class="star-icon">★</span>
+                      <span class="rating-val">4.9</span>
+                      <span class="reviews-count">(42)</span>
+                    </div>
+                    <div class="advisor-intro-booking">
+                      <span>Book Session</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Advisor 2 -->
+              <div class="advisor-intro-card" data-advisor-id="david_chee">
+                <div class="advisor-intro-image-wrap">
+                  <img src="david_chee_portrait.png" alt="David Chee" class="portrait-card-img">
+                  <div class="portrait-verified-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  </div>
+                  <div class="portrait-availability-tag">Available Wed</div>
+                </div>
+                <div class="advisor-intro-details">
+                  <h3 class="advisor-intro-name">David Chee</h3>
+                  <p class="advisor-intro-title">Family Reunification Expert • 6 yrs exp</p>
+                  <div class="advisor-intro-specialties">
+                    <span class="specialty-badge">Family Visa</span>
+                    <span class="specialty-badge">Sponsorship</span>
+                    <span class="specialty-badge">Green Cards</span>
+                  </div>
+                  <div class="advisor-intro-footer">
+                    <div class="advisor-intro-rating">
+                      <span class="star-icon">★</span>
+                      <span class="rating-val">4.8</span>
+                      <span class="reviews-count">(31)</span>
+                    </div>
+                    <div class="advisor-intro-booking">
+                      <span>Book Session</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Advisor 3 -->
+              <div class="advisor-intro-card" data-advisor-id="elena">
+                <div class="advisor-intro-image-wrap">
+                  <img src="elena_portrait.png" alt="Elena Ramirez" class="portrait-card-img">
+                  <div class="portrait-verified-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  </div>
+                  <div class="portrait-availability-tag">Available Wed</div>
+                </div>
+                <div class="advisor-intro-details">
+                  <h3 class="advisor-intro-name">Elena Ramirez</h3>
+                  <p class="advisor-intro-title">Asylum & Refugee Specialist • 8 yrs exp</p>
+                  <div class="advisor-intro-specialties">
+                    <span class="specialty-badge">Asylum</span>
+                    <span class="specialty-badge">Refugee</span>
+                    <span class="specialty-badge">Humanitarian</span>
+                  </div>
+                  <div class="advisor-intro-footer">
+                    <div class="advisor-intro-rating">
+                      <span class="star-icon">★</span>
+                      <span class="rating-val">4.9</span>
+                      <span class="reviews-count">(28)</span>
+                    </div>
+                    <div class="advisor-intro-booking">
+                      <span>Book Session</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Advisor 4 -->
+              <div class="advisor-intro-card" data-advisor-id="hassan">
+                <div class="advisor-intro-image-wrap">
+                  <img src="hassan_portrait.png" alt="Hassan Badoor" class="portrait-card-img">
+                  <div class="portrait-verified-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  </div>
+                  <div class="portrait-availability-tag">Available Thu</div>
+                </div>
+                <div class="advisor-intro-details">
+                  <h3 class="advisor-intro-name">Hassan Badoor</h3>
+                  <p class="advisor-intro-title">Citizenship & Naturalization Specialist • 10 yrs exp</p>
+                  <div class="advisor-intro-specialties">
+                    <span class="specialty-badge">Citizenship</span>
+                    <span class="specialty-badge">Naturalization</span>
+                    <span class="specialty-badge">Immigration Law</span>
+                  </div>
+                  <div class="advisor-intro-footer">
+                    <div class="advisor-intro-rating">
+                      <span class="star-icon">★</span>
+                      <span class="rating-val">5.0</span>
+                      <span class="reviews-count">(56)</span>
+                    </div>
+                    <div class="advisor-intro-booking">
+                      <span>Book Session</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- See More Card -->
+              <div class="advisor-intro-card see-more-card" onclick="document.querySelector('.nav-link[data-target=\'directory\']').click(); window.scrollTo({ top: 0, behavior: \'smooth\' });">
+                <div class="see-more-content">
+                  <span class="see-more-icon">&rarr;</span>
+                  <span class="see-more-text">See more</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Segment 2: Other Available Guides -->
+        <div class="advisors-carousel-container-wrapper" style="margin-top: 64px;">
+          <div class="carousel-header-wrapper">
+            <div class="section-header left-align">
+              <span class="badge">More Guides</span>
+              <h2 class="section-title">Find the exact right guide &rarr;</h2>
+              <p class="section-subtitle">Connect with peers and financial planners to build your credit, prep for top-tier interviews, or launch your business.</p>
+            </div>
+            <div class="carousel-nav-buttons">
+              <button class="carousel-nav-btn prev-btn" aria-label="Previous Advisors">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              </button>
+              <button class="carousel-nav-btn next-btn" aria-label="Next Advisors">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+          
+          <div class="advisors-carousel-container">
+            <div class="advisors-carousel-track">
+              <!-- Advisor 5 -->
+              <div class="advisor-intro-card" data-advisor-id="aisha">
+                <div class="advisor-intro-image-wrap">
+                  <img src="aisha_portrait.png" alt="Aisha Haddad" class="portrait-card-img">
+                  <div class="portrait-verified-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  </div>
+                  <div class="portrait-availability-tag">Available Wed</div>
+                </div>
+                <div class="advisor-intro-details">
+                  <h3 class="advisor-intro-name">Aisha Haddad</h3>
+                  <p class="advisor-intro-title">Student & Academic Visa Advisor • 5 yrs exp</p>
+                  <div class="advisor-intro-specialties">
+                    <span class="specialty-badge">Student Visa</span>
+                    <span class="specialty-badge">F-1 Visa</span>
+                    <span class="specialty-badge">J-1 Visa</span>
+                  </div>
+                  <div class="advisor-intro-footer">
+                    <div class="advisor-intro-rating">
+                      <span class="star-icon">★</span>
+                      <span class="rating-val">4.7</span>
+                      <span class="reviews-count">(19)</span>
+                    </div>
+                    <div class="advisor-intro-booking">
+                      <span>Book Session</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Advisor 6 -->
+              <div class="advisor-intro-card" data-advisor-id="michael">
+                <div class="advisor-intro-image-wrap">
+                  <img src="michael_portrait.png" alt="Michael Vargas" class="portrait-card-img">
+                  <div class="portrait-verified-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  </div>
+                  <div class="portrait-availability-tag">Available Wed</div>
+                </div>
+                <div class="advisor-intro-details">
+                  <h3 class="advisor-intro-name">Michael Vargas</h3>
+                  <p class="advisor-intro-title">Business & Investment Visa Advisor • 15 yrs exp</p>
+                  <div class="advisor-intro-specialties">
+                    <span class="specialty-badge">Investor Visa</span>
+                    <span class="specialty-badge">EB-5</span>
+                    <span class="specialty-badge">Business Immigration</span>
+                  </div>
+                  <div class="advisor-intro-footer">
+                    <div class="advisor-intro-rating">
+                      <span class="star-icon">★</span>
+                      <span class="rating-val">5.0</span>
+                      <span class="reviews-count">(47)</span>
+                    </div>
+                    <div class="advisor-intro-booking">
+                      <span>Book Session</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Advisor 7 -->
+              <div class="advisor-intro-card" data-advisor-id="david">
+                <div class="advisor-intro-image-wrap">
+                  <img src="david_k_portrait.png" alt="David K." class="portrait-card-img">
+                  <div class="portrait-verified-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  </div>
+                  <div class="portrait-availability-tag">Available Wed</div>
+                </div>
+                <div class="advisor-intro-details">
+                  <h3 class="advisor-intro-name">David K.</h3>
+                  <p class="advisor-intro-title">Senior Tech Recruiter, FAANG • 6 yrs exp</p>
+                  <div class="advisor-intro-specialties">
+                    <span class="specialty-badge">Career & Job</span>
+                    <span class="specialty-badge">Interview Prep</span>
+                    <span class="specialty-badge">Salary Negotiation</span>
+                  </div>
+                  <div class="advisor-intro-footer">
+                    <div class="advisor-intro-rating">
+                      <span class="star-icon">★</span>
+                      <span class="rating-val">4.8</span>
+                      <span class="reviews-count">(31)</span>
+                    </div>
+                    <div class="advisor-intro-booking">
+                      <span>Book Session</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Advisor 8 -->
+              <div class="advisor-intro-card" data-advisor-id="amanda">
+                <div class="advisor-intro-image-wrap">
+                  <img src="amanda_portrait.png" alt="Amanda W." class="portrait-card-img">
+                  <div class="portrait-verified-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  </div>
+                  <div class="portrait-availability-tag">Available Wed</div>
+                </div>
+                <div class="advisor-intro-details">
+                  <h3 class="advisor-intro-name">Amanda W.</h3>
+                  <p class="advisor-intro-title">Certified Financial Planner • 9 yrs exp</p>
+                  <div class="advisor-intro-specialties">
+                    <span class="specialty-badge">Finance & Credit</span>
+                    <span class="specialty-badge">Expat Taxes</span>
+                    <span class="specialty-badge">Wealth Growth</span>
+                  </div>
+                  <div class="advisor-intro-footer">
+                    <div class="advisor-intro-rating">
+                      <span class="star-icon">★</span>
+                      <span class="rating-val">5.0</span>
+                      <span class="reviews-count">(19)</span>
+                    </div>
+                    <div class="advisor-intro-booking">
+                      <span>Book Session</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Advisor 9 -->
+              <div class="advisor-intro-card" data-advisor-id="cloricea">
+                <div class="advisor-intro-image-wrap">
+                  <img src="cloricea_portrait.png" alt="Cloricea (Cloey)" class="portrait-card-img">
+                  <div class="portrait-verified-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  </div>
+                  <div class="portrait-availability-tag">Available Wed</div>
+                </div>
+                <div class="advisor-intro-details">
+                  <h3 class="advisor-intro-name">Cloricea (Cloey)</h3>
+                  <p class="advisor-intro-title">Certified Nutrition & Mental Health Advisor • 7 yrs exp</p>
+                  <div class="advisor-intro-specialties">
+                    <span class="specialty-badge">Mental Health</span>
+                    <span class="specialty-badge">Nutrition</span>
+                    <span class="specialty-badge">Holistic Wellness</span>
+                  </div>
+                  <div class="advisor-intro-footer">
+                    <div class="advisor-intro-rating">
+                      <span class="star-icon">★</span>
+                      <span class="rating-val">4.9</span>
+                      <span class="reviews-count">(34)</span>
+                    </div>
+                    <div class="advisor-intro-booking">
+                      <span>Book Session</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- See More Card -->
+              <div class="advisor-intro-card see-more-card" onclick="document.querySelector('.nav-link[data-target=\'directory\']').click(); window.scrollTo({ top: 0, behavior: \'smooth\' });">
+                <div class="see-more-content">
+                  <span class="see-more-icon">&rarr;</span>
+                  <span class="see-more-text">See more</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section-padding how-it-works-section" style="background-color: #f7fce3;">
+      <div class="container">
+        <div class="section-header left-align">
+          <span class="badge">How it Works</span>
+          <h2 class="section-title">Support tailored to your unique journey</h2>
+          <button class="btn btn-primary pull-right-btn">Take the Quiz</button>
+        </div>
+        
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
+            <h3>1. Take the Intake Quiz</h3>
+            <p>Tell us exactly where you are in your journey, whether you're securing a visa or negotiating a promotion.</p>
+            <a href="#" class="step-link">Learn More &rarr;</a>
+          </div>
+          
+          <div class="step-card">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3>2. Get Matched instantly</h3>
+            <p>Our matching algorithm connects you with top-tier advisors and peer guides who have solved your exact problems.</p>
+            <a href="#" class="step-link">Learn More &rarr;</a>
+          </div>
+          
+          <div class="step-card">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <h3>3. Book a Session</h3>
+            <p>Schedule a 1-on-1 session at a time that works for you, and start getting actionable advice immediately.</p>
+            <a href="#" class="step-link">Learn More &rarr;</a>
+          </div>
+          
+          <div class="step-card">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <h3>4. Move Forward Faster</h3>
+            <p>Execute on the strategic roadmap provided by your advisor, skipping years of trial and error.</p>
+            <a href="#" class="step-link">Learn More &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="section-padding stats-section" style="background-color: white;">
+      <div class="container">
+        <div class="section-header left-align">
+          <span class="badge">Why Choose Us</span>
+          <h2 class="section-title">Real change happens when you<br>are guided by experience</h2>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-label">SUCCESSFUL PLACEMENTS</span>
+            <h3 class="stat-number">5,000+</h3>
+            <p>Immigrants and expats have successfully navigated the system using our advisors.</p>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">EXPERIENCE</span>
+            <h3 class="stat-number">10+ Years</h3>
+            <p>Our average advisor has over a decade of domain expertise in their respective fields.</p>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">CLIENT SATISFACTION</span>
+            <h3 class="stat-number">99%</h3>
+            <p>Of our clients report a massive reduction in stress after their first session.</p>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">VETTED ADVISORS</span>
+            <h3 class="stat-number">500+</h3>
+            <p>Highly curated professionals available to guide you through your journey.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="section-padding newsletter-section" style="background-color: var(--bg-primary);">
+      <div class="container">
+        <div class="newsletter-box">
+          <div class="newsletter-content">
+            <span class="badge badge-dark">Useful Content Only</span>
+            <h2>Get Tips and Insights Straight<br>to Your Inbox. No Spam, Ever.</h2>
+          </div>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Email address" class="form-input">
+            <button class="btn btn-primary btn-full" style="background: #e2f0a5; color: #153b28;">Subscribe to Newsletter</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUCCESS STORIES -->
+    <section class="section-padding stories-section" style="background-color: var(--bg-primary);">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge">Testimonials</span>
+          <h2 class="section-title">Success Stories from our Clients</h2>
+        </div>
+        
+        <div class="stories-grid">
+          <div class="story-card">
+            <div class="stars">★★★★★</div>
+            <p>"I was struggling with my O-1 visa application. My advisor helped me build the perfect portfolio, and I got approved in record time."</p>
+            <span class="story-author">Arthur F.</span>
+          </div>
+          <div class="story-card">
+            <div class="stars">★★★★★</div>
+            <p>"Moving here meant losing my credit history. My finance guide showed me exactly how to hit a 750 score within 6 months."</p>
+            <span class="story-author">Sophia Martinez</span>
+          </div>
+          <div class="story-card">
+            <div class="stars">★★★★★</div>
+            <p>"I didn't know how to negotiate my salary in the local market. One session paid for itself 100x over when I got my new job."</p>
+            <span class="story-author">Eduardo Silva</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="section-padding cta-section" style="background-color: var(--bg-primary);">
+      <div class="container">
+        <div class="cta-box">
+          <div class="cta-content">
+            <h2>Take the First Step<br>Toward Real Progress</h2>
+            <p>You don't have to figure it out alone. Book a session with someone who has already succeeded at what you're trying to do.</p>
+            <button class="btn btn-primary" style="background: #e2f0a5; color: #153b28; margin-top: 20px;">Take the Intake Quiz</button>
+          </div>
+          <div class="cta-image">
+            <img src="cta_wheat_field.png" alt="Success">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section-padding faq-section" style="background-color: var(--bg-primary);">
+      <div class="container" style="max-width: 800px;">
+        <div class="section-header">
+          <span class="badge">FAQs</span>
+          <h2 class="section-title">Everything You Need to Know<br>before Working with Us</h2>
+        </div>
+        
+        <div class="faq-accordion">
+          <div class="faq-item">
+            <button class="faq-toggle">Who are the advisors on The Bridge?<span class="faq-icon">+</span></button>
+            <div class="faq-content">
+              <p>Our advisors are heavily vetted professionals—including lawyers, recruiters, and financial planners—who specialize in immigrant and expat cases.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-toggle">How does the matching process work?<span class="faq-icon">+</span></button>
+            <div class="faq-content">
+              <p>You take a brief intake quiz detailing your situation. Our system instantly matches you with the 3 most qualified advisors for your exact needs.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-toggle">Do you offer one-time sessions?<span class="faq-icon">+</span></button>
+            <div class="faq-content">
+              <p>Yes. You can book a single consulting session to get immediate answers, or opt for ongoing mentorship if you need continuous guidance.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-toggle">What is the difference between a Peer Guide and an Accredited Advisor?<span class="faq-icon">+</span></button>
+            <div class="faq-content">
+              <p>Peer Guides are immigrants who have successfully navigated the system and offer practical, lived-experience advice. Accredited Advisors are licensed professionals (like attorneys or CPAs) who provide legal or financial counsel.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="logo" style="color: white;">
+              <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8"/></svg>
+              The Bridge
+            </div>
+            <p style="color: #9ca3af; margin-top: 16px; font-size: 0.9rem;">Connecting global talent with local expertise.</p>
+          </div>
+          <div class="footer-col">
+            <h4>Explore</h4>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Browse Directory</a></li>
+              <li><a href="#">Success Stories</a></li>
+              <li><a href="#">Advisor Application</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Support</h4>
+            <ul>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Connect</h4>
+            <ul>
+              <li><a href="#">Instagram</a></li>
+              <li><a href="#">LinkedIn</a></li>
+              <li><a href="#">Twitter</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          &copy; 2026 The Bridge. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+  </section><!-- END #home -->
+
+  <!-- OTHER VIEWS -->
+  <!-- BROWSE DIRECTORY VIEW -->
+  <section id="directory" class="view-section">
+    <div class="directory-container container" style="padding: 100px 24px 80px;">
+      <div class="section-header center-align">
+        <span class="badge">Advisor Directory</span>
+        <h2 class="section-title">Find the exact right guide</h2>
+        <p class="section-subtitle">Browse our fully verified database of peers, legal experts, financial planners, and wellness advisors.</p>
+      </div>
+
+          <p class="section-subtitle">Our curated advisor directory connects you with verified experts across immigration, legal, finance, career, and wellness. Use the search and filter tools to find the perfect guide for your specific journey.</p>
+      <!-- Controls: Search & Category Filter -->
+      <div class="directory-controls">
+        <div class="search-bar-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="dir-search" placeholder="Search by name, specialty, or role...">
+        </div>
+        <div class="filter-pills-container">
+          <button class="filter-pill-btn active" data-category="all">All</button>
+          <button class="filter-pill-btn" data-category="status">Status & Visas</button>
+          <button class="filter-pill-btn" data-category="career">Career & Jobs</button>
+          <button class="filter-pill-btn" data-category="finance">Finance & Credit</button>
+          <button class="filter-pill-btn" data-category="wellness">Mental Health & Wellness</button>
+        </div>
+      </div>
+
+      <!-- Advisor Grid -->
+      <div class="directory-grid" id="dir-advisor-grid">
+        <!-- Advisor 1 -->
+        <div class="advisor-intro-card" data-advisor-id="sarah" data-category="status">
+          <div class="advisor-intro-image-wrap">
+            <img src="sarah_portrait.png" alt="Sarah Jenkins, Esq." class="portrait-card-img">
+            <div class="portrait-verified-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="portrait-availability-tag">Available Wed</div>
+          </div>
+          <div class="advisor-intro-details">
+            <h3 class="advisor-intro-name">Sarah Jenkins, Esq.</h3>
+            <p class="advisor-intro-title">Licensed Immigration Attorney • 8 yrs exp</p>
+            <div class="advisor-intro-specialties">
+              <span class="specialty-badge">Status & Visa</span>
+              <span class="specialty-badge">O-1 & H-1B</span>
+              <span class="specialty-badge">Green Cards</span>
+            </div>
+            <div class="advisor-intro-footer">
+              <div class="advisor-intro-rating">
+                <span class="star-icon">★</span>
+                <span class="rating-val">4.9</span>
+                <span class="reviews-count">(42)</span>
+              </div>
+              <div class="advisor-intro-booking">
+                <span>Book Session</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advisor 2 -->
+        <div class="advisor-intro-card" data-advisor-id="david_chee" data-category="status">
+          <div class="advisor-intro-image-wrap">
+            <img src="david_chee_portrait.png" alt="David Chee" class="portrait-card-img">
+            <div class="portrait-verified-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="portrait-availability-tag">Available Wed</div>
+          </div>
+          <div class="advisor-intro-details">
+            <h3 class="advisor-intro-name">David Chee</h3>
+            <p class="advisor-intro-title">Family Reunification Expert • 6 yrs exp</p>
+            <div class="advisor-intro-specialties">
+              <span class="specialty-badge">Family Visa</span>
+              <span class="specialty-badge">Sponsorship</span>
+              <span class="specialty-badge">Green Cards</span>
+            </div>
+            <div class="advisor-intro-footer">
+              <div class="advisor-intro-rating">
+                <span class="star-icon">★</span>
+                <span class="rating-val">4.8</span>
+                <span class="reviews-count">(31)</span>
+              </div>
+              <div class="advisor-intro-booking">
+                <span>Book Session</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advisor 3 -->
+        <div class="advisor-intro-card" data-advisor-id="elena" data-category="status">
+          <div class="advisor-intro-image-wrap">
+            <img src="elena_portrait.png" alt="Elena Ramirez" class="portrait-card-img">
+            <div class="portrait-verified-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="portrait-availability-tag">Available Wed</div>
+          </div>
+          <div class="advisor-intro-details">
+            <h3 class="advisor-intro-name">Elena Ramirez</h3>
+            <p class="advisor-intro-title">Asylum & Refugee Specialist • 8 yrs exp</p>
+            <div class="advisor-intro-specialties">
+              <span class="specialty-badge">Asylum</span>
+              <span class="specialty-badge">Refugee</span>
+              <span class="specialty-badge">Humanitarian</span>
+            </div>
+            <div class="advisor-intro-footer">
+              <div class="advisor-intro-rating">
+                <span class="star-icon">★</span>
+                <span class="rating-val">4.9</span>
+                <span class="reviews-count">(28)</span>
+              </div>
+              <div class="advisor-intro-booking">
+                <span>Book Session</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advisor 4 -->
+        <div class="advisor-intro-card" data-advisor-id="hassan" data-category="status">
+          <div class="advisor-intro-image-wrap">
+            <img src="hassan_portrait.png" alt="Hassan Badoor" class="portrait-card-img">
+            <div class="portrait-verified-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="portrait-availability-tag">Available Thu</div>
+          </div>
+          <div class="advisor-intro-details">
+            <h3 class="advisor-intro-name">Hassan Badoor</h3>
+            <p class="advisor-intro-title">Citizenship & Naturalization Specialist • 10 yrs exp</p>
+            <div class="advisor-intro-specialties">
+              <span class="specialty-badge">Citizenship</span>
+              <span class="specialty-badge">Naturalization</span>
+              <span class="specialty-badge">Immigration Law</span>
+            </div>
+            <div class="advisor-intro-footer">
+              <div class="advisor-intro-rating">
+                <span class="star-icon">★</span>
+                <span class="rating-val">5.0</span>
+                <span class="reviews-count">(56)</span>
+              </div>
+              <div class="advisor-intro-booking">
+                <span>Book Session</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advisor 5 -->
+        <div class="advisor-intro-card" data-advisor-id="aisha" data-category="career">
+          <div class="advisor-intro-image-wrap">
+            <img src="aisha_portrait.png" alt="Aisha Haddad" class="portrait-card-img">
+            <div class="portrait-verified-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="portrait-availability-tag">Available Wed</div>
+          </div>
+          <div class="advisor-intro-details">
+            <h3 class="advisor-intro-name">Aisha Haddad</h3>
+            <p class="advisor-intro-title">Student & Academic Visa Advisor • 5 yrs exp</p>
+            <div class="advisor-intro-specialties">
+              <span class="specialty-badge">Student Visa</span>
+              <span class="specialty-badge">F-1 Visa</span>
+              <span class="specialty-badge">J-1 Visa</span>
+            </div>
+            <div class="advisor-intro-footer">
+              <div class="advisor-intro-rating">
+                <span class="star-icon">★</span>
+                <span class="rating-val">4.7</span>
+                <span class="reviews-count">(19)</span>
+              </div>
+              <div class="advisor-intro-booking">
+                <span>Book Session</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advisor 6 -->
+        <div class="advisor-intro-card" data-advisor-id="michael" data-category="career">
+          <div class="advisor-intro-image-wrap">
+            <img src="michael_portrait.png" alt="Michael Vargas" class="portrait-card-img">
+            <div class="portrait-verified-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="portrait-availability-tag">Available Wed</div>
+          </div>
+          <div class="advisor-intro-details">
+            <h3 class="advisor-intro-name">Michael Vargas</h3>
+            <p class="advisor-intro-title">Business & Investment Visa Advisor • 15 yrs exp</p>
+            <div class="advisor-intro-specialties">
+              <span class="specialty-badge">Investor Visa</span>
+              <span class="specialty-badge">EB-5</span>
+              <span class="specialty-badge">Business Immigration</span>
+            </div>
+            <div class="advisor-intro-footer">
+              <div class="advisor-intro-rating">
+                <span class="star-icon">★</span>
+                <span class="rating-val">5.0</span>
+                <span class="reviews-count">(47)</span>
+              </div>
+              <div class="advisor-intro-booking">
+                <span>Book Session</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advisor 7 -->
+        <div class="advisor-intro-card" data-advisor-id="david" data-category="career">
+          <div class="advisor-intro-image-wrap">
+            <img src="david_k_portrait.png" alt="David K." class="portrait-card-img">
+            <div class="portrait-verified-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="portrait-availability-tag">Available Wed</div>
+          </div>
+          <div class="advisor-intro-details">
+            <h3 class="advisor-intro-name">David K.</h3>
+            <p class="advisor-intro-title">Senior Tech Recruiter, FAANG • 6 yrs exp</p>
+            <div class="advisor-intro-specialties">
+              <span class="specialty-badge">Career & Job</span>
+              <span class="specialty-badge">Interview Prep</span>
+              <span class="specialty-badge">Salary Negotiation</span>
+            </div>
+            <div class="advisor-intro-footer">
+              <div class="advisor-intro-rating">
+                <span class="star-icon">★</span>
+                <span class="rating-val">4.8</span>
+                <span class="reviews-count">(31)</span>
+              </div>
+              <div class="advisor-intro-booking">
+                <span>Book Session</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advisor 8 -->
+        <div class="advisor-intro-card" data-advisor-id="amanda" data-category="finance">
+          <div class="advisor-intro-image-wrap">
+            <img src="amanda_portrait.png" alt="Amanda W." class="portrait-card-img">
+            <div class="portrait-verified-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="portrait-availability-tag">Available Wed</div>
+          </div>
+          <div class="advisor-intro-details">
+            <h3 class="advisor-intro-name">Amanda W.</h3>
+            <p class="advisor-intro-title">Certified Financial Planner • 9 yrs exp</p>
+            <div class="advisor-intro-specialties">
+              <span class="specialty-badge">Finance & Credit</span>
+              <span class="specialty-badge">Expat Taxes</span>
+              <span class="specialty-badge">Wealth Growth</span>
+            </div>
+            <div class="advisor-intro-footer">
+              <div class="advisor-intro-rating">
+                <span class="star-icon">★</span>
+                <span class="rating-val">5.0</span>
+                <span class="reviews-count">(19)</span>
+              </div>
+              <div class="advisor-intro-booking">
+                <span>Book Session</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advisor 9 -->
+        <div class="advisor-intro-card" data-advisor-id="cloricea" data-category="wellness">
+          <div class="advisor-intro-image-wrap">
+            <img src="cloricea_portrait.png" alt="Cloricea (Cloey)" class="portrait-card-img">
+            <div class="portrait-verified-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="portrait-availability-tag">Available Wed</div>
+          </div>
+          <div class="advisor-intro-details">
+            <h3 class="advisor-intro-name">Cloricea (Cloey)</h3>
+            <p class="advisor-intro-title">Certified Nutrition & Mental Health Advisor • 7 yrs exp</p>
+            <div class="advisor-intro-specialties">
+              <span class="specialty-badge">Mental Health</span>
+              <span class="specialty-badge">Nutrition</span>
+              <span class="specialty-badge">Holistic Wellness</span>
+            </div>
+            <div class="advisor-intro-footer">
+              <div class="advisor-intro-rating">
+            <div class="advisor-intro-rating">
+                <span class="star-icon">★</span>
+                <span class="rating-val">4.9</span>
+                <span class="reviews-count">(34)</span>
+              </div>
+              <div class="advisor-intro-booking">
+                <span>Book Session</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR MISSION VIEW -->
+  <section id="mission" class="view-section">
+    <div class="mission-page">
+
+      <!-- ① TWO-COLUMN HERO -->
+      <div class="mission-hero-split container">
+        <!-- Left: Text -->
+        <div class="mission-hero-text">
+          <span class="badge">OUR MISSION</span>
+          <h1 class="mission-headline">
+            We built the bridge we wish we had on day one.
+            <span class="mission-accent">And the network we rely on today.</span>
+          </h1>
+          <p class="mission-lead">Whether you are landing your first local role or negotiating an executive package, <strong>you shouldn't have to guess the unwritten rules.</strong></p>
+          <button class="btn btn-primary" onclick="document.querySelector('.nav-link[data-target=\'directory\']').click();" style="margin-top: 8px; padding: 14px 32px;">Find Your Guide →</button>
+        </div>
+
+        <!-- Right: Image + floating cards -->
+        <div class="mission-hero-visual">
+          <div class="mission-hero-img-wrap">
+            <img src="hero_candid_cafe.png" alt="Professional advisory session" class="mission-hero-img">
+            <!-- Floating stat card -->
+            <div class="mission-float-card mission-float-tl">
+              <span class="float-number">1,200+</span>
+              <span class="float-label">Sessions completed</span>
+            </div>
+            <div class="mission-float-card mission-float-br">
+              <div class="float-avatars">
+                <img src="sarah_portrait.png" alt="">
+                <img src="hassan_portrait.png" alt="">
+                <img src="amanda_portrait.png" alt="">
+                <span class="float-avatar-more">+47</span>
+              </div>
+              <span class="float-label" style="margin-top:8px;">Verified Advisors</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② STATS ROW -->
+      <div class="mission-stats-bar">
+        <div class="container mission-stats-inner">
+          <div class="mission-stat">
+            <span class="stat-number">50+</span>
+            <span class="stat-label">Verified Advisors</span>
+          </div>
+          <div class="mission-stat-divider"></div>
+          <div class="mission-stat">
+            <span class="stat-number">75+</span>
+            <span class="stat-label">Countries Represented</span>
+          </div>
+          <div class="mission-stat-divider"></div>
+          <div class="mission-stat">
+            <span class="stat-number">1,200+</span>
+            <span class="stat-label">Sessions Completed</span>
+          </div>
+          <div class="mission-stat-divider"></div>
+          <div class="mission-stat">
+            <span class="stat-number">4.9★</span>
+            <span class="stat-label">Average Rating</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ WHY THE BRIDGE — image left, features right -->
+      <div class="container mission-why-split">
+        <div class="mission-why-img-wrap">
+          <img src="hero_candid_document.png" alt="Advisor reviewing documents with client" class="mission-why-img">
+          <!-- Overlay card -->
+          <div class="mission-why-overlay-card" style="max-width: 300px;">
+            <p class="why-overlay-quote" style="font-size: 0.95rem; line-height: 1.65; font-style: italic; margin-bottom: 0; color: rgba(255,255,255,0.95);">
+              "Getting in the door is just the starting line. True success is having the right insiders in your corner at every stage of your life."
+            </p>
+          </div>
+        </div>
+        <div class="mission-why-content">
+          <span class="badge">Why The Bridge?</span>
+          <h2 class="mission-why-headline">
+            Direct access to people who've <span class="mission-accent">been there.</span>
+          </h2>
+          <p class="mission-why-lead">Generic advice only gets you so far. When it's time to negotiate a top-tier salary, secure a complex visa, or build local wealth, <strong>you can't afford to rely on trial-and-error.</strong></p>
+          <p class="mission-why-lead"><strong>We started The Bridge to give you a lifelong advantage.</strong></p>
+          <p class="mission-why-lead">With one subscription, you get continuous access to vetted legal experts, financial planners, and successful peers. We replace the guesswork with <strong>direct insider access</strong>—so you never stop moving forward.</p>
+
+          <ul class="mission-features-list">
+            <li class="mission-feature-item">
+              <span class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <div><strong>Vetted Legal Experts</strong> — Licensed attorneys who navigate immigration with you</div>
+            </li>
+            <li class="mission-feature-item">
+              <span class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <div><strong>Peer Guides</strong> — Immigrants who solved the exact problems you're facing</div>
+            </li>
+            <li class="mission-feature-item">
+              <span class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <div><strong>Financial Planners</strong> — Build local credit, navigate taxes, grow your wealth</div>
+            </li>
+            <li class="mission-feature-item">
+              <span class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <div><strong>1-on-1 Virtual Sessions</strong> — Real time, on your schedule, from anywhere</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ④ MEET OUR ADVISORS TEASER -->
+      <div class="container mission-advisors-teaser">
+        <div class="mission-advisors-header">
+          <div>
+            <h2 class="mission-advisors-headline">Meet our <span class="mission-accent">dedicated guides</span></h2>
+            <p class="mission-advisors-sub">Skilled professionals ready to guide you through every step.</p>
+          </div>
+          <button class="btn btn-outline" onclick="document.querySelector('.nav-link[data-target=\'directory\']').click();" style="padding:12px 28px; font-size:0.9rem;">View All →</button>
+        </div>
+        <div class="mission-advisor-cards">
+          <div class="mission-adv-card">
+            <img src="sarah_portrait.png" alt="Sarah Jenkins" class="mission-adv-img">
+            <div class="mission-adv-info">
+              <h4>Sarah Jenkins, Esq.</h4>
+              <p>Immigration Attorney</p>
+            </div>
+          </div>
+          <div class="mission-adv-card mission-adv-card--featured">
+            <img src="hassan_portrait.png" alt="Hassan Badoor" class="mission-adv-img">
+            <div class="mission-adv-info">
+              <h4>Hassan Badoor</h4>
+              <p>Citizenship Specialist</p>
+            </div>
+          </div>
+          <div class="mission-adv-card">
+            <img src="amanda_portrait.png" alt="Amanda Williams" class="mission-adv-img">
+            <div class="mission-adv-info">
+              <h4>Amanda Williams</h4>
+              <p>Financial Planner</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑤ PILLAR CARDS -->
+      <div class="container mission-pillars-new">
+        <div class="pillar-card-new">
+          <div class="pillar-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <h3 class="pillar-card-title">Break the Bottlenecks</h3>
+          <p class="pillar-card-desc">Get unstuck instantly. Connect with an insider to solve your immediate legal, career, or visa roadblock.</p>
+        </div>
+        <div class="pillar-card-new">
+          <div class="pillar-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+              <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+            </svg>
+          </div>
+          <h3 class="pillar-card-title">Master the System</h3>
+          <p class="pillar-card-desc">Learn the unwritten rules. Get the playbooks for asking for raises, navigating corporate promotions, and buying your first home.</p>
+        </div>
+        <div class="pillar-card-new">
+          <div class="pillar-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+            </svg>
+          </div>
+          <h3 class="pillar-card-title">Build Your Legacy</h3>
+          <p class="pillar-card-desc">Don't just participate—lead. Get high-level guidance on starting a business, investing your capital, and reaching the executive suite.</p>
+        </div>
+      </div>
+
+      <!-- ⑥ CTA DARK STRIP -->
+      <div class="mission-cta-dark">
+        <div class="container mission-cta-dark-inner">
+          <div>
+            <h2>Get expert guidance <em>at your fingertips.</em></h2>
+            <p>Access top advisors anytime, anywhere. Book a session and prioritize your transition today.</p>
+          </div>
+          <div class="mission-cta-dark-btns">
+            <button class="btn btn-primary" onclick="document.querySelector('.nav-link[data-target=\'directory\']').click();">Browse Advisors →</button>
+            <button class="btn btn-outline" style="border-color:rgba(255,255,255,0.4); color:white;" onclick="document.querySelector('.nav-link[data-target=\'application\']').click();">Apply as Guide</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SUCCESS STORIES VIEW -->
+  <section id="stories" class="view-section">
+    <div class="stories-container container" style="padding: 100px 24px 80px;">
+      <div class="section-header center-align">
+        <span class="badge">Success Stories</span>
+        <h2 class="section-title">Real stories of resilience</h2>
+        <p class="section-subtitle">Read how immigrants and expats found their path with the direct help of our verified advisors.</p>
+        <p class="section-subtitle">These stories showcase real outcomes—career breakthroughs, visa approvals, financial stability—made possible through our advisors' expertise.</p>
+      </div>
+
+      <div class="stories-grid">
+        <!-- Story 1 -->
+        <div class="story-card">
+          <span class="story-tag">Career Move</span>
+          <p class="story-quote">"David's technical resume rebuild changed everything. Within three weeks of optimizing my profile for local tech ATS scanners, I landed four callbacks and signed my senior software engineer offer at a top-tier company."</p>
+          <div class="story-author">
+            <div class="story-author-details">
+              <h4 class="author-name">Sofia R.</h4>
+              <p class="author-bio">Senior Developer from Brazil • Guided by David K.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Story 2 -->
+        <div class="story-card">
+          <span class="story-tag">Immigration Success</span>
+          <p class="story-quote">"Sarah and Hassan walked me through my Green Card interview prep step-by-step. The mock interview prepared me for every single question the USCIS officer asked, and my petition was approved on the spot."</p>
+          <div class="story-author">
+            <div class="story-author-details">
+              <h4 class="author-name">Mateo L.</h4>
+              <p class="author-bio">Startup Founder from Argentina • Guided by Sarah J. & Hassan B.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Story 3 -->
+        <div class="story-card">
+              <span class="story-tag">Financial Transition</span>
+              <p class="story-quote">"Amanda helped me understand U.S. credit transfers and tax filings. Thanks to her financial roadmap, I established a secure score and successfully leased my first apartment within two months of arrival."</p>
+              <div class="story-author">
+                <div class="story-author-details">
+                  <h4 class="author-name">Priya K.</h4>
+                  <p class="author-bio">Medical Researcher from India • Guided by Amanda W.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADVISOR APPLICATION VIEW -->
+      <section id="application" class="view-section">
+        <div class="application-container container" style="padding: 100px 24px 80px; max-width: 780px;">
+          
+          <!-- Header -->
+          <div class="section-header center-align">
+            <span class="badge">Join Our Network</span>
+            <h2 class="section-title">Apply to become a guide</h2>
+            <p class="section-subtitle">We're looking for people who have already navigated the system — and want to help others do the same. Fill out the form below and our team will review your application within 5 business days.</p>
+          </div>
+
+          <div class="form-wrapper">
+            <form id="advisor-apply-form" class="apply-form">
+
+              <!-- SECTION 1: Personal Info -->
+              <div class="form-section-block">
+                <h3 class="form-section-heading">01 — Personal Information</h3>
+
+                <div class="form-group-row">
+                  <div class="form-group">
+                    <label for="apply-fname">First Name *</label>
+                    <input type="text" id="apply-fname" placeholder="Maria" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="apply-lname">Last Name *</label>
+                    <input type="text" id="apply-lname" placeholder="Gonzalez" required>
+                  </div>
+                </div>
+
+                <div class="form-group-row">
+                  <div class="form-group">
+                    <label for="apply-email">Email Address *</label>
+                    <input type="email" id="apply-email" placeholder="maria@example.com" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="apply-phone">Phone Number</label>
+                    <input type="tel" id="apply-phone" placeholder="+1 (555) 000-0000">
+                  </div>
+                </div>
+
+                <div class="form-group-row">
+                  <div class="form-group">
+                    <label for="apply-country-origin">Country of Origin *</label>
+                    <input type="text" id="apply-country-origin" placeholder="Mexico" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="apply-country-current">Country You Currently Live In *</label>
+                    <input type="text" id="apply-country-current" placeholder="United States" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="apply-city">City & State / Province *</label>
+                  <input type="text" id="apply-city" placeholder="Houston, TX" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="apply-linkedin">LinkedIn Profile URL</label>
+                  <input type="url" id="apply-linkedin" placeholder="https://linkedin.com/in/your-profile">
+                </div>
+              </div>
+
+              <!-- SECTION 2: Your Journey -->
+              <div class="form-section-block">
+                <h3 class="form-section-heading">02 — Your Immigration Journey</h3>
+
+                <div class="form-group">
+                  <label for="apply-arrived">What year did you arrive in your current country? *</label>
+                  <input type="number" id="apply-arrived" placeholder="2018" min="1960" max="2025" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="apply-visa-type">What visa or status category did you navigate? *</label>
+                  <select id="apply-visa-type" required>
+                    <option value="" disabled selected>Select the primary category</option>
+                    <option value="work">Work Visa (H-1B, L-1, O-1, TN, etc.)</option>
+                    <option value="student">Student Visa (F-1, J-1, M-1)</option>
+                    <option value="family">Family-Based (Spouse, Parent, Sibling sponsorship)</option>
+                    <option value="greencard">Permanent Residency / Green Card</option>
+                    <option value="asylum">Asylum or Refugee</option>
+                    <option value="citizenship">Naturalization / Citizenship</option>
+                    <option value="eb">EB-1, EB-2, EB-3 Employment-Based</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="apply-journey">Describe your immigration journey in your own words *</label>
+                  <textarea id="apply-journey" rows="5" placeholder="Share the key hurdles you faced — visa denials, RFEs, relocation challenges, rebuilding your career — and how you ultimately navigated them. Be as specific as possible." required></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="apply-biggest-win">What was your biggest win after arriving? *</label>
+                  <textarea id="apply-biggest-win" rows="3" placeholder="e.g. Secured my first job in tech within 6 months, bought my first home, passed the bar exam in a new country..." required></textarea>
+                </div>
+              </div>
+
+              <!-- SECTION 3: Expertise -->
+              <div class="form-section-block">
+                <h3 class="form-section-heading">03 — Your Area of Expertise</h3>
+
+                <div class="form-group">
+                  <label>Which service category best describes your expertise? * <span style="font-weight:400; font-size:0.8rem; color:var(--text-secondary)">(Select all that apply)</span></label>
+                  <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" name="specialty" value="status"> Immigration Status &amp; Visas</label>
+                    <label class="checkbox-item"><input type="checkbox" name="specialty" value="career"> Career, Resume &amp; Job Search</label>
+                    <label class="checkbox-item"><input type="checkbox" name="specialty" value="finance"> Finance, Banking &amp; Credit Building</label>
+                    <label class="checkbox-item"><input type="checkbox" name="specialty" value="tax"> Tax Filing &amp; Expat Tax Planning</label>
+                    <label class="checkbox-item"><input type="checkbox" name="specialty" value="wellness"> Mental Health &amp; Wellness</label>
+                    <label class="checkbox-item"><input type="checkbox" name="specialty" value="housing"> Housing &amp; Lease Negotiation</label>
+                    <label class="checkbox-item"><input type="checkbox" name="specialty" value="entrepreneurship"> Entrepreneurship &amp; Starting a Business</label>
+                    <label class="checkbox-item"><input type="checkbox" name="specialty" value="education"> Education &amp; Credential Recognition</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="apply-credentials">Do you hold any professional licenses or certifications? *</label>
+                  <select id="apply-credentials" required>
+                    <option value="" disabled selected>Select one</option>
+                    <option value="licensed">Yes — Licensed professional (Attorney, CPA, CFP, LCSW, etc.)</option>
+                    <option value="certified">Yes — Certified specialist (PMP, SHRM, USCIS Accredited Rep, etc.)</option>
+                    <option value="peer">No — I am a peer guide with lived experience</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="apply-credentials-detail">If licensed or certified, list your credentials</label>
+                  <input type="text" id="apply-credentials-detail" placeholder="e.g. Licensed Immigration Attorney (TX Bar #12345), Enrolled Agent">
+                </div>
+
+                <div class="form-group">
+                  <label for="apply-years">How many years have you been actively advising or mentoring others in this area? *</label>
+                  <select id="apply-years" required>
+                    <option value="" disabled selected>Select range</option>
+                    <option value="0-1">Less than 1 year</option>
+                    <option value="1-3">1–3 years</option>
+                    <option value="3-5">3–5 years</option>
+                    <option value="5-10">5–10 years</option>
+                    <option value="10+">10+ years</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- SECTION 4: Your Approach -->
+              <div class="form-section-block">
+                <h3 class="form-section-heading">04 — Your Guiding Style</h3>
+
+                <div class="form-group">
+                  <label for="apply-approach">How would you describe your approach to advising someone new? *</label>
+                  <textarea id="apply-approach" rows="4" placeholder="e.g. I lead with empathy and curiosity. I ask open-ended questions to understand where someone is, then share what worked for me and what I'd do differently. I never impose — I help people make decisions that fit their own values and goals." required></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="apply-first-session">What would your first session with a new client look like? *</label>
+                  <textarea id="apply-first-session" rows="4" placeholder="e.g. We'd spend the first 15 minutes getting to know each other, then I'd walk through their current situation, top 3 blockers, and help them build a clear action plan for the next 30 days." required></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="apply-languages">Languages you can advise in *</label>
+                  <input type="text" id="apply-languages" placeholder="e.g. English, Spanish, Portuguese" required>
+                </div>
+
+                <div class="form-group">
+                  <label>Preferred session format *</label>
+                  <div class="radio-group">
+                    <label class="radio-item"><input type="radio" name="session-format" value="video" required> Video Call (Zoom, Google Meet)</label>
+                    <label class="radio-item"><input type="radio" name="session-format" value="phone"> Phone Call</label>
+                    <label class="radio-item"><input type="radio" name="session-format" value="both"> Both</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>General availability *</label>
+                  <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" name="availability" value="weekday-am"> Weekday Mornings</label>
+                    <label class="checkbox-item"><input type="checkbox" name="availability" value="weekday-pm"> Weekday Afternoons</label>
+                    <label class="checkbox-item"><input type="checkbox" name="availability" value="weekday-eve"> Weekday Evenings</label>
+                    <label class="checkbox-item"><input type="checkbox" name="availability" value="weekend"> Weekends</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SECTION 5: Motivation -->
+              <div class="form-section-block">
+                <h3 class="form-section-heading">05 — Why The Bridge?</h3>
+
+                <div class="form-group">
+                  <label for="apply-why">Why do you want to guide others through their immigration journey? *</label>
+                  <textarea id="apply-why" rows="4" placeholder="Share what drives you. What do you wish you had when you first arrived? Why does this work matter to you?" required></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="apply-referral">How did you hear about The Bridge?</label>
+                  <select id="apply-referral">
+                    <option value="" disabled selected>Select one</option>
+                    <option value="social">Social media (Instagram, LinkedIn, Twitter)</option>
+                    <option value="word">Word of mouth / referral</option>
+                    <option value="search">Google / web search</option>
+                    <option value="community">Community group or forum</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="apply-anything-else">Anything else you'd like us to know?</label>
+                  <textarea id="apply-anything-else" rows="3" placeholder="Optional — share any additional context, a link to your work, or a question for our team."></textarea>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-full apply-submit-btn" style="padding: 16px; font-size: 1rem; margin-top: 8px;">Submit My Application →</button>
+              <p style="text-align:center; font-size:0.8rem; color:var(--text-secondary); margin-top:12px;">Our vetting team reviews every application personally. We'll follow up within 5 business days.</p>
+            </form>
+
+            <!-- Success Message -->
+            <div id="apply-success-message" class="apply-success-card" style="display: none;">
+              <div class="success-icon-wrap" style="margin: 0 auto 20px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <h3>Application Submitted!</h3>
+              <p>Thank you for applying to join our network. Our vetting team will review your background and credentials personally, and we'll get back to you within 5 business days.</p>
+              <button type="button" class="btn btn-primary" onclick="document.querySelector('.nav-link[data-target=\'home\']').click();" style="margin-top: 24px;">Return Home</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+  <!-- Advisor Profile & Scheduler Modal -->
+  <div id="advisor-modal" class="modal-overlay">
+    <div class="modal-container advisor-modal-container">
+      <button class="modal-close-btn">&times;</button>
+      <div class="advisor-modal-layout">
+        <!-- Left Sidebar: Photo, Fit & Scheduler -->
+        <div class="advisor-modal-sidebar">
+          <div class="profile-photo-wrapper">
+            <img id="adv-modal-photo" src="" alt="Advisor" class="profile-photo-img">
+          </div>
+          
+          <!-- Potential Fit Card -->
+          <div class="potential-fit-card">
+            <div class="potential-fit-header">
+              <h4 class="sidebar-section-title">Potential Fit</h4>
+              <span class="potential-fit-shield">🛡️</span>
+            </div>
+            <ul class="fit-items-list">
+              <li class="fit-item">
+                <span class="fit-icon">✓</span>
+                <span class="fit-text">Availability matches your timing preferences</span>
+              </li>
+              <li class="fit-item">
+                <span class="fit-icon">💻</span>
+                <span class="fit-text">Virtual sessions</span>
+              </li>
+              <li class="fit-item">
+                <span class="fit-icon">💬</span>
+                <span class="fit-text">1-on-1 mentorship</span>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Schedule Session Card -->
+          <div class="scheduler-card">
+            <h4 class="sidebar-section-title">Schedule 60-Minute Session</h4>
+            
+            <div class="scheduler-days-container" style="margin-bottom: 20px;">
+              <div class="scheduler-days-header" id="adv-modal-days-header">
+                <!-- Dynamically populated day tabs -->
+              </div>
+              
+              <div class="scheduler-slots-content" id="adv-modal-slots-content">
+                <!-- Dynamically populated slot content -->
+              </div>
+            </div>
+            
+            <p style="font-size: 0.68rem; color: var(--text-secondary); text-align: center; margin-bottom: 16px; font-weight: 500;">*All times shown in Central Time (CT)</p>
+            
+            <button class="btn btn-primary btn-full book-session-btn" id="adv-modal-book-btn" disabled>Schedule</button>
+          </div>
+        </div>
+        
+        <!-- Right Main Content: Name, Bio, Details -->
+        <div class="advisor-modal-main">
+          <div class="profile-header">
+            <h1 id="adv-modal-name" class="profile-name">Sarah Jenkins, Esq.</h1>
+            <p id="adv-modal-title" class="profile-title">Licensed Immigration Attorney • 8 yrs exp</p>
+            
+            <div class="profile-availability-bar">
+              <div class="availability-bar-item">
+                <span class="bar-icon">📅</span>
+                <span id="adv-modal-avail-text">Available Wed Jun 10</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- About -->
+          <div class="profile-section">
+            <h3 class="section-title">About</h3>
+            <p id="adv-modal-bio" class="section-text">Bio text...</p>
+          </div>
+          
+          <!-- First Session -->
+          <div class="profile-section">
+            <h3 class="section-title">First session</h3>
+            <p id="adv-modal-first-session" class="section-text">First session outline...</p>
+          </div>
+
+          <!-- Strengths -->
+          <div class="profile-section">
+            <h3 class="section-title">Strengths</h3>
+            <p id="adv-modal-strengths" class="section-text">Strengths outline...</p>
+          </div>
+
+          <!-- Ideal Clients -->
+          <div class="profile-section">
+            <h3 class="section-title">Ideal clients</h3>
+            <p id="adv-modal-ideal-clients" class="section-text">Ideal client description...</p>
+          </div>
+          
+          <!-- Location -->
+          <div class="profile-section">
+            <h3 class="section-title">Location</h3>
+            <p id="adv-modal-location-text" class="section-text">🌐 Virtual sessions (Offers services globally)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Confirmation Modal -->
+  <div id="booking-modal" class="modal-overlay">
+    <div class="modal-container">
+      <button class="modal-close-btn">&times;</button>
+      <div class="modal-header">
+        <div class="success-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h3>Confirm Your Session</h3>
+        <p>You are booking a 1-on-1 session with <strong id="modal-advisor-name">Advisor</strong>.</p>
+      </div>
+      
+      <div class="modal-body">
+        <div class="booking-summary-card">
+          <div class="summary-row">
+            <span class="summary-label">Date & Time</span>
+            <span class="summary-value" id="modal-booking-time">Wednesday, Jun 10 at 10:00 AM</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Format</span>
+            <span class="summary-value">Virtual Video Call (Google Meet)</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Focus Area</span>
+            <span class="summary-value" id="modal-advisor-specialty">Status & Visa</span>
+          </div>
+        </div>
+        
+        <form class="modal-form" id="booking-form">
+          <div class="form-group">
+            <label for="booking-name">Your Full Name</label>
+            <input type="text" id="booking-name" required placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label for="booking-email">Email Address</label>
+            <input type="email" id="booking-email" required placeholder="john@example.com">
+          </div>
+          <div class="form-group">
+            <label for="booking-notes">Briefly describe what you'd like to discuss</label>
+            <textarea id="booking-notes" rows="3" placeholder="e.g. Preparing for my O-1 visa interview next month..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Confirm Booking</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Intake Match Loading Modal -->
+  <div id="matching-loader-modal" class="modal-overlay" style="display: none; z-index: 10000; background: rgba(17, 47, 32, 0.95); backdrop-filter: blur(12px);">
+    <div class="loader-content" style="text-align: center; color: white; max-width: 450px; padding: 40px; display: flex; flex-direction: column; align-items: center;">
+      <div class="loading-ring-wrapper" style="margin-bottom: 24px; display: inline-block;">
+        <div class="radar-ping"></div>
+        <div class="loader-avatar-container">
+          <img id="loader-avatar" src="sarah_portrait.png" alt="Matching..." class="loader-portrait-img">
+        </div>
+      </div>
+      <h3 class="loader-step-title" style="font-family: var(--font-serif); font-size: 2.2rem; font-weight: 400; margin-bottom: 12px; font-style: italic;">Finding your guide...</h3>
+      <p class="loader-step-desc" style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.5; min-height: 48px;">Analyzing relocation destinations and pathway requirements...</p>
+      
+      <!-- Progress Bar -->
+      <div class="loader-progress" style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 24px; overflow: hidden;">
+        <div class="loader-progress-bar" style="width: 0%; height: 100%; background: #10B981; transition: width 0.3s ease;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
