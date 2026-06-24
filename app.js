@@ -2178,9 +2178,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const shouldShow = loggedIn && userRole === 'client';
       if (parentLi) {
         parentLi.style.display = shouldShow ? 'inline-block' : 'none';
-      } else {
-        dashboardLink.style.display = shouldShow ? 'inline-block' : 'none';
       }
+      dashboardLink.style.display = shouldShow ? 'inline-block' : 'none';
     }
 
     if (advisorPortalLink) {
@@ -2188,9 +2187,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const shouldShow = loggedIn && userRole === 'advisor';
       if (parentLi) {
         parentLi.style.display = shouldShow ? 'inline-block' : 'none';
-      } else {
-        advisorPortalLink.style.display = shouldShow ? 'inline-block' : 'none';
       }
+      advisorPortalLink.style.display = shouldShow ? 'inline-block' : 'none';
     }
 
     if (!navActions) return;
