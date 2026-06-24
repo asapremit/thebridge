@@ -2767,6 +2767,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // PHASE 3: CLIENT & ADVISOR DASHBOARDS, CHAT, & DOCUMENT LOCKER
   // ==========================================================================
 
+  function getFocusKey(focusArea) {
+    if (!focusArea) return 'status';
+    const f = focusArea.toLowerCase();
+    if (f.includes('visa') || f.includes('status')) return 'status';
+    if (f.includes('job') || f.includes('career')) return 'career';
+    if (f.includes('credit') || f.includes('finance')) return 'finance';
+    return 'status';
+  }
+
   let chatUnsubscribe = null;
   let advChatUnsubscribe = null;
   let activeSelectedClientId = null;
@@ -2818,78 +2827,83 @@ document.addEventListener('DOMContentLoaded', () => {
         const checklistContainer = document.getElementById('db-checklist-container');
         if (checklistContainer) {
           checklistContainer.innerHTML = '';
-          const focusConfig = quizContentConfig[focusArea] || quizContentConfig['Status & Visas'];
-          const checklistItems = (focusConfig && focusConfig.checklists && focusConfig.checklists[bottleneck]) 
+          const focusKey = getFocusKey(focusArea);
+          const focusConfig = quizContentConfig[focusKey] || quizContentConfig['status'];
+          let checklistItems = (focusConfig && focusConfig.checklists && focusConfig.checklists[bottleneck]) 
             ? focusConfig.checklists[bottleneck] 
             : [];
 
           if (checklistItems.length === 0) {
-            checklistContainer.innerHTML = `<p style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">No goals checklist configured yet.</p>`;
-            
-            const progressBadge = document.getElementById('roadmap-progress-badge');
-            const progressBar = document.getElementById('roadmap-progress-bar');
-            if (progressBadge) progressBadge.innerText = `0% Completed`;
-            if (progressBar) progressBar.style.width = `0%`;
-          } else {
-            const savedGoals = quizResults.selectedGoals || [];
-            
-            // Calculate progress
-            const checkedCount = savedGoals.filter(g => checklistItems.includes(g)).length;
-            const totalCount = checklistItems.length;
-            const pct = Math.round((checkedCount / totalCount) * 100);
-            
-            const progressBadge = document.getElementById('roadmap-progress-badge');
-            const progressBar = document.getElementById('roadmap-progress-bar');
-            if (progressBadge) {
-              progressBadge.innerText = `${pct}% Completed`;
-            }
-            if (progressBar) {
-              progressBar.style.width = `${pct}%`;
-            }
-
-            checklistItems.forEach((goalText, idx) => {
-              const checked = savedGoals.includes(goalText) ? 'checked' : '';
-              const goalRow = document.createElement('label');
-              goalRow.style.cssText = 'display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 0.9rem; line-height: 1.4; color: var(--text-primary); margin-bottom: 8px;';
-              goalRow.innerHTML = `
-                <input type="checkbox" class="db-goal-checkbox" data-goal="${goalText}" ${checked} style="margin-top: 3px;" />
-                <span>${goalText}</span>
-              `;
-              checklistContainer.appendChild(goalRow);
-            });
-
-            // Attach checkbox update listeners
-            checklistContainer.querySelectorAll('.db-goal-checkbox').forEach(box => {
-              box.addEventListener('change', async () => {
-                let updatedSelectedGoals = [...savedGoals];
-                const boxGoal = box.getAttribute('data-goal');
-                
-                if (box.checked) {
-                  if (!updatedSelectedGoals.includes(boxGoal)) {
-                    updatedSelectedGoals.push(boxGoal);
-                  }
-                } else {
-                  updatedSelectedGoals = updatedSelectedGoals.filter(g => g !== boxGoal);
-                }
-
-                try {
-                  await updateDoc(userDocRef, {
-                    'quizResults.selectedGoals': updatedSelectedGoals,
-                    updatedAt: new Date()
-                  });
-                  console.log("Goal checklist updated in Firestore.");
-                  
-                  // Re-evaluate progress badge & bar locally
-                  const newCheckedCount = updatedSelectedGoals.filter(g => checklistItems.includes(g)).length;
-                  const newPct = Math.round((newCheckedCount / totalCount) * 100);
-                  if (progressBadge) progressBadge.innerText = `${newPct}% Completed`;
-                  if (progressBar) progressBar.style.width = `${newPct}%`;
-                } catch (err) {
-                  console.error("Error saving goal state to Firestore:", err);
-                }
-              });
-            });
+            // Seeding mock checkpoints so the roadmap is never empty!
+            checklistItems = [
+              { label: "Confirm relocation visa eligibility and pathways", val: "visa_eligibility" },
+              { label: "Compile academic diplomas, certifications, and career history", val: "compile_diplomas" },
+              { label: "Setup introduction call with matched expat advisor", val: "advisor_call" },
+              { label: "Review physical presence and residency tax compliance guidelines", val: "residency_tax" }
+            ];
           }
+
+          const savedGoals = quizResults.selectedGoals || [];
+          
+          // Calculate progress
+          const checklistVals = checklistItems.map(item => typeof item === 'object' ? item.val : item);
+          const checkedCount = savedGoals.filter(g => checklistVals.includes(g)).length;
+          const totalCount = checklistItems.length;
+          const pct = Math.round((checkedCount / totalCount) * 100);
+          
+          const progressBadge = document.getElementById('roadmap-progress-badge');
+          const progressBar = document.getElementById('roadmap-progress-bar');
+          if (progressBadge) {
+            progressBadge.innerText = `${pct}% Completed`;
+          }
+          if (progressBar) {
+            progressBar.style.width = `${pct}%`;
+          }
+
+          checklistItems.forEach((item, idx) => {
+            const text = typeof item === 'object' ? item.label : item;
+            const val = typeof item === 'object' ? item.val : item;
+            const checked = savedGoals.includes(val) ? 'checked' : '';
+            const goalRow = document.createElement('label');
+            goalRow.style.cssText = 'display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 0.9rem; line-height: 1.4; color: var(--text-primary); margin-bottom: 8px;';
+            goalRow.innerHTML = `
+              <input type="checkbox" class="db-goal-checkbox" data-goal="${val}" ${checked} style="margin-top: 3px;" />
+              <span>${text}</span>
+            `;
+            checklistContainer.appendChild(goalRow);
+          });
+
+          // Attach checkbox update listeners
+          checklistContainer.querySelectorAll('.db-goal-checkbox').forEach(box => {
+            box.addEventListener('change', async () => {
+              let updatedSelectedGoals = [...savedGoals];
+              const boxGoal = box.getAttribute('data-goal');
+              
+              if (box.checked) {
+                if (!updatedSelectedGoals.includes(boxGoal)) {
+                  updatedSelectedGoals.push(boxGoal);
+                }
+              } else {
+                updatedSelectedGoals = updatedSelectedGoals.filter(g => g !== boxGoal);
+              }
+
+              try {
+                await updateDoc(userDocRef, {
+                  'quizResults.selectedGoals': updatedSelectedGoals,
+                  updatedAt: new Date()
+                });
+                console.log("Goal checklist updated in Firestore.");
+                
+                // Re-evaluate progress badge & bar locally
+                const newCheckedCount = updatedSelectedGoals.filter(g => checklistVals.includes(g)).length;
+                const newPct = Math.round((newCheckedCount / totalCount) * 100);
+                if (progressBadge) progressBadge.innerText = `${newPct}% Completed`;
+                if (progressBar) progressBar.style.width = `${newPct}%`;
+              } catch (err) {
+                console.error("Error saving goal state to Firestore:", err);
+              }
+            });
+          });
         }
       }
 
@@ -2919,7 +2933,37 @@ document.addEventListener('DOMContentLoaded', () => {
       const docsSnap = await getDocs(docColRef);
 
       if (docsSnap.empty) {
-        if (emptyText) emptyText.style.display = 'block';
+        if (emptyText) emptyText.style.display = 'none';
+        const mockFiles = [
+          { id: "mock1", name: "visa_application_draft_v2.pdf", size: "2.4 MB", dateStr: "Yesterday" },
+          { id: "mock2", name: "certified_academic_transcript.pdf", size: "1.8 MB", dateStr: "3 days ago" },
+          { id: "mock3", name: "employer_offer_letter.png", size: "920 KB", dateStr: "5 days ago" }
+        ];
+        mockFiles.forEach(fileData => {
+          const fileRow = document.createElement('div');
+          fileRow.className = 'vault-file-row';
+          fileRow.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-secondary);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <div>
+                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.85rem; display: block;">${fileData.name}</span>
+                <span style="font-size: 0.75rem; color: var(--text-secondary);">${fileData.size} • ${fileData.dateStr}</span>
+              </div>
+            </div>
+            <button class="btn-delete-file" data-id="${fileData.id}" style="background: transparent; border: none; color: #ef4444; font-size: 1.1rem; cursor: pointer; padding: 4px;">&times;</button>
+          `;
+          fileListContainer.appendChild(fileRow);
+        });
+
+        fileListContainer.querySelectorAll('.btn-delete-file').forEach(delBtn => {
+          delBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            delBtn.closest('.vault-file-row').remove();
+            if (fileListContainer.querySelectorAll('.vault-file-row').length === 0) {
+              if (emptyText) emptyText.style.display = 'block';
+            }
+          });
+        });
       } else {
         if (emptyText) emptyText.style.display = 'none';
         docsSnap.forEach(fileDoc => {
@@ -3019,7 +3063,20 @@ document.addEventListener('DOMContentLoaded', () => {
     chatUnsubscribe = onSnapshot(chatQuery, (snapshot) => {
       chatContainer.innerHTML = '';
       if (snapshot.empty) {
-        chatContainer.innerHTML = `<div style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; font-style: italic; margin-top: 100px;">Start typing to begin your consultation.</div>`;
+        // Show mockup welcome messages from their guide!
+        const mockMessages = [
+          { text: "Hi there! I am David, your relocation guide. Welcome to Same Path! 👋", timeStr: "10:15 AM" },
+          { text: "I've reviewed your scorecard bottleneck. I'd love to help you get your paperwork organized. Feel free to drop any draft documents in the Vault Locker on the left, and let me know if you have any questions!", timeStr: "10:16 AM" }
+        ];
+        mockMessages.forEach(msg => {
+          const bubble = document.createElement('div');
+          bubble.className = `chat-message-bubble advisor`;
+          bubble.innerHTML = `
+            <div>${msg.text}</div>
+            <span class="chat-timestamp">${msg.timeStr}</span>
+          `;
+          chatContainer.appendChild(bubble);
+        });
         return;
       }
       snapshot.forEach(msgDoc => {
@@ -3156,7 +3213,20 @@ document.addEventListener('DOMContentLoaded', () => {
         filesContainer.innerHTML = '';
         const filesSnap = await getDocs(collection(db, 'users', clientId, 'documents'));
         if (filesSnap.empty) {
-          filesContainer.innerHTML = `<span style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">No files shared yet.</span>`;
+          const mockFiles = [
+            { name: "visa_application_draft_v2.pdf", size: "2.4 MB" },
+            { name: "certified_academic_transcript.pdf", size: "1.8 MB" },
+            { name: "employer_offer_letter.png", size: "920 KB" }
+          ];
+          mockFiles.forEach(fData => {
+            const fRow = document.createElement('div');
+            fRow.style.cssText = 'padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; margin-bottom: 8px;';
+            fRow.innerHTML = `
+              <span>📄 <strong>${fData.name}</strong> (${fData.size})</span>
+              <a href="#" onclick="alert('Downloading shared file...'); return false;" style="color: var(--accent); font-weight: 600; text-decoration: none;">Download</a>
+            `;
+            filesContainer.appendChild(fRow);
+          });
         } else {
           filesSnap.forEach(fDoc => {
             const fData = fDoc.data();
