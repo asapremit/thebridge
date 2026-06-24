@@ -854,29 +854,26 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Step 9 Continue button click handler
-    const step9ContinueBtn = quizCard.querySelector('.quiz-step-slide[data-step="9"] .btn-goal-continue');
-    if (step9ContinueBtn) {
-      step9ContinueBtn.addEventListener('click', () => {
-        goToStep(10);
-      });
-    }
+    // Step 9 & 10 Continue button handler — use event delegation on quizCard
+    // to reliably catch clicks regardless of slide visibility state
+    quizCard.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-goal-continue');
+      if (!btn) return;
 
-    // Question 10 View Match / Continue Button click handler
-    const step10ContinueBtn = quizCard.querySelector('.quiz-step-slide[data-step="10"] .btn-goal-continue');
-    if (step10ContinueBtn) {
-      step10ContinueBtn.addEventListener('click', () => {
-        // Activate results view section
+      const slide = btn.closest('.quiz-step-slide');
+      if (!slide) return;
+      const stepAttr = slide.getAttribute('data-step');
+
+      if (stepAttr === '9') {
+        goToStep(10);
+      } else if (stepAttr === '10') {
+        // Show results section in locked state
         sections.forEach(sec => sec.classList.toggle('active', sec.id === 'results'));
         navLinks.forEach(l => l.classList.remove('active'));
-        
-        // Render results content
         renderResultsPage();
-        
-        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    }
+      }
+    });
 
     // Signup / Login Form Handling
     const tabSignup = document.getElementById('btn-tab-signup');
