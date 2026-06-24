@@ -1,13 +1,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 let auth = null;
 let db = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Fetch dynamic Firebase configuration from the Express backend
-  fetch('/api/firebase-config')
+  // Fetch dynamic Firebase configuration from the Express backend with cache busting
+  fetch('/api/firebase-config?cb=' + Date.now())
     .then(res => res.json())
     .then(config => {
       const app = initializeApp(config);
@@ -1059,6 +1059,43 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(handleAuthError);
         }
+      });
+    }
+
+    const btnGoogleQuiz = document.getElementById('btn-google-quiz');
+    if (btnGoogleQuiz) {
+      btnGoogleQuiz.addEventListener('click', () => {
+        if (!auth) return;
+        if (authErrorMsg) authErrorMsg.style.display = 'none';
+        
+        if (authSubmitBtn) {
+          authSubmitBtn.disabled = true;
+          authSubmitBtn.innerHTML = `<span class="auth-spinner"></span> Authenticating...`;
+        }
+
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+          .then((result) => {
+            const user = result.user;
+            return syncUserData(user).then(() => {
+              if (authSubmitBtn) {
+                authSubmitBtn.disabled = false;
+                authSubmitBtn.innerText = isSignupMode ? 'Create Account & View Match' : 'Log In & View Match';
+              }
+              triggerMatching();
+            });
+          })
+          .catch(err => {
+            console.error("Google Auth failed:", err);
+            if (authSubmitBtn) {
+              authSubmitBtn.disabled = false;
+              authSubmitBtn.innerText = isSignupMode ? 'Create Account & View Match' : 'Log In & View Match';
+            }
+            if (authErrorMsg) {
+              authErrorMsg.innerText = err.message || "Google authentication failed.";
+              authErrorMsg.style.display = 'block';
+            }
+          });
       });
     }
 
@@ -2296,6 +2333,47 @@ document.addEventListener('DOMContentLoaded', () => {
           })
           .catch(handleResAuthError);
       }
+    });
+  }
+
+  const btnGoogleResults = document.getElementById('btn-google-results');
+  if (btnGoogleResults) {
+    btnGoogleResults.addEventListener('click', () => {
+      if (!auth) return;
+      if (resErrorMsg) resErrorMsg.style.display = 'none';
+      
+      if (resSubmitBtn) {
+        resSubmitBtn.disabled = true;
+        resSubmitBtn.innerHTML = `<span class="auth-spinner"></span> Authenticating...`;
+      }
+
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          return syncUserData(user).then(() => {
+            if (resSubmitBtn) {
+              resSubmitBtn.disabled = false;
+              resSubmitBtn.innerText = resultsAuthIsSignup ? 'Create Account & Save Plan' : 'Log In & Save Plan';
+            }
+            renderResultsPage();
+            const advisorCard = document.getElementById('results-advisor-card-container');
+            if (advisorCard) {
+              advisorCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          });
+        })
+        .catch(err => {
+          console.error("Google Auth failed:", err);
+          if (resSubmitBtn) {
+            resSubmitBtn.disabled = false;
+            resSubmitBtn.innerText = resultsAuthIsSignup ? 'Create Account & Save Plan' : 'Log In & Save Plan';
+          }
+          if (resErrorMsg) {
+            resErrorMsg.innerText = err.message || "Google authentication failed.";
+            resErrorMsg.style.display = 'block';
+          }
+        });
     });
   }
 

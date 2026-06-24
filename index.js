@@ -17,6 +17,9 @@ app.get('/api/health', (req, res) => {
 });
 
 app.get('/api/firebase-config', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.json({
     apiKey: process.env.FIREBASE_API_KEY || "AIzaSyDummyKeyForSamePathApp12345678",
     authDomain: process.env.FIREBASE_AUTH_DOMAIN || "samepath-web.firebaseapp.com",
