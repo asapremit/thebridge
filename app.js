@@ -1,4 +1,41 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+let auth = null;
+let db = null;
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Fetch dynamic Firebase configuration from the Express backend
+  fetch('/api/firebase-config')
+    .then(res => res.json())
+    .then(config => {
+      const app = initializeApp(config);
+      auth = getAuth(app);
+      db = getFirestore(app);
+
+      // Listen for authentication changes
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          isUserLoggedIn = true;
+          // Sync onboarding quiz choices to Firestore
+          await syncUserData(user);
+        } else {
+          isUserLoggedIn = false;
+        }
+
+        updateHeaderNavActions(isUserLoggedIn);
+
+        // Re-render the Results view if it is active to update locking/booking UI
+        const resultsSec = document.getElementById('results');
+        if (resultsSec && resultsSec.classList.contains('active')) {
+          renderResultsPage();
+        }
+      });
+    })
+    .catch(err => console.error("Error initializing Firebase Client SDK:", err));
+
+
   const navLinks = document.querySelectorAll('.nav-link');
   const sections = document.querySelectorAll('.view-section');
 
@@ -49,6 +86,47 @@ document.addEventListener('DOMContentLoaded', () => {
   // Config objects declared in outer scope for access by renderResultsPage and other outside-quizCard functions
   let quizContentConfig = {};
   let statusDescriptions = {};
+
+  function getBiggestBottleneck() {
+    let bottleneck = 'status';
+    if (ratings.career < ratings.status) bottleneck = 'career';
+    if (ratings.finance < ratings[bottleneck]) bottleneck = 'finance';
+    return bottleneck;
+  }
+
+  async function syncUserData(user) {
+    if (!db) return;
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const payload = {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || user.email.split('@')[0],
+        role: "client",
+        updatedAt: new Date(),
+        quizResults: {
+          focusArea: selectedFocus || "",
+          scores: ratings || { status: 0, career: 0, finance: 0 },
+          biggestBottleneck: getBiggestBottleneck() || "status",
+          selectedGoals: selectedStep9 || []
+        }
+      };
+
+      const docSnap = await getDoc(userDocRef);
+      if (!docSnap.exists()) {
+        payload.createdAt = new Date();
+        await setDoc(userDocRef, payload);
+      } else {
+        await updateDoc(userDocRef, {
+          updatedAt: new Date(),
+          quizResults: payload.quizResults
+        });
+      }
+      console.log("Synced user onboarding data to Firestore successfully.");
+    } catch (err) {
+      console.error("Error syncing user data to Firestore:", err);
+    }
+  }
 
   const quizCard = document.querySelector('.hero-quiz-card');
   if (quizCard) {
@@ -935,28 +1013,52 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
 
-        // Simulated loading spinner
         if (authSubmitBtn) {
           authSubmitBtn.disabled = true;
-          authSubmitBtn.innerHTML = `<span class="auth-spinner"></span> Creating profile...`;
+          authSubmitBtn.innerHTML = `<span class="auth-spinner"></span> Authenticating...`;
         }
 
-        setTimeout(() => {
-          isUserLoggedIn = true;
-          if (typeof updateHeaderNavActions === 'function') {
-            updateHeaderNavActions(true);
-          }
+        const handleAuthError = (err) => {
+          console.error("Auth failed:", err);
           if (authSubmitBtn) {
             authSubmitBtn.disabled = false;
             authSubmitBtn.innerText = isSignupMode ? 'Create Account & View Match' : 'Log In & View Match';
           }
-          // Clear fields
-          inputEmail.value = '';
-          inputPassword.value = '';
-          if (inputFullname) inputFullname.value = '';
-          
-          triggerMatching();
-        }, 1200);
+          if (authErrorMsg) {
+            authErrorMsg.innerText = err.message || "Authentication failed. Please check credentials.";
+            authErrorMsg.style.display = 'block';
+          }
+        };
+
+        if (isSignupMode) {
+          createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              updateProfile(user, { displayName: fullname })
+                .then(() => syncUserData(user))
+                .then(() => {
+                  inputEmail.value = '';
+                  inputPassword.value = '';
+                  if (inputFullname) inputFullname.value = '';
+                  triggerMatching();
+                })
+                .catch(handleAuthError);
+            })
+            .catch(handleAuthError);
+        } else {
+          signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              syncUserData(user)
+                .then(() => {
+                  inputEmail.value = '';
+                  inputPassword.value = '';
+                  triggerMatching();
+                })
+                .catch(handleAuthError);
+            })
+            .catch(handleAuthError);
+        }
       });
     }
 
@@ -2036,13 +2138,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const logoutBtn = document.getElementById('btn-header-logout');
       if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
-          isUserLoggedIn = false;
-          // Re-render results page state
-          renderResultsPage();
-          
-          // Switch to home view
-          const homeLink = document.querySelector('.nav-link[data-target="home"]');
-          if (homeLink) homeLink.click();
+          if (auth) {
+            signOut(auth)
+              .then(() => {
+                isUserLoggedIn = false;
+                renderResultsPage();
+                const homeLink = document.querySelector('.nav-link[data-target="home"]');
+                if (homeLink) homeLink.click();
+              })
+              .catch(err => console.error("Sign out failed:", err));
+          } else {
+            isUserLoggedIn = false;
+            renderResultsPage();
+            const homeLink = document.querySelector('.nav-link[data-target="home"]');
+            if (homeLink) homeLink.click();
+          }
         });
       }
     } else {
@@ -2129,28 +2239,63 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Simulate loading spinner
       if (resSubmitBtn) {
         resSubmitBtn.disabled = true;
         resSubmitBtn.innerHTML = `<span class="auth-spinner"></span> Authenticating...`;
       }
 
-      setTimeout(() => {
-        isUserLoggedIn = true;
+      const handleResAuthError = (err) => {
+        console.error("Results Auth failed:", err);
         if (resSubmitBtn) {
           resSubmitBtn.disabled = false;
           resSubmitBtn.innerText = resultsAuthIsSignup ? 'Create Account & Save Plan' : 'Log In & Save Plan';
         }
-        
-        // Re-render results page to unlock
-        renderResultsPage();
-        
-        // Smooth scroll to advisor card
-        const advisorCard = document.getElementById('results-advisor-card-container');
-        if (advisorCard) {
-          advisorCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (resErrorMsg) {
+          resErrorMsg.innerText = err.message || "Authentication failed. Please check credentials.";
+          resErrorMsg.style.display = 'block';
         }
-      }, 1000);
+      };
+
+      if (resultsAuthIsSignup) {
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            updateProfile(user, { displayName: fullname })
+              .then(() => syncUserData(user))
+              .then(() => {
+                if (resSubmitBtn) {
+                  resSubmitBtn.disabled = false;
+                  resSubmitBtn.innerText = 'Create Account & Save Plan';
+                }
+                renderResultsPage();
+                const advisorCard = document.getElementById('results-advisor-card-container');
+                if (advisorCard) {
+                  advisorCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+              })
+              .catch(handleResAuthError);
+          })
+          .catch(handleResAuthError);
+      } else {
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            syncUserData(user)
+              .then(() => {
+                if (resSubmitBtn) {
+                  resSubmitBtn.disabled = false;
+                  resSubmitBtn.innerText = 'Log In & Save Plan';
+                }
+                renderResultsPage();
+                const advisorCard = document.getElementById('results-advisor-card-container');
+                if (advisorCard) {
+                  advisorCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+              })
+              .catch(handleResAuthError);
+          })
+          .catch(handleResAuthError);
+      }
     });
   }
 
