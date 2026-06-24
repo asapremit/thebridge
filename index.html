@@ -22,6 +22,8 @@
       </div>
       <ul class="nav-links">
         <li><a href="#" class="nav-link active" data-target="home">Home</a></li>
+        <li><a href="#" class="nav-link" data-target="dashboard" id="nav-link-dashboard" style="display: none;">My Roadmap</a></li>
+        <li><a href="#" class="nav-link" data-target="advisor-portal" id="nav-link-advisor-portal" style="display: none;">Guide Workspace</a></li>
         <li><a href="#" class="nav-link" data-target="directory">Browse Directory</a></li>
         <li><a href="#" class="nav-link" data-target="mission">Our Mission</a></li>
         <li><a href="#" class="nav-link" data-target="stories">Success Stories</a></li>
@@ -1304,6 +1306,164 @@
         
         <div class="stories-grid" id="results-stories-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
           <!-- Dynamically populated success stories based on bottleneck -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENT ROADMAP DASHBOARD VIEW -->
+  <section id="dashboard" class="view-section" style="background-color: var(--bg-primary); display: none;">
+    <div class="container" style="padding: 100px 24px 80px;">
+      <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
+        <div>
+          <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; letter-spacing: 0.05em;">CLIENT WORKSPACE</span>
+          <h2 style="font-family: var(--font-serif); font-size: 2.6rem; font-style: italic; margin-top: 8px;" id="db-user-greeting">My Relocation Roadmap</h2>
+        </div>
+        <!-- Role Switching Toggle for Testing -->
+        <button class="btn btn-outline" id="btn-toggle-to-advisor" style="padding: 10px 20px; border-radius: 100px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          🔄 Switch to Advisor View
+        </button>
+      </div>
+
+      <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start;">
+        <!-- Left Side: Interactive Checklist & Document Vault -->
+        <div class="dashboard-left" style="display: flex; flex-direction: column; gap: 32px;">
+          <!-- Interactive Checklist -->
+          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
+            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-style: italic; margin-bottom: 12px; color: var(--text-primary);">Relocation Action Items</h3>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;">Complete these steps to advance your roadmap. Checking an item updates your progress instantly.</p>
+            <div id="db-checklist-container" style="display: flex; flex-direction: column; gap: 14px;">
+              <!-- Dynamically populated checklist -->
+            </div>
+          </div>
+
+          <!-- Document Vault -->
+          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
+            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-style: italic; margin-bottom: 8px; color: var(--text-primary);">Document Vault</h3>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;">Securely store and share draft applications, CVs, or official paperwork with your advisor.</p>
+            
+            <!-- Upload Dropzone -->
+            <div class="vault-upload-dropzone" id="vault-dropzone" style="border: 2px dashed var(--border-color); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: background 0.2s; background: rgba(0,0,0,0.02); margin-bottom: 20px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent); margin-bottom: 8px; display: inline-block;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              <p style="font-size: 0.88rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Click or drag files to upload</p>
+              <p style="font-size: 0.75rem; color: var(--text-secondary);">PDF, JPG, PNG or DOCX (max 10MB)</p>
+              <input type="file" id="vault-file-input" style="display: none;" />
+            </div>
+
+            <!-- Uploaded Documents List -->
+            <div id="vault-file-list" style="display: flex; flex-direction: column; gap: 10px;">
+              <!-- Dynamically populated list -->
+              <p style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;" id="vault-empty-text">No documents uploaded yet.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Secure Chat -->
+        <div class="dashboard-right" style="display: flex; flex-direction: column; gap: 32px; height: 100%;">
+          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; height: 600px;">
+            <div class="chat-header" style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+              <img id="chat-advisor-avatar" src="david_k_portrait.png" alt="Advisor" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);" />
+              <div>
+                <h4 style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);" id="chat-advisor-name">Advisor Chat</h4>
+                <p style="font-size: 0.78rem; color: #10B981; display: flex; align-items: center; gap: 4px;"><span style="width: 6px; height: 6px; background: #10B981; border-radius: 50%;"></span> Matched Expat Guide</p>
+              </div>
+            </div>
+
+            <!-- Message Area -->
+            <div class="chat-messages-container" id="chat-messages" style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-right: 8px; margin-bottom: 16px;">
+              <!-- Messages load here -->
+              <div style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; font-style: italic; margin-top: 100px;">Start typing to begin your consultation.</div>
+            </div>
+
+            <!-- Input Area -->
+            <form id="chat-input-form" style="display: flex; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+              <input type="text" id="chat-message-input" placeholder="Type a message..." required style="flex-grow: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.88rem;" />
+              <button type="submit" class="btn btn-primary" style="padding: 12px 20px; border-radius: 8px; cursor: pointer;">Send</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADVISOR DASHBOARD VIEW -->
+  <section id="advisor-portal" class="view-section" style="background-color: var(--bg-primary); display: none;">
+    <div class="container" style="padding: 100px 24px 80px;">
+      <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
+        <div>
+          <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; letter-spacing: 0.05em;">GUIDE WORKSPACE</span>
+          <h2 style="font-family: var(--font-serif); font-size: 2.6rem; font-style: italic; margin-top: 8px;">Advisor Dashboard Portal</h2>
+        </div>
+        <!-- Role Switching Toggle for Testing -->
+        <button class="btn btn-outline" id="btn-toggle-to-client" style="padding: 10px 20px; border-radius: 100px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          🔄 Switch to Client View
+        </button>
+      </div>
+
+      <div class="dashboard-grid" style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: start;">
+        <!-- Left Side: Roster and Client Info -->
+        <div class="dashboard-left" style="display: flex; flex-direction: column; gap: 32px;">
+          <!-- Clients List -->
+          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
+            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-style: italic; margin-bottom: 16px; color: var(--text-primary);">Active Clients</h3>
+            
+            <div id="adv-clients-list" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Matches listing -->
+              <div class="client-row active" style="padding: 16px; border: 1px solid var(--accent); border-radius: 10px; cursor: pointer; background: var(--bg-primary); display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <h4 style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);" id="adv-client-row-name">Client Name</h4>
+                  <p style="font-size: 0.78rem; color: var(--text-secondary);" id="adv-client-row-email">client@email.com</p>
+                </div>
+                <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 0.7rem; border-radius: 12px;">Active Session</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Client Details & Shared Vault -->
+          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
+            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-style: italic; margin-bottom: 8px; color: var(--text-primary);">Client Onboarding Profile</h3>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;">Review this client's goals and shared files.</p>
+            
+            <!-- Checklist items completed -->
+            <div style="margin-bottom: 24px;">
+              <h4 style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 12px;">Action Items Checked</h4>
+              <div id="adv-client-goals" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Goals -->
+              </div>
+            </div>
+
+            <!-- Client shared files -->
+            <div>
+              <h4 style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 12px;">Shared Files Locker</h4>
+              <div id="adv-client-files" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Files listing -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Chat with Client -->
+        <div class="dashboard-right" style="display: flex; flex-direction: column; gap: 32px; height: 100%;">
+          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; height: 600px;">
+            <div class="chat-header" style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;" id="chat-client-avatar">C</div>
+              <div>
+                <h4 style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);" id="chat-client-header-name">Client Name</h4>
+                <p style="font-size: 0.78rem; color: var(--text-secondary);">Direct Messaging Channel</p>
+              </div>
+            </div>
+
+            <!-- Message Area -->
+            <div class="chat-messages-container" id="adv-chat-messages" style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-right: 8px; margin-bottom: 16px;">
+              <!-- Messages load here -->
+            </div>
+
+            <!-- Input Area -->
+            <form id="adv-chat-input-form" style="display: flex; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+              <input type="text" id="adv-chat-message-input" placeholder="Type a response..." required style="flex-grow: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.88rem;" />
+              <button type="submit" class="btn btn-primary" style="padding: 12px 20px; border-radius: 8px; cursor: pointer;">Reply</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

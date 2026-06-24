@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, orderBy, onSnapshot, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 let auth = null;
 let db = null;
@@ -64,6 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
         sec.classList.toggle('active', sec.id === targetId)
       );
       window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (targetId === 'dashboard') {
+        renderClientDashboard();
+      } else if (targetId === 'advisor-portal') {
+        renderAdvisorDashboard();
+      }
     });
   });
 
@@ -78,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedStep9 = [];
   let selectedStep10 = '';
   let isUserLoggedIn = false; // Simulated authentication state
+  let userRole = 'client'; // Current active dashboard role ('client' or 'advisor')
   let ratings = { status: 0, career: 0, finance: 0 };
   // Dynamic goal selection steps state
   let goalStepsToAsk = [];
@@ -2153,6 +2160,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateHeaderNavActions(loggedIn, user = null) {
     const navActions = document.querySelector('.nav-actions');
     const directoryLink = document.querySelector('.nav-link[data-target="directory"]');
+    const dashboardLink = document.getElementById('nav-link-dashboard');
+    const advisorPortalLink = document.getElementById('nav-link-advisor-portal');
     
     // Toggle directory nav link visibility based on login state
     if (directoryLink) {
@@ -2161,6 +2170,26 @@ document.addEventListener('DOMContentLoaded', () => {
         parentLi.style.display = loggedIn ? 'inline-block' : 'none';
       } else {
         directoryLink.style.display = loggedIn ? 'inline-block' : 'none';
+      }
+    }
+
+    if (dashboardLink) {
+      const parentLi = dashboardLink.closest('li');
+      const shouldShow = loggedIn && userRole === 'client';
+      if (parentLi) {
+        parentLi.style.display = shouldShow ? 'inline-block' : 'none';
+      } else {
+        dashboardLink.style.display = shouldShow ? 'inline-block' : 'none';
+      }
+    }
+
+    if (advisorPortalLink) {
+      const parentLi = advisorPortalLink.closest('li');
+      const shouldShow = loggedIn && userRole === 'advisor';
+      if (parentLi) {
+        parentLi.style.display = shouldShow ? 'inline-block' : 'none';
+      } else {
+        advisorPortalLink.style.display = shouldShow ? 'inline-block' : 'none';
       }
     }
 
@@ -2693,6 +2722,449 @@ document.addEventListener('DOMContentLoaded', () => {
             globalErrorMsg.style.display = 'block';
           }
         });
+    });
+  }
+
+  // ==========================================================================
+  // PHASE 3: CLIENT & ADVISOR DASHBOARDS, CHAT, & DOCUMENT LOCKER
+  // ==========================================================================
+
+  let chatUnsubscribe = null;
+  let advChatUnsubscribe = null;
+  let activeSelectedClientId = null;
+
+  // 1. Client Dashboard Logic
+  async function renderClientDashboard() {
+    if (!auth || !auth.currentUser) return;
+    const user = auth.currentUser;
+    const uid = user.uid;
+
+    // Greeting
+    const greeting = document.getElementById('db-user-greeting');
+    if (greeting) {
+      const name = user.displayName || user.email.split('@')[0];
+      greeting.innerText = `👋 Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}!`;
+    }
+
+    if (!db) return;
+
+    try {
+      // Load user profile goals
+      const userDocRef = doc(db, 'users', uid);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        const quizResults = data.quizResults || {};
+        const bottleneck = quizResults.biggestBottleneck || 'status';
+        
+        // 1.1 Checklist Population
+        const checklistContainer = document.getElementById('db-checklist-container');
+        if (checklistContainer) {
+          checklistContainer.innerHTML = '';
+          const focusArea = quizResults.focusArea || 'Status & Visas';
+          const focusConfig = quizContentConfig[focusArea] || quizContentConfig['Status & Visas'];
+          const checklistItems = (focusConfig && focusConfig.checklists && focusConfig.checklists[bottleneck]) 
+            ? focusConfig.checklists[bottleneck] 
+            : [];
+
+          if (checklistItems.length === 0) {
+            checklistContainer.innerHTML = `<p style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">No goals checklist configured yet.</p>`;
+          } else {
+            const savedGoals = quizResults.selectedGoals || [];
+            checklistItems.forEach((goalText, idx) => {
+              const checked = savedGoals.includes(goalText) ? 'checked' : '';
+              const goalRow = document.createElement('label');
+              goalRow.style.cssText = 'display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 0.9rem; line-height: 1.4; color: var(--text-primary); margin-bottom: 8px;';
+              goalRow.innerHTML = `
+                <input type="checkbox" class="db-goal-checkbox" data-goal="${goalText}" ${checked} style="margin-top: 3px;" />
+                <span>${goalText}</span>
+              `;
+              checklistContainer.appendChild(goalRow);
+            });
+
+            // Attach checkbox update listeners
+            checklistContainer.querySelectorAll('.db-goal-checkbox').forEach(box => {
+              box.addEventListener('change', async () => {
+                const currentChecked = Array.from(checklistContainer.querySelectorAll('.db-goal-checkbox:checked'))
+                  .map(el => el.getAttribute('data-goal'));
+                try {
+                  await updateDoc(userDocRef, {
+                    'quizResults.selectedGoals': currentChecked,
+                    updatedAt: new Date()
+                  });
+                  console.log("Goal checklist updated in Firestore.");
+                } catch (err) {
+                  console.error("Error saving goal state to Firestore:", err);
+                }
+              });
+            });
+          }
+        }
+      }
+
+      // 1.2 Document Vault File Listing & Dropzone
+      renderVaultFileList(uid);
+      setupVaultUpload(uid);
+
+      // 1.3 Connect Client Chat
+      connectClientChat(uid);
+
+    } catch (err) {
+      console.error("Error rendering client dashboard:", err);
+    }
+  }
+
+  // Helper to Render File Locker List
+  async function renderVaultFileList(userId) {
+    const fileListContainer = document.getElementById('vault-file-list');
+    const emptyText = document.getElementById('vault-empty-text');
+    if (!fileListContainer || !db) return;
+
+    // Clear previous items
+    fileListContainer.querySelectorAll('.vault-file-row').forEach(row => row.remove());
+
+    try {
+      const docColRef = collection(db, 'users', userId, 'documents');
+      const docsSnap = await getDocs(docColRef);
+
+      if (docsSnap.empty) {
+        if (emptyText) emptyText.style.display = 'block';
+      } else {
+        if (emptyText) emptyText.style.display = 'none';
+        docsSnap.forEach(fileDoc => {
+          const fileData = fileDoc.data();
+          const fileRow = document.createElement('div');
+          fileRow.className = 'vault-file-row';
+          fileRow.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-secondary);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <div>
+                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.85rem; display: block;">${fileData.name}</span>
+                <span style="font-size: 0.75rem; color: var(--text-secondary);">${fileData.size} • ${fileData.uploadedAt ? new Date(fileData.uploadedAt.seconds * 1000).toLocaleDateString() : 'Just now'}</span>
+              </div>
+            </div>
+            <button class="btn-delete-file" data-id="${fileDoc.id}" style="background: transparent; border: none; color: #ef4444; font-size: 1.1rem; cursor: pointer; padding: 4px;">&times;</button>
+          `;
+          fileListContainer.appendChild(fileRow);
+        });
+
+        // Bind delete action
+        fileListContainer.querySelectorAll('.btn-delete-file').forEach(delBtn => {
+          delBtn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const fileId = delBtn.getAttribute('data-id');
+            try {
+              await deleteDoc(doc(db, 'users', userId, 'documents', fileId));
+              console.log("File metadata deleted from Firestore.");
+              renderVaultFileList(userId);
+            } catch (err) {
+              console.error("Error deleting file:", err);
+            }
+          });
+        });
+      }
+    } catch (err) {
+      console.error("Error fetching files:", err);
+    }
+  }
+
+  // Helper to Setup Document Drag/Drop & Select
+  function setupVaultUpload(userId) {
+    const dropzone = document.getElementById('vault-dropzone');
+    const fileInput = document.getElementById('vault-file-input');
+    if (!dropzone || !fileInput) return;
+
+    // Toggle select file
+    dropzone.onclick = () => fileInput.click();
+
+    fileInput.onchange = (e) => {
+      const files = e.target.files;
+      if (files && files.length > 0) {
+        handleFileUpload(userId, files[0]);
+      }
+    };
+  }
+
+  // Simulated File Upload (save metadata details to Firestore)
+  async function handleFileUpload(userId, file) {
+    if (!db) return;
+    try {
+      const docColRef = collection(db, 'users', userId, 'documents');
+      // Format file size
+      const sizeStr = file.size > 1024 * 1024 
+        ? (file.size / (1024 * 1024)).toFixed(1) + ' MB' 
+        : (file.size / 1024).toFixed(0) + ' KB';
+
+      const payload = {
+        name: file.name,
+        size: sizeStr,
+        uploadedAt: new Date()
+      };
+
+      await addDoc(docColRef, payload);
+      console.log("Uploaded file metadata details successfully.");
+      renderVaultFileList(userId);
+    } catch (err) {
+      console.error("Simulated file upload error:", err);
+    }
+  }
+
+  // Connect Real-Time Client Chat
+  function connectClientChat(clientId) {
+    if (chatUnsubscribe) chatUnsubscribe();
+    if (!db) return;
+
+    const chatContainer = document.getElementById('chat-messages');
+    const inputForm = document.getElementById('chat-input-form');
+    const messageInput = document.getElementById('chat-message-input');
+
+    if (!chatContainer || !inputForm || !messageInput) return;
+
+    const chatSessionId = `chat_${clientId}`;
+    const messagesCol = collection(db, 'chats', chatSessionId, 'messages');
+    const chatQuery = query(messagesCol, orderBy('timestamp', 'asc'));
+
+    // Listen to messages
+    chatUnsubscribe = onSnapshot(chatQuery, (snapshot) => {
+      chatContainer.innerHTML = '';
+      if (snapshot.empty) {
+        chatContainer.innerHTML = `<div style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; font-style: italic; margin-top: 100px;">Start typing to begin your consultation.</div>`;
+        return;
+      }
+      snapshot.forEach(msgDoc => {
+        const msg = msgDoc.data();
+        const bubble = document.createElement('div');
+        bubble.className = `chat-message-bubble ${msg.senderId === clientId ? 'client' : 'advisor'}`;
+        const timeStr = msg.timestamp ? new Date(msg.timestamp.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now';
+        
+        bubble.innerHTML = `
+          <div>${msg.text}</div>
+          <span class="chat-timestamp">${timeStr}</span>
+        `;
+        chatContainer.appendChild(bubble);
+      });
+      // Scroll to bottom
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    });
+
+    // Send Message
+    inputForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const text = messageInput.value.trim();
+      if (!text) return;
+
+      try {
+        await addDoc(messagesCol, {
+          senderId: clientId,
+          senderName: auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
+          text: text,
+          timestamp: new Date()
+        });
+        messageInput.value = '';
+      } catch (err) {
+        console.error("Error sending message:", err);
+      }
+    };
+  }
+
+  // 2. Advisor Dashboard Logic
+  async function renderAdvisorDashboard() {
+    if (!db) return;
+
+    const rosterContainer = document.getElementById('adv-clients-list');
+    if (!rosterContainer) return;
+
+    rosterContainer.innerHTML = '';
+
+    try {
+      // Get all clients who have onboarding results
+      const usersColRef = collection(db, 'users');
+      const usersQuery = query(usersColRef);
+      const querySnap = await getDocs(usersQuery);
+
+      let activeRowBound = false;
+
+      querySnap.forEach(userDoc => {
+        const uData = userDoc.data();
+        if (uData.uid && uData.role === 'client') {
+          const clientRow = document.createElement('div');
+          clientRow.className = `client-row ${!activeRowBound ? 'active' : ''}`;
+          clientRow.setAttribute('data-id', uData.uid);
+          clientRow.style.cssText = 'padding: 16px; border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; background: var(--bg-primary); display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;';
+          
+          clientRow.innerHTML = `
+            <div>
+              <h4 style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);">${uData.displayName || uData.email.split('@')[0]}</h4>
+              <p style="font-size: 0.78rem; color: var(--text-secondary);">${uData.email}</p>
+            </div>
+            <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 0.7rem; border-radius: 12px;">Active Session</span>
+          `;
+          
+          rosterContainer.appendChild(clientRow);
+
+          // Click handler to load client details
+          clientRow.addEventListener('click', () => {
+            rosterContainer.querySelectorAll('.client-row').forEach(row => row.classList.remove('active'));
+            clientRow.classList.add('active');
+            loadClientDetailsForAdvisor(uData.uid, uData.displayName || uData.email.split('@')[0]);
+          });
+
+          if (!activeRowBound) {
+            // Load first client by default
+            loadClientDetailsForAdvisor(uData.uid, uData.displayName || uData.email.split('@')[0]);
+            activeRowBound = true;
+          }
+        }
+      });
+
+      if (!activeRowBound) {
+        rosterContainer.innerHTML = `<p style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">No clients matching active sessions.</p>`;
+        document.getElementById('adv-client-goals').innerHTML = '';
+        document.getElementById('adv-client-files').innerHTML = '';
+        document.getElementById('adv-chat-messages').innerHTML = `<div style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; font-style: italic; margin-top: 100px;">No active chat session.</div>`;
+      }
+
+    } catch (err) {
+      console.error("Error loading advisor roster:", err);
+    }
+  }
+
+  // Load Client Detail Views in Advisor Portal
+  async function loadClientDetailsForAdvisor(clientId, clientName) {
+    activeSelectedClientId = clientId;
+    if (!db) return;
+
+    // Set Header
+    const clientHeader = document.getElementById('chat-client-header-name');
+    const clientAvatar = document.getElementById('chat-client-avatar');
+    if (clientHeader) clientHeader.innerText = clientName;
+    if (clientAvatar) clientAvatar.innerText = clientName.charAt(0).toUpperCase();
+
+    try {
+      // Load checked goals
+      const userDoc = await getDoc(doc(db, 'users', clientId));
+      const goalsContainer = document.getElementById('adv-client-goals');
+      if (goalsContainer && userDoc.exists()) {
+        goalsContainer.innerHTML = '';
+        const savedGoals = userDoc.data().quizResults?.selectedGoals || [];
+        if (savedGoals.length === 0) {
+          goalsContainer.innerHTML = `<span style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">No milestones checked yet.</span>`;
+        } else {
+          savedGoals.forEach(gText => {
+            const goalRow = document.createElement('div');
+            goalRow.style.cssText = 'font-size: 0.88rem; color: var(--accent); font-weight: 600; display: flex; align-items: center; gap: 6px;';
+            goalRow.innerHTML = `✓ <span style="color: var(--text-primary); font-weight: 400;">${gText}</span>`;
+            goalsContainer.appendChild(goalRow);
+          });
+        }
+      }
+
+      // Load client files
+      const filesContainer = document.getElementById('adv-client-files');
+      if (filesContainer) {
+        filesContainer.innerHTML = '';
+        const filesSnap = await getDocs(collection(db, 'users', clientId, 'documents'));
+        if (filesSnap.empty) {
+          filesContainer.innerHTML = `<span style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">No files shared yet.</span>`;
+        } else {
+          filesSnap.forEach(fDoc => {
+            const fData = fDoc.data();
+            const fRow = document.createElement('div');
+            fRow.style.cssText = 'padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem;';
+            fRow.innerHTML = `
+              <span>📄 <strong>${fData.name}</strong> (${fData.size})</span>
+              <a href="#" onclick="alert('Downloading shared file...'); return false;" style="color: var(--accent); font-weight: 600; text-decoration: none;">Download</a>
+            `;
+            filesContainer.appendChild(fRow);
+          });
+        }
+      }
+
+      // Connect Advisor Chat to Client Channel
+      connectAdvisorChat(clientId);
+
+    } catch (err) {
+      console.error("Error loading client details for advisor:", err);
+    }
+  }
+
+  // Connect Real-Time Advisor Chat
+  function connectAdvisorChat(clientId) {
+    if (advChatUnsubscribe) advChatUnsubscribe();
+    if (!db) return;
+
+    const chatContainer = document.getElementById('adv-chat-messages');
+    const inputForm = document.getElementById('adv-chat-input-form');
+    const messageInput = document.getElementById('adv-chat-message-input');
+
+    if (!chatContainer || !inputForm || !messageInput) return;
+
+    const chatSessionId = `chat_${clientId}`;
+    const messagesCol = collection(db, 'chats', chatSessionId, 'messages');
+    const chatQuery = query(messagesCol, orderBy('timestamp', 'asc'));
+
+    // Listen to messages
+    advChatUnsubscribe = onSnapshot(chatQuery, (snapshot) => {
+      chatContainer.innerHTML = '';
+      snapshot.forEach(msgDoc => {
+        const msg = msgDoc.data();
+        const bubble = document.createElement('div');
+        bubble.className = `chat-message-bubble ${msg.senderId === 'advisor' ? 'client' : 'advisor'}`;
+        const timeStr = msg.timestamp ? new Date(msg.timestamp.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now';
+        
+        bubble.innerHTML = `
+          <div>${msg.text}</div>
+          <span class="chat-timestamp">${timeStr}</span>
+        `;
+        chatContainer.appendChild(bubble);
+      });
+      // Scroll to bottom
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    });
+
+    // Send Message (Advisor Response)
+    inputForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const text = messageInput.value.trim();
+      if (!text) return;
+
+      try {
+        await addDoc(messagesCol, {
+          senderId: 'advisor',
+          senderName: 'Expat Guide',
+          text: text,
+          timestamp: new Date()
+        });
+        messageInput.value = '';
+      } catch (err) {
+        console.error("Error sending response message:", err);
+      }
+    };
+  }
+
+  // 3. Bind Switch View Toggles for Testing
+  const btnToggleToAdvisor = document.getElementById('btn-toggle-to-advisor');
+  const btnToggleToClient = document.getElementById('btn-toggle-to-client');
+
+  if (btnToggleToAdvisor) {
+    btnToggleToAdvisor.addEventListener('click', () => {
+      userRole = 'advisor';
+      // Toggle navbar visibility links
+      updateHeaderNavActions(true);
+      // Route to advisor section
+      sections.forEach(sec => sec.classList.toggle('active', sec.id === 'advisor-portal'));
+      renderAdvisorDashboard();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  if (btnToggleToClient) {
+    btnToggleToClient.addEventListener('click', () => {
+      userRole = 'client';
+      updateHeaderNavActions(true);
+      sections.forEach(sec => sec.classList.toggle('active', sec.id === 'dashboard'));
+      renderClientDashboard();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 });
