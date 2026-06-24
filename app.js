@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
           isUserLoggedIn = false;
         }
 
-        updateHeaderNavActions(isUserLoggedIn);
+        updateHeaderNavActions(isUserLoggedIn, user);
 
         // Re-render the Results view if it is active to update locking/booking UI
         const resultsSec = document.getElementById('results');
@@ -2150,7 +2150,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Header Nav actions logged-in toggles
-  function updateHeaderNavActions(loggedIn) {
+  function updateHeaderNavActions(loggedIn, user = null) {
     const navActions = document.querySelector('.nav-actions');
     const directoryLink = document.querySelector('.nav-link[data-target="directory"]');
     
@@ -2167,8 +2167,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!navActions) return;
 
     if (loggedIn) {
+      let displayName = 'Expat';
+      const currentUserObj = user || (auth ? auth.currentUser : null);
+      if (currentUserObj) {
+        if (currentUserObj.displayName) {
+          displayName = currentUserObj.displayName.split(' ')[0];
+        } else if (currentUserObj.email) {
+          displayName = currentUserObj.email.split('@')[0].split('.')[0];
+          displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+        }
+      }
+      
       navActions.innerHTML = `
-        <span style="font-size: 0.88rem; font-weight: 600; color: var(--accent); margin-right: 12px; display: inline-block; vertical-align: middle;">👋 Welcome, Expat!</span>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--accent); margin-right: 12px; display: inline-block; vertical-align: middle;">👋 Welcome, ${displayName}!</span>
         <button class="btn btn-outline" id="btn-header-logout" style="padding: 8px 16px; font-size: 0.8rem; border-radius: 100px;">Log Out</button>
       `;
       
