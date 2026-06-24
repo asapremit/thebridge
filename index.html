@@ -20,14 +20,20 @@
         </svg>
         same Path
       </div>
-      <ul class="nav-links">
+      <!-- Public Navigation Links -->
+      <ul class="nav-links public-nav-links">
         <li><a href="#" class="nav-link active" data-target="home">Home</a></li>
-        <li><a href="#" class="nav-link" data-target="dashboard" id="nav-link-dashboard" style="display: none;">My Roadmap</a></li>
-        <li><a href="#" class="nav-link" data-target="advisor-portal" id="nav-link-advisor-portal" style="display: none;">Guide Workspace</a></li>
-        <li><a href="#" class="nav-link" data-target="directory">Browse Directory</a></li>
         <li><a href="#" class="nav-link" data-target="mission">Our Mission</a></li>
         <li><a href="#" class="nav-link" data-target="stories">Success Stories</a></li>
         <li><a href="#" class="nav-link" data-target="application">Advisor Application</a></li>
+      </ul>
+      <!-- Logged-in Portal Navigation Links -->
+      <ul class="nav-links portal-nav-links" style="display: none;">
+        <li><a href="#" class="nav-link" data-target="dashboard" id="nav-link-dashboard">My Roadmap</a></li>
+        <li><a href="#" class="nav-link" data-target="dashboard" data-scroll="document-locker-card">Document Locker</a></li>
+        <li><a href="#" class="nav-link" data-target="dashboard" data-scroll="message-center-card">Message Center</a></li>
+        <li><a href="#" class="nav-link" data-target="advisor-portal" id="nav-link-advisor-portal">Guide Workspace</a></li>
+        <li><a href="#" class="nav-link" data-target="directory" id="nav-link-directory">Browse Guides</a></li>
       </ul>
       <div class="nav-actions">
         <button class="btn btn-outline">Sign In</button>
@@ -35,6 +41,16 @@
       </div>
     </div>
   </nav>
+
+  <!-- PORTAL SUB-NAV CATEGORIES (EXPAT SUCCESS HUB) -->
+  <div class="sub-nav-categories" id="portal-sub-nav" style="display: none; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: 12px 0; box-shadow: var(--shadow-sm);">
+    <div class="container" style="display: flex; gap: 16px; align-items: center; overflow-x: auto; white-space: nowrap;">
+      <span style="font-size: 0.72rem; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-right: 12px;">Success Focus Areas:</span>
+      <a href="#" class="sub-nav-cat active" data-focus="Status & Visas" style="color: var(--text-primary); text-decoration: none; font-size: 0.85rem; font-weight: 600; padding: 6px 16px; border-radius: 20px; transition: all 0.2s;">Status & Visas</a>
+      <a href="#" class="sub-nav-cat" data-focus="Career & Jobs" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 6px 16px; border-radius: 20px; transition: all 0.2s;">Career & Jobs</a>
+      <a href="#" class="sub-nav-cat" data-focus="Finance & Credit" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 6px 16px; border-radius: 20px; transition: all 0.2s;">Finance & Credit</a>
+    </div>
+  </div>
 
   <!-- HOME VIEW -->
   <section id="home" class="view-section active">
@@ -1313,38 +1329,62 @@
 
   <!-- CLIENT ROADMAP DASHBOARD VIEW -->
   <section id="dashboard" class="view-section" style="background-color: var(--bg-primary); display: none;">
-    <div class="container" style="padding: 100px 24px 80px;">
-      <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
-        <div>
-          <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; letter-spacing: 0.05em;">CLIENT WORKSPACE</span>
-          <h2 style="font-family: var(--font-serif); font-size: 2.6rem; font-style: italic; margin-top: 8px;" id="db-user-greeting">My Relocation Roadmap</h2>
+    <div class="container" style="padding: 60px 24px 80px;">
+      <!-- Welcome back Expat Success Hub Header Card -->
+      <div class="results-card welcome-hub-card" style="background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(16, 185, 129, 0.03) 100%); border: 1px solid var(--border-color); border-radius: 20px; padding: 32px; margin-bottom: 32px; box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px;">
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <!-- Avatar Icon -->
+          <div id="hub-user-avatar" style="width: 64px; height: 64px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 700; font-family: var(--font-serif); box-shadow: var(--shadow-sm);">U</div>
+          <div>
+            <h2 style="font-family: var(--font-serif); font-size: 2.2rem; font-style: italic; margin: 0; color: var(--text-primary);" id="db-user-greeting">Welcome back, Expat!</h2>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 6px 0 0 0;" id="db-user-subheading">Status & Visas Relocation Journey</p>
+          </div>
         </div>
-        <!-- Role Switching Toggle for Testing -->
-        <button class="btn btn-outline" id="btn-toggle-to-advisor" style="padding: 10px 20px; border-radius: 100px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
-          🔄 Switch to Advisor View
-        </button>
+        <div>
+          <!-- Role Switching Toggle for Testing -->
+          <button class="btn btn-outline" id="btn-toggle-to-advisor" style="padding: 10px 20px; border-radius: 100px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            🔄 Switch to Advisor View
+          </button>
+        </div>
       </div>
 
-      <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start;">
-        <!-- Left Side: Interactive Checklist & Document Vault -->
+      <div class="dashboard-grid" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: start;">
+        <!-- Left Column: Dynamic Roadmap Checklist -->
         <div class="dashboard-left" style="display: flex; flex-direction: column; gap: 32px;">
-          <!-- Interactive Checklist -->
           <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
-            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-style: italic; margin-bottom: 12px; color: var(--text-primary);">Relocation Action Items</h3>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;">Complete these steps to advance your roadmap. Checking an item updates your progress instantly.</p>
-            <div id="db-checklist-container" style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+              <div>
+                <h3 style="font-family: var(--font-serif); font-size: 1.5rem; font-style: italic; color: var(--text-primary); margin: 0;">Expat Success Roadmap</h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 4px 0 0 0;">Check off completed actions to update your relocation timeline.</p>
+              </div>
+              <!-- Roadmap Progress Badge -->
+              <div id="roadmap-progress-badge" style="background: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 0.85rem; padding: 6px 14px; border-radius: 20px;">
+                0% Completed
+              </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div style="width: 100%; height: 8px; background: rgba(0,0,0,0.05); border-radius: 4px; margin-bottom: 24px; overflow: hidden;">
+              <div id="roadmap-progress-bar" style="width: 0%; height: 100%; background: var(--accent); transition: width 0.3s ease;"></div>
+            </div>
+
+            <!-- Checklist Items -->
+            <div id="db-checklist-container" style="display: flex; flex-direction: column; gap: 12px;">
               <!-- Dynamically populated checklist -->
             </div>
           </div>
+        </div>
 
-          <!-- Document Vault -->
-          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
-            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-style: italic; margin-bottom: 8px; color: var(--text-primary);">Document Vault</h3>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;">Securely store and share draft applications, CVs, or official paperwork with your advisor.</p>
+        <!-- Right Column: Document Vault & Secure Chat -->
+        <div class="dashboard-right" style="display: flex; flex-direction: column; gap: 32px;">
+          <!-- Document Vault Locker -->
+          <div class="results-card" id="document-locker-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
+            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-style: italic; margin-bottom: 6px; color: var(--text-primary);">Document Vault Locker</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">Upload applications, visa draft paperwork, and CVs for guide review.</p>
             
             <!-- Upload Dropzone -->
-            <div class="vault-upload-dropzone" id="vault-dropzone" style="border: 2px dashed var(--border-color); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: background 0.2s; background: rgba(0,0,0,0.02); margin-bottom: 20px;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent); margin-bottom: 8px; display: inline-block;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+            <div class="vault-upload-dropzone" id="vault-dropzone" style="border: 2px dashed var(--border-color); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: background 0.2s; background: rgba(0,0,0,0.01); margin-bottom: 20px;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent); margin-bottom: 8px; display: inline-block;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
               <p style="font-size: 0.88rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Click or drag files to upload</p>
               <p style="font-size: 0.75rem; color: var(--text-secondary);">PDF, JPG, PNG or DOCX (max 10MB)</p>
               <input type="file" id="vault-file-input" style="display: none;" />
@@ -1356,17 +1396,18 @@
               <p style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;" id="vault-empty-text">No documents uploaded yet.</p>
             </div>
           </div>
-        </div>
 
-        <!-- Right Side: Secure Chat -->
-        <div class="dashboard-right" style="display: flex; flex-direction: column; gap: 32px; height: 100%;">
-          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; height: 600px;">
-            <div class="chat-header" style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
-              <img id="chat-advisor-avatar" src="david_k_portrait.png" alt="Advisor" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);" />
-              <div>
-                <h4 style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);" id="chat-advisor-name">Advisor Chat</h4>
-                <p style="font-size: 0.78rem; color: #10B981; display: flex; align-items: center; gap: 4px;"><span style="width: 6px; height: 6px; background: #10B981; border-radius: 50%;"></span> Matched Expat Guide</p>
+          <!-- Secure Message Center -->
+          <div class="results-card" id="message-center-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; height: 500px;">
+            <div class="chat-header" style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <img id="chat-advisor-avatar" src="david_k_portrait.png" alt="Advisor" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);" />
+                <div>
+                  <h4 style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);" id="chat-advisor-name">Advisor Chat</h4>
+                  <p style="font-size: 0.78rem; color: #10B981; display: flex; align-items: center; gap: 4px; margin: 0;"><span style="width: 6px; height: 6px; background: #10B981; border-radius: 50%;"></span> Matched Expat Guide</p>
+                </div>
               </div>
+              <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 0.7rem; border-radius: 12px; padding: 4px 10px;">Message Center</span>
             </div>
 
             <!-- Message Area -->

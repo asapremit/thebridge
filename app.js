@@ -20,16 +20,33 @@ document.addEventListener('DOMContentLoaded', () => {
           isUserLoggedIn = true;
           // Sync onboarding quiz choices to Firestore
           await syncUserData(user);
+
+          // Get user document to verify role
+          try {
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+              userRole = userDoc.data().role || 'client';
+            }
+          } catch(err) {
+            console.error("Error reading user role:", err);
+          }
+
+          updateHeaderNavActions(true, user);
+
+          // Swap view immediately to portal dashboard
+          sections.forEach(sec => {
+            const target = userRole === 'advisor' ? 'advisor-portal' : 'dashboard';
+            sec.classList.toggle('active', sec.id === target);
+          });
+
+          if (userRole === 'advisor') {
+            renderAdvisorDashboard();
+          } else {
+            renderClientDashboard();
+          }
         } else {
           isUserLoggedIn = false;
-        }
-
-        updateHeaderNavActions(isUserLoggedIn, user);
-
-        // Re-render the Results view if it is active to update locking/booking UI
-        const resultsSec = document.getElementById('results');
-        if (resultsSec && resultsSec.classList.contains('active')) {
-          renderResultsPage();
+          updateHeaderNavActions(false);
         }
       });
     })
@@ -63,13 +80,38 @@ document.addEventListener('DOMContentLoaded', () => {
       sections.forEach(sec =>
         sec.classList.toggle('active', sec.id === targetId)
       );
-      window.scrollTo({ top: 0, behavior: 'smooth' });
 
       if (targetId === 'dashboard') {
-        renderClientDashboard();
-      } else if (targetId === 'advisor-portal') {
-        renderAdvisorDashboard();
+        renderClientDashboard().then(() => {
+          const scrollId = link.getAttribute('data-scroll');
+          if (scrollId) {
+            const elementToScroll = document.getElementById(scrollId);
+            if (elementToScroll) {
+              setTimeout(() => {
+                elementToScroll.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }, 150);
+            }
+          } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      } else {
+        if (targetId === 'advisor-portal') {
+          renderAdvisorDashboard();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
+    });
+  });
+
+  // Bind sub-nav category click events
+  document.querySelectorAll('.sub-nav-cat').forEach(cat => {
+    cat.addEventListener('click', (e) => {
+      e.preventDefault();
+      portalActiveFocusArea = cat.getAttribute('data-focus');
+      document.querySelectorAll('.sub-nav-cat').forEach(c => c.classList.remove('active'));
+      cat.classList.add('active');
+      renderClientDashboard();
     });
   });
 
@@ -86,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let isUserLoggedIn = false; // Simulated authentication state
   let userRole = 'client'; // Current active dashboard role ('client' or 'advisor')
   let ratings = { status: 0, career: 0, finance: 0 };
+  let portalActiveFocusArea = null; // Active dashboard category filter
   // Dynamic goal selection steps state
   let goalStepsToAsk = [];
   let currentGoalStepIndex = 0;
@@ -2159,19 +2202,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Header Nav actions logged-in toggles
   function updateHeaderNavActions(loggedIn, user = null) {
     const navActions = document.querySelector('.nav-actions');
-    const directoryLink = document.querySelector('.nav-link[data-target="directory"]');
+    const publicNav = document.querySelector('.public-nav-links');
+    const portalNav = document.querySelector('.portal-nav-links');
+    const portalSubNav = document.getElementById('portal-sub-nav');
     const dashboardLink = document.getElementById('nav-link-dashboard');
     const advisorPortalLink = document.getElementById('nav-link-advisor-portal');
     
-    // Toggle directory nav link visibility based on login state
-    if (directoryLink) {
-      const parentLi = directoryLink.closest('li');
-      if (parentLi) {
-        parentLi.style.display = loggedIn ? 'inline-block' : 'none';
-      } else {
-        directoryLink.style.display = loggedIn ? 'inline-block' : 'none';
-      }
-    }
+    // Toggle public vs portal nav links
+    if (publicNav) publicNav.style.display = loggedIn ? 'none' : 'flex';
+    if (portalNav) portalNav.style.display = loggedIn ? 'flex' : 'none';
+    if (portalSubNav) portalSubNav.style.display = loggedIn ? 'block' : 'none';
 
     if (dashboardLink) {
       const parentLi = dashboardLink.closest('li');
@@ -2737,11 +2777,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = auth.currentUser;
     const uid = user.uid;
 
-    // Greeting
+    // Greeting & Avatar Initials
     const greeting = document.getElementById('db-user-greeting');
+    const avatar = document.getElementById('hub-user-avatar');
     if (greeting) {
       const name = user.displayName || user.email.split('@')[0];
-      greeting.innerText = `👋 Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}!`;
+      greeting.innerText = `Welcome back, ${name.charAt(0).toUpperCase() + name.slice(1)}!`;
+    }
+    if (avatar) {
+      const name = user.displayName || user.email.split('@')[0];
+      avatar.innerText = name.charAt(0).toUpperCase();
     }
 
     if (!db) return;
@@ -2755,11 +2800,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const quizResults = data.quizResults || {};
         const bottleneck = quizResults.biggestBottleneck || 'status';
         
+        const focusArea = portalActiveFocusArea || quizResults.focusArea || 'Status & Visas';
+        
+        // Update subheading details on success hub header
+        const subheading = document.getElementById('db-user-subheading');
+        if (subheading) {
+          subheading.innerText = `${focusArea} Relocation Journey • Bottleneck: ${bottleneck.charAt(0).toUpperCase() + bottleneck.slice(1)}`;
+        }
+
+        // Highlight category nav tab
+        document.querySelectorAll('.sub-nav-cat').forEach(cat => {
+          const focusVal = cat.getAttribute('data-focus');
+          cat.classList.toggle('active', focusVal === focusArea);
+        });
+        
         // 1.1 Checklist Population
         const checklistContainer = document.getElementById('db-checklist-container');
         if (checklistContainer) {
           checklistContainer.innerHTML = '';
-          const focusArea = quizResults.focusArea || 'Status & Visas';
           const focusConfig = quizContentConfig[focusArea] || quizContentConfig['Status & Visas'];
           const checklistItems = (focusConfig && focusConfig.checklists && focusConfig.checklists[bottleneck]) 
             ? focusConfig.checklists[bottleneck] 
@@ -2767,8 +2825,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
           if (checklistItems.length === 0) {
             checklistContainer.innerHTML = `<p style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">No goals checklist configured yet.</p>`;
+            
+            const progressBadge = document.getElementById('roadmap-progress-badge');
+            const progressBar = document.getElementById('roadmap-progress-bar');
+            if (progressBadge) progressBadge.innerText = `0% Completed`;
+            if (progressBar) progressBar.style.width = `0%`;
           } else {
             const savedGoals = quizResults.selectedGoals || [];
+            
+            // Calculate progress
+            const checkedCount = savedGoals.filter(g => checklistItems.includes(g)).length;
+            const totalCount = checklistItems.length;
+            const pct = Math.round((checkedCount / totalCount) * 100);
+            
+            const progressBadge = document.getElementById('roadmap-progress-badge');
+            const progressBar = document.getElementById('roadmap-progress-bar');
+            if (progressBadge) {
+              progressBadge.innerText = `${pct}% Completed`;
+            }
+            if (progressBar) {
+              progressBar.style.width = `${pct}%`;
+            }
+
             checklistItems.forEach((goalText, idx) => {
               const checked = savedGoals.includes(goalText) ? 'checked' : '';
               const goalRow = document.createElement('label');
@@ -2783,14 +2861,29 @@ document.addEventListener('DOMContentLoaded', () => {
             // Attach checkbox update listeners
             checklistContainer.querySelectorAll('.db-goal-checkbox').forEach(box => {
               box.addEventListener('change', async () => {
-                const currentChecked = Array.from(checklistContainer.querySelectorAll('.db-goal-checkbox:checked'))
-                  .map(el => el.getAttribute('data-goal'));
+                let updatedSelectedGoals = [...savedGoals];
+                const boxGoal = box.getAttribute('data-goal');
+                
+                if (box.checked) {
+                  if (!updatedSelectedGoals.includes(boxGoal)) {
+                    updatedSelectedGoals.push(boxGoal);
+                  }
+                } else {
+                  updatedSelectedGoals = updatedSelectedGoals.filter(g => g !== boxGoal);
+                }
+
                 try {
                   await updateDoc(userDocRef, {
-                    'quizResults.selectedGoals': currentChecked,
+                    'quizResults.selectedGoals': updatedSelectedGoals,
                     updatedAt: new Date()
                   });
                   console.log("Goal checklist updated in Firestore.");
+                  
+                  // Re-evaluate progress badge & bar locally
+                  const newCheckedCount = updatedSelectedGoals.filter(g => checklistItems.includes(g)).length;
+                  const newPct = Math.round((newCheckedCount / totalCount) * 100);
+                  if (progressBadge) progressBadge.innerText = `${newPct}% Completed`;
+                  if (progressBar) progressBar.style.width = `${newPct}%`;
                 } catch (err) {
                   console.error("Error saving goal state to Firestore:", err);
                 }

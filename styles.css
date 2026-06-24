@@ -4256,6 +4256,70 @@ button, input, textarea {
   color: rgba(255,255,255,0.7);
   text-align: right;
 }
+/* Portal Sub-nav & Success Hub Classes */
+.sub-nav-cat {
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: transparent;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
 
+.sub-nav-cat:hover {
+  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.03);
+}
 
+.sub-nav-cat.active {
+  color: white !important;
+  background: var(--accent) !important;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
 
+.welcome-hub-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.welcome-hub-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Roadmap Checkbox custom layout */
+.db-goal-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-color);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  background: var(--bg-primary);
+}
+
+.db-goal-checkbox:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.db-goal-checkbox:checked::after {
+  content: "✓";
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.db-goal-checkbox:hover {
+  border-color: var(--accent);
+}
