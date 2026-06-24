@@ -3876,7 +3876,9 @@ button, input, textarea {
 }
 
 .goal-checkbox-input {
-  display: none; /* Hide default browser checkbox */
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* Custom Checkbox Box */
@@ -3895,18 +3897,18 @@ button, input, textarea {
   border-color: rgba(17, 47, 32, 0.4);
 }
 
-/* Checked state changes */
-/* Status Theme (Coral) */
+/* Checked state changes (Uniformed premium forest green colors for all categories) */
+/* Status Theme */
 [data-theme="status"] .goal-checkbox-row.checked {
-  border-color: #c85a5a;
-  background: rgba(200, 90, 90, 0.03);
+  border-color: var(--accent);
+  background: var(--accent-light);
 }
 [data-theme="status"] .goal-checkbox-row.checked .goal-checkbox-box {
-  background-color: #c85a5a;
-  border-color: #c85a5a;
+  background-color: var(--accent);
+  border-color: var(--accent);
 }
 
-/* Career Theme (Forest Green) */
+/* Career Theme */
 [data-theme="career"] .goal-checkbox-row.checked {
   border-color: var(--accent);
   background: var(--accent-light);
@@ -3916,14 +3918,14 @@ button, input, textarea {
   border-color: var(--accent);
 }
 
-/* Finance Theme (Orange) */
+/* Finance Theme */
 [data-theme="finance"] .goal-checkbox-row.checked {
-  border-color: #f5a623;
-  background: rgba(245, 166, 35, 0.03);
+  border-color: var(--accent);
+  background: var(--accent-light);
 }
 [data-theme="finance"] .goal-checkbox-row.checked .goal-checkbox-box {
-  background-color: #f5a623;
-  border-color: #f5a623;
+  background-color: var(--accent);
+  border-color: var(--accent);
 }
 
 /* Checkmark Icon inside custom checkbox */

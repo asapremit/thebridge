@@ -1,0 +1,68 @@
+{
+  "collections": {
+    "users": {
+      "description": "Stores user profiles for clients and advisors, including quiz responses and metadata.",
+      "fields": {
+        "uid": { "type": "string", "description": "Firebase Auth User ID" },
+        "email": { "type": "string", "description": "Email address" },
+        "displayName": { "type": "string", "description": "Full name" },
+        "role": { "type": "string", "enum": ["client", "advisor", "admin"], "description": "User role" },
+        "createdAt": { "type": "timestamp", "description": "Record creation time" },
+        "updatedAt": { "type": "timestamp", "description": "Record last update time" },
+        "quizResults": {
+          "type": "map",
+          "description": "Stored expat readiness results from the onboarding quiz",
+          "fields": {
+            "focusArea": { "type": "string" },
+            "scores": {
+              "type": "map",
+              "fields": {
+                "visa": { "type": "number" },
+                "career": { "type": "number" },
+                "finance": { "type": "number" }
+              }
+            },
+            "biggestBottleneck": { "type": "string" },
+            "selectedGoals": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "advisors": {
+      "description": "Stores profile details, specialty tags, pricing, and ratings for 1-1 expat guides.",
+      "fields": {
+        "id": { "type": "string", "description": "Unique slug or document ID" },
+        "name": { "type": "string", "description": "Full name" },
+        "email": { "type": "string", "description": "Email address" },
+        "photoUrl": { "type": "string", "description": "URL to profile picture" },
+        "title": { "type": "string", "description": "Advisor tagline/headline" },
+        "bio": { "type": "string", "description": "Long biography details" },
+        "rating": { "type": "number", "description": "Average user rating (e.g. 4.9)" },
+        "reviewsCount": { "type": "number", "description": "Total reviews received" },
+        "pricePerHour": { "type": "number", "description": "Hourly rate in USD" },
+        "languages": { "type": "array", "items": { "type": "string" } },
+        "specialties": { "type": "array", "items": { "type": "string" } },
+        "meetLink": { "type": "string", "description": "Direct personal video meeting link or OAuth token target" },
+        "createdAt": { "type": "timestamp", "description": "Record creation time" }
+      }
+    },
+    "bookings": {
+      "description": "Tracks appointments booked between users and advisors, including Stripe payment status and Google Meet links.",
+      "fields": {
+        "id": { "type": "string", "description": "Unique booking document ID" },
+        "clientId": { "type": "string", "description": "Document reference to users (client)" },
+        "advisorId": { "type": "string", "description": "Document reference to advisors" },
+        "advisorName": { "type": "string", "description": "Advisor's cached full name" },
+        "clientName": { "type": "string", "description": "Client's cached full name" },
+        "clientEmail": { "type": "string", "description": "Client's cached email" },
+        "date": { "type": "string", "description": "Date of meeting in YYYY-MM-DD format" },
+        "slot": { "type": "string", "description": "Start time of slot (e.g. 10:00 AM)" },
+        "status": { "type": "string", "enum": ["pending", "confirmed", "completed", "cancelled"], "description": "Current status of appointment" },
+        "paymentStatus": { "type": "string", "enum": ["unpaid", "paid", "refunded"], "description": "Stripe checkout billing status" },
+        "stripeSessionId": { "type": "string", "description": "Stripe checkout session ID for tracking webhooks" },
+        "meetLink": { "type": "string", "description": "Google Meet meeting URL generated for the session" },
+        "createdAt": { "type": "timestamp", "description": "Record creation time" }
+      }
+    }
+  }
+}

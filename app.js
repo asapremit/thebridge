@@ -7,6 +7,17 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const targetId = link.getAttribute('data-target');
       
+      // If Browse Directory is clicked and user is not logged in, redirect to login/signup quiz flow
+      if (targetId === 'directory' && !isUserLoggedIn) {
+        // Find the quiz section and scroll to it
+        const quizBox = document.querySelector('.quiz-box') || document.querySelector('.hero-quiz-card');
+        if (quizBox) {
+          quizBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        goToStep('signup');
+        return;
+      }
+      
       // Update links
       navLinks.forEach(l => l.classList.remove('active'));
       link.classList.add('active');
@@ -574,22 +585,19 @@ document.addEventListener('DOMContentLoaded', () => {
           let activeVal = 0;
           if (currentStep === 4) {
             activeCat = 'status';
-            activeVal = valStatus;
+            activeVal = displayRatings.status;
           } else if (currentStep === 5) {
             activeCat = 'career';
-            activeVal = valCareer;
+            activeVal = displayRatings.career;
           } else if (currentStep === 6) {
             activeCat = 'finance';
-            activeVal = valFinance;
+            activeVal = displayRatings.finance;
           }
 
           if (activeVal === 0) {
             statusText.innerText = "Select a number to rate your current progress.";
           } else {
-            let lookupCat = activeCat;
-            if (selectedFocus) {
-              lookupCat = selectedFocus;
-            }
+            const lookupCat = selectedFocus || 'status';
             const categoryDesc = statusDescriptions[lookupCat];
             statusText.innerText = categoryDesc ? categoryDesc[activeVal] : "Select a number to rate your current progress.";
           }
@@ -1002,6 +1010,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const container = slide.querySelector('.dynamic-checklists-container');
       if (!container) return;
       container.innerHTML = '';
+      container.setAttribute('data-theme', bottleneck);
       
       const checklistItems = config.checklists[bottleneck] || [];
       checklistItems.forEach(item => {
@@ -1020,8 +1029,14 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         
         const input = label.querySelector('.goal-checkbox-input');
-        input.addEventListener('change', () => {
+        label.addEventListener('click', (e) => {
+          // Prevent double firing if clicking directly on input/text elements
+          if (e.target === input) return;
+          e.preventDefault();
+          
+          input.checked = !input.checked;
           label.classList.toggle('checked', input.checked);
+          
           if (input.checked) {
             if (!selectedStep9.includes(item.val)) {
               selectedStep9.push(item.val);
@@ -1029,6 +1044,11 @@ document.addEventListener('DOMContentLoaded', () => {
           } else {
             selectedStep9 = selectedStep9.filter(v => v !== item.val);
           }
+          
+          // Auto-advance to Step 10 after selection to keep uniform transition behavior
+          setTimeout(() => {
+            goToStep(10);
+          }, 600);
         });
         
         container.appendChild(label);
@@ -1079,16 +1099,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const badge = slide.querySelector('.dynamic-badge');
             if (badge) {
               badge.innerText = config.badge;
-              if (selectedFocus === 'status') {
-                badge.style.backgroundColor = 'rgba(200, 90, 90, 0.1)';
-                badge.style.color = '#c85a5a';
-              } else if (selectedFocus === 'career') {
-                badge.style.backgroundColor = 'rgba(17, 47, 32, 0.1)';
-                badge.style.color = 'var(--accent)';
-              } else if (selectedFocus === 'finance') {
-                badge.style.backgroundColor = 'rgba(245, 166, 35, 0.1)';
-                badge.style.color = '#f5a623';
-              }
+              // Always use uniform premium forest green branding colors
+              badge.style.backgroundColor = 'var(--accent-light)';
+              badge.style.color = 'var(--accent)';
             }
             
             const title = slide.querySelector('.dynamic-title');
@@ -1448,6 +1461,22 @@ document.addEventListener('DOMContentLoaded', () => {
   introCards.forEach(card => {
     card.addEventListener('click', () => {
       const id = card.getAttribute('data-advisor-id');
+      
+      // Handle see more card clicks
+      if (id === 'see-more') {
+        if (!isUserLoggedIn) {
+          const quizBox = document.querySelector('.quiz-box') || document.querySelector('.hero-quiz-card');
+          if (quizBox) {
+            quizBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          goToStep('signup');
+        } else {
+          const dirLink = document.querySelector('.nav-link[data-target="directory"]');
+          if (dirLink) dirLink.click();
+        }
+        return;
+      }
+      
       const adv = advisorDb[id];
       if (!adv) return;
 
@@ -1549,6 +1578,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Hide advisor modal
         advisorModal.classList.remove('open');
+        
+        // If user is not logged in, prompt sign up/login by scrolling to intake quiz
+        if (!isUserLoggedIn) {
+          const quizBox = document.querySelector('.quiz-box') || document.querySelector('.hero-quiz-card');
+          if (quizBox) {
+            quizBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          goToStep('signup');
+          return;
+        }
         
         // Pre-fill and show booking confirmation modal
         document.getElementById('modal-advisor-name').innerText = adv.name;
@@ -1974,6 +2013,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Header Nav actions logged-in toggles
   function updateHeaderNavActions(loggedIn) {
     const navActions = document.querySelector('.nav-actions');
+    const directoryLink = document.querySelector('.nav-link[data-target="directory"]');
+    
+    // Toggle directory nav link visibility based on login state
+    if (directoryLink) {
+      const parentLi = directoryLink.closest('li');
+      if (parentLi) {
+        parentLi.style.display = loggedIn ? 'inline-block' : 'none';
+      } else {
+        directoryLink.style.display = loggedIn ? 'inline-block' : 'none';
+      }
+    }
+
     if (!navActions) return;
 
     if (loggedIn) {
