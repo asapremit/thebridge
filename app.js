@@ -982,18 +982,16 @@ document.addEventListener('DOMContentLoaded', () => {
           container.querySelectorAll('.quiz-choice-row').forEach(r => r.classList.remove('active'));
           btn.classList.add('active');
           
-          if (step === 7) selectedStep7 = ch.val;
-          else if (step === 8) selectedStep8 = ch.val;
-          else if (step === 10) {
+          if (step === 7) {
+            selectedStep7 = ch.val;
+            setTimeout(() => goToStep(8), 600);
+          } else if (step === 8) {
+            selectedStep8 = ch.val;
+            setTimeout(() => goToStep(9), 600);
+          } else if (step === 10) {
             selectedStep10 = ch.val;
-            // Step 10 does NOT auto-navigate — user presses "View My Match" button
-            return;
+            setTimeout(() => goToStep('signup'), 600);
           }
-          
-          // Steps 7 and 8 auto-advance
-          setTimeout(() => {
-            goToStep(step + 1);
-          }, 600);
         });
         
         container.appendChild(btn);
