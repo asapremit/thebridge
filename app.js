@@ -2205,16 +2205,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const resultsSec = document.getElementById('results');
       
       const handleAuthClick = (isLogin) => {
-        if (resultsSec.classList.contains('active')) {
+        if (resultsSec && resultsSec.classList.contains('active') && !isUserLoggedIn) {
           document.getElementById('results-auth-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
           const tabBtn = document.getElementById(isLogin ? 'results-tab-login' : 'results-tab-signup');
           if (tabBtn) tabBtn.click();
         } else {
-          // Go to home and go to quiz auth
-          const homeLink = document.querySelector('.nav-link[data-target="home"]');
-          if (homeLink) homeLink.click();
-          // Reset quiz and open signup slide
-          goToStep('signup');
+          const globalModal = document.getElementById('global-auth-modal');
+          if (globalModal) {
+            globalModal.style.display = 'flex';
+            globalModal.classList.add('open');
+            const tabSignup = document.getElementById('global-tab-signup');
+            const tabLogin = document.getElementById('global-tab-login');
+            if (isLogin) {
+              if (tabLogin) tabLogin.click();
+            } else {
+              if (tabSignup) tabSignup.click();
+            }
+          }
         }
       };
       
@@ -2515,6 +2522,166 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Reset form fields
       applyForm.reset();
+    });
+  }
+
+  // Bind Global Authentication Modal
+  const globalAuthModal = document.getElementById('global-auth-modal');
+  const btnCloseGlobalAuth = document.getElementById('btn-close-global-auth');
+  const globalAuthForm = document.getElementById('global-auth-form');
+  const globalTabSignup = document.getElementById('global-tab-signup');
+  const globalTabLogin = document.getElementById('global-tab-login');
+  const globalGroupFullname = document.getElementById('global-group-fullname');
+  const globalFullnameInput = document.getElementById('global-fullname');
+  const globalEmailInput = document.getElementById('global-email');
+  const globalPasswordInput = document.getElementById('global-password');
+  const globalSubmitBtn = document.getElementById('btn-global-auth-submit');
+  const globalErrorMsg = document.getElementById('global-auth-error-msg');
+  const btnGoogleGlobal = document.getElementById('btn-google-global');
+
+  let globalAuthIsSignup = true;
+
+  if (btnCloseGlobalAuth && globalAuthModal) {
+    btnCloseGlobalAuth.addEventListener('click', () => {
+      globalAuthModal.style.display = 'none';
+      globalAuthModal.classList.remove('open');
+    });
+    // Click outside to close
+    globalAuthModal.addEventListener('click', (e) => {
+      if (e.target === globalAuthModal) {
+        globalAuthModal.style.display = 'none';
+        globalAuthModal.classList.remove('open');
+      }
+    });
+  }
+
+  if (globalTabSignup && globalTabLogin) {
+    globalTabSignup.addEventListener('click', () => {
+      globalAuthIsSignup = true;
+      globalTabSignup.classList.add('active');
+      globalTabLogin.classList.remove('active');
+      if (globalGroupFullname) globalGroupFullname.style.display = 'block';
+      if (globalFullnameInput) globalFullnameInput.setAttribute('required', 'required');
+      if (globalSubmitBtn) globalSubmitBtn.innerText = 'Create Account';
+      if (globalErrorMsg) globalErrorMsg.style.display = 'none';
+    });
+
+    globalTabLogin.addEventListener('click', () => {
+      globalAuthIsSignup = false;
+      globalTabSignup.classList.remove('active');
+      globalTabLogin.classList.add('active');
+      if (globalGroupFullname) globalGroupFullname.style.display = 'none';
+      if (globalFullnameInput) globalFullnameInput.removeAttribute('required');
+      if (globalSubmitBtn) globalSubmitBtn.innerText = 'Log In';
+      if (globalErrorMsg) globalErrorMsg.style.display = 'none';
+    });
+  }
+
+  if (globalAuthForm) {
+    globalAuthForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (globalErrorMsg) globalErrorMsg.style.display = 'none';
+
+      const fullname = globalAuthIsSignup ? globalFullnameInput.value.trim() : '';
+      const email = globalEmailInput.value.trim();
+      const password = globalPasswordInput.value.trim();
+
+      if (globalAuthIsSignup && !fullname) {
+        if (globalErrorMsg) {
+          globalErrorMsg.innerText = "Please enter your full name.";
+          globalErrorMsg.style.display = 'block';
+        }
+        return;
+      }
+
+      if (globalSubmitBtn) {
+        globalSubmitBtn.disabled = true;
+        globalSubmitBtn.innerHTML = `<span class="auth-spinner"></span> Authenticating...`;
+      }
+
+      const handleGlobalAuthError = (err) => {
+        console.error("Global Auth failed:", err);
+        if (globalSubmitBtn) {
+          globalSubmitBtn.disabled = false;
+          globalSubmitBtn.innerText = globalAuthIsSignup ? 'Create Account' : 'Log In';
+        }
+        if (globalErrorMsg) {
+          globalErrorMsg.innerText = err.message || "Authentication failed. Please check credentials.";
+          globalErrorMsg.style.display = 'block';
+        }
+      };
+
+      if (globalAuthIsSignup) {
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            updateProfile(user, { displayName: fullname })
+              .then(() => syncUserData(user))
+              .then(() => {
+                if (globalSubmitBtn) {
+                  globalSubmitBtn.disabled = false;
+                  globalSubmitBtn.innerText = 'Create Account';
+                }
+                globalAuthModal.style.display = 'none';
+                globalAuthModal.classList.remove('open');
+              })
+              .catch(handleGlobalAuthError);
+          })
+          .catch(handleGlobalAuthError);
+      } else {
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            syncUserData(user)
+              .then(() => {
+                if (globalSubmitBtn) {
+                  globalSubmitBtn.disabled = false;
+                  globalSubmitBtn.innerText = 'Log In';
+                }
+                globalAuthModal.style.display = 'none';
+                globalAuthModal.classList.remove('open');
+              })
+              .catch(handleGlobalAuthError);
+          })
+          .catch(handleGlobalAuthError);
+      }
+    });
+  }
+
+  if (btnGoogleGlobal) {
+    btnGoogleGlobal.addEventListener('click', () => {
+      if (!auth) return;
+      if (globalErrorMsg) globalErrorMsg.style.display = 'none';
+
+      if (globalSubmitBtn) {
+        globalSubmitBtn.disabled = true;
+        globalSubmitBtn.innerHTML = `<span class="auth-spinner"></span> Authenticating...`;
+      }
+
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          return syncUserData(user).then(() => {
+            if (globalSubmitBtn) {
+              globalSubmitBtn.disabled = false;
+              globalSubmitBtn.innerText = globalAuthIsSignup ? 'Create Account' : 'Log In';
+            }
+            globalAuthModal.style.display = 'none';
+            globalAuthModal.classList.remove('open');
+          });
+        })
+        .catch(err => {
+          console.error("Global Google Auth failed:", err);
+          if (globalSubmitBtn) {
+            globalSubmitBtn.disabled = false;
+            globalSubmitBtn.innerText = globalAuthIsSignup ? 'Create Account' : 'Log In';
+          }
+          if (globalErrorMsg) {
+            globalErrorMsg.innerText = err.message || "Google authentication failed.";
+            globalErrorMsg.style.display = 'block';
+          }
+        });
     });
   }
 });

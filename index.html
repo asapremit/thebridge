@@ -2230,6 +2230,64 @@
     </div>
   </div>
 
+  <!-- Global Authentication Modal -->
+  <div id="global-auth-modal" class="modal-overlay" style="display: none; z-index: 9999;">
+    <div class="modal-container" style="max-width: 450px; padding: 32px;">
+      <button class="modal-close-btn" id="btn-close-global-auth">&times;</button>
+      <div class="modal-header" style="text-align: center; margin-bottom: 24px;">
+        <h3 style="font-family: var(--font-serif); font-size: 1.8rem; font-style: italic; margin-bottom: 8px;">Welcome to Same Path</h3>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.45;">Join a community of expats receiving verified 1-1 guide support.</p>
+      </div>
+      <div class="modal-body">
+        <form id="global-auth-form" style="display: flex; flex-direction: column; gap: 14px;">
+          <!-- Toggle Tab Header -->
+          <div class="auth-toggle-tab">
+            <button type="button" class="auth-tab-btn active" id="global-tab-signup">Sign Up</button>
+            <button type="button" class="auth-tab-btn" id="global-tab-login">Log In</button>
+          </div>
+
+          <!-- Form Inputs -->
+          <div class="auth-input-group" id="global-group-fullname">
+            <label for="global-fullname">Full Name</label>
+            <input type="text" id="global-fullname" placeholder="Alex Johnson" />
+          </div>
+          
+          <div class="auth-input-group">
+            <label for="global-email">Email Address</label>
+            <input type="email" id="global-email" placeholder="alex@example.com" required />
+          </div>
+          
+          <div class="auth-input-group">
+            <label for="global-password">Password</label>
+            <input type="password" id="global-password" placeholder="••••••••" required />
+          </div>
+          
+          <div id="global-auth-error-msg" style="color: #c85a5a; font-size: 0.82rem; font-weight: 500; display: none; text-align: left; margin-top: -4px;"></div>
+
+          <button type="submit" class="btn btn-primary" id="btn-global-auth-submit" style="width: 100%; padding: 14px; margin-top: 6px; justify-content: center; display: flex; align-items: center; gap: 8px;">
+            Create Account
+          </button>
+          
+          <div class="auth-divider" style="display: flex; align-items: center; justify-content: center; margin: 10px 0; color: var(--text-secondary); font-size: 0.8rem; font-weight: 500; text-transform: uppercase;">
+            <span style="flex-grow: 1; height: 1px; background-color: var(--border-color); margin-right: 12px;"></span>
+            or
+            <span style="flex-grow: 1; height: 1px; background-color: var(--border-color); margin-left: 12px;"></span>
+          </div>
+          
+          <button type="button" class="btn btn-outline google-auth-btn" id="btn-google-global" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; font-weight: 600; font-size: 0.9rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); cursor: pointer; transition: all 0.2s ease;">
+            <svg width="18" height="18" viewBox="0 0 18 18">
+              <path fill="#EA4335" d="M9 3.58c1.02 0 1.94.35 2.66 1.04l2.02-2.02C12.46 1.41 10.87 1 9 1 5.48 1 2.5 3.02 1.04 5.96l2.87 2.22C4.59 5.37 6.57 3.58 9 3.58z"/>
+              <path fill="#4285F4" d="M17.64 9.2c0-.59-.05-1.17-.16-1.73H9v3.28h4.84c-.21 1.12-.84 2.07-1.79 2.7l2.78 2.16c1.63-1.5 2.57-3.7 2.57-6.41z"/>
+              <path fill="#FBBC05" d="M3.91 10.18c-.22-.66-.35-1.37-.35-2.1s.13-1.44.35-2.1L1.04 3.75C.37 5.09 0 6.6 0 8s.37 2.91 1.04 4.25l2.87-2.07z"/>
+              <path fill="#34A853" d="M9 17c2.43 0 4.47-.8 5.96-2.18l-2.79-2.15c-.78.52-1.78.83-3.17.83-2.43 0-4.41-1.79-5.14-4.2L1.04 12.2C2.5 15.13 5.48 17 9 17z"/>
+            </svg>
+            Continue with Google
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- Intake Match Loading Modal -->
   <div id="matching-loader-modal" class="modal-overlay" style="display: none; z-index: 10000; background: rgba(17, 47, 32, 0.95); backdrop-filter: blur(12px);">
     <div class="loader-content" style="text-align: center; color: white; max-width: 450px; padding: 40px; display: flex; flex-direction: column; align-items: center;">
