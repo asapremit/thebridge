@@ -1101,12 +1101,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Determine bottleneck category for Q9 Title text formatting
             let bottleneck = 'status';
-            let lowestScore = ratings.status || 10;
-            if ((ratings.career || 10) < lowestScore) {
+            let lowestScore = ratings.status > 0 ? ratings.status : 10;
+            if (ratings.career > 0 && ratings.career < lowestScore) {
               lowestScore = ratings.career;
               bottleneck = 'career';
             }
-            if ((ratings.finance || 10) < lowestScore) {
+            if (ratings.finance > 0 && ratings.finance < lowestScore) {
               lowestScore = ratings.finance;
               bottleneck = 'finance';
             }
@@ -1160,12 +1160,12 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         let bottleneck = 'status';
-        let lowestScore = ratings.status || 10;
-        if ((ratings.career || 10) < lowestScore) {
+        let lowestScore = ratings.status > 0 ? ratings.status : 10;
+        if (ratings.career > 0 && ratings.career < lowestScore) {
           lowestScore = ratings.career;
           bottleneck = 'career';
         }
-        if ((ratings.finance || 10) < lowestScore) {
+        if (ratings.finance > 0 && ratings.finance < lowestScore) {
           lowestScore = ratings.finance;
           bottleneck = 'finance';
         }
@@ -1626,7 +1626,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (progress >= 30 && progress < 70) {
         stepTitle.innerText = "Finding your match...";
-        stepDesc.innerText = `Matching your request with top-rated ${adv ? adv.specialties[0] : 'relocation'} experts...`;
+        stepDesc.innerText = `Matching your request with top-rated ${adv ? adv.topSpecialties[0] : 'relocation'} experts...`;
       } else if (progress >= 70 && progress < 95) {
         stepTitle.innerText = "Securing availability...";
         stepDesc.innerText = `Connecting with ${adv ? adv.name : 'your expert'}...`;
@@ -2112,11 +2112,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const retakeQuizBtn = document.getElementById('results-retake-quiz-btn');
   if (retakeQuizBtn) {
     retakeQuizBtn.addEventListener('click', () => {
-      // Clear all selected choices
-      quizCard.querySelectorAll('.quiz-choice-row').forEach(r => r.classList.remove('active'));
-      quizCard.querySelectorAll('.goal-checkbox-row').forEach(r => r.classList.remove('checked'));
-      quizCard.querySelectorAll('.goal-checkbox-input').forEach(i => i.checked = false);
-      
+      // Reset all quiz state
       selectedFocus = '';
       selectedStep2 = '';
       selectedStep3 = '';
@@ -2127,12 +2123,29 @@ document.addEventListener('DOMContentLoaded', () => {
       ratings = { status: 0, career: 0, finance: 0 };
       goalStepsToAsk = [];
       currentGoalStepIndex = 0;
-      
-      if (ratingBtns) ratingBtns.forEach(b => b.classList.remove('active'));
-      
-      restorePathOpacities();
-      updateHorizonVisuals();
-      goToStep(1);
+
+      // Clear quiz UI selections if quizCard exists
+      const qCard = document.querySelector('.hero-quiz-card');
+      if (qCard) {
+        qCard.querySelectorAll('.quiz-choice-row').forEach(r => r.classList.remove('active'));
+        qCard.querySelectorAll('.goal-checkbox-row').forEach(r => r.classList.remove('checked'));
+        qCard.querySelectorAll('.goal-checkbox-input').forEach(i => i.checked = false);
+        qCard.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+        // Reset visualizer if available
+        const pFill = document.getElementById('hero-quiz-progress');
+        if (pFill) pFill.style.width = '33.3%';
+        const allSlides = qCard.querySelectorAll('.quiz-step-slide');
+        allSlides.forEach(s => { s.style.display = 'none'; s.classList.remove('active'); });
+        const step1 = qCard.querySelector('.quiz-step-slide[data-step="1"]');
+        if (step1) { step1.style.display = 'block'; setTimeout(() => step1.classList.add('active'), 10); }
+        const prevBtnEl = qCard.querySelector('.quiz-prev-btn');
+        if (prevBtnEl) prevBtnEl.style.display = 'none';
+        const progressWrapper = qCard.querySelector('.quiz-progress-wrapper');
+        if (progressWrapper) progressWrapper.classList.remove('hide-progress');
+        const stepLabelEl = qCard.querySelector('.quiz-step-label');
+        if (stepLabelEl) stepLabelEl.innerText = 'Step 1 of 3';
+      }
+      currentStep = 1;
 
       // Return to homepage
       sections.forEach(sec => sec.classList.toggle('active', sec.id === 'home'));
@@ -2147,6 +2160,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial header nav state set
   updateHeaderNavActions(isUserLoggedIn);
+
+  // CTA "Take the Intake Quiz" button — scrolls to hero quiz
+  const ctaQuizBtn = document.getElementById('cta-take-quiz-btn');
+  if (ctaQuizBtn) {
+    ctaQuizBtn.addEventListener('click', () => {
+      const quizCardEl = document.querySelector('.hero-quiz-card');
+      if (quizCardEl) {
+        quizCardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
 
   // ==========================================================================
   // DIRECTORY FILTERING & SEARCH LOGIC
