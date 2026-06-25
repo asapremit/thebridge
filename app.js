@@ -185,7 +185,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Config objects declared in outer scope for access by renderResultsPage and other outside-quizCard functions
   function getChecklistItems(focusArea, bottleneck) {
-    const focusKey = getFocusKey(focusArea);
+    const focusKey = getFocusKey(focusArea) || 'status';
+    const safeBottleneck = (bottleneck === 'status' || bottleneck === 'career' || bottleneck === 'finance') ? bottleneck : 'status';
     
     // Fallback seed checklists specific to focus areas if not found in dynamic config
     const fallbackChecklists = {
@@ -242,12 +243,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // First try to look inside quizContentConfig[focusKey][9]
     if (quizContentConfig && quizContentConfig[focusKey] && quizContentConfig[focusKey][9] && quizContentConfig[focusKey][9].checklists) {
       const lists = quizContentConfig[focusKey][9].checklists;
-      if (lists[bottleneck]) {
-        return lists[bottleneck];
+      if (lists[safeBottleneck]) {
+        return lists[safeBottleneck];
       }
     }
     
-    return fallbackChecklists[focusKey][bottleneck] || fallbackChecklists['status']['status'];
+    const categoryChecklists = fallbackChecklists[focusKey] || fallbackChecklists['status'];
+    return categoryChecklists[safeBottleneck] || categoryChecklists['status'] || fallbackChecklists['status']['status'];
   }
 
   const mockBookingsData = {
@@ -466,28 +468,44 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!db) return;
     try {
       const userDocRef = doc(db, "users", user.uid);
-      const payload = {
+      const docSnap = await getDoc(userDocRef);
+      
+      let payload = {
         uid: user.uid,
         email: user.email,
         displayName: user.displayName || user.email.split('@')[0],
         role: "client",
-        updatedAt: new Date(),
-        quizResults: {
+        updatedAt: new Date()
+      };
+
+      if (!docSnap.exists()) {
+        payload.createdAt = new Date();
+        payload.quizResults = {
           focusArea: selectedFocus || "",
           scores: ratings || { status: 0, career: 0, finance: 0 },
           biggestBottleneck: getBiggestBottleneck() || "status",
           selectedGoals: selectedStep9 || []
-        }
-      };
-
-      const docSnap = await getDoc(userDocRef);
-      if (!docSnap.exists()) {
-        payload.createdAt = new Date();
+        };
         await setDoc(userDocRef, payload);
       } else {
+        const existingData = docSnap.data();
+        const existingQuizResults = existingData.quizResults || {};
+        
+        let newQuizResults = { ...existingQuizResults };
+        // Only overwrite quiz results if selectedFocus is populated (meaning we just finished the quiz in this session)
+        // or if there are no existing quiz results in Firestore
+        if (selectedFocus || !existingQuizResults.focusArea) {
+          newQuizResults = {
+            focusArea: selectedFocus || existingQuizResults.focusArea || "",
+            scores: ratings || existingQuizResults.scores || { status: 0, career: 0, finance: 0 },
+            biggestBottleneck: getBiggestBottleneck() || existingQuizResults.biggestBottleneck || "status",
+            selectedGoals: (selectedStep9 && selectedStep9.length > 0) ? selectedStep9 : (existingQuizResults.selectedGoals || [])
+          };
+        }
+        
         await updateDoc(userDocRef, {
           updatedAt: new Date(),
-          quizResults: payload.quizResults
+          quizResults: newQuizResults
         });
       }
       console.log("Synced user onboarding data to Firestore successfully.");
@@ -3161,6 +3179,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return 'status';
   }
 
+  function getDisplayFocusArea(focusArea) {
+    if (!focusArea) return 'Status & Visas';
+    const f = focusArea.toLowerCase();
+    if (f.includes('visa') || f === 'status') return 'Status & Visas';
+    if (f.includes('job') || f.includes('career')) return 'Career & Jobs';
+    if (f.includes('credit') || f === 'finance') return 'Finance & Credit';
+    return 'Status & Visas';
+  }
+
   let chatUnsubscribe = null;
   let advChatUnsubscribe = null;
   let activeSelectedClientId = null;
@@ -3197,7 +3224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = userDoc.data();
         quizResults = data.quizResults || {};
         bottleneck = quizResults.biggestBottleneck || 'status';
-        focusArea = portalActiveFocusArea || quizResults.focusArea || 'Status & Visas';
+        focusArea = portalActiveFocusArea || getDisplayFocusArea(quizResults.focusArea) || 'Status & Visas';
       } else {
         focusArea = portalActiveFocusArea || 'Status & Visas';
       }
