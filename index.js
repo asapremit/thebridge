@@ -21,12 +21,12 @@ app.get('/api/firebase-config', (req, res) => {
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
   res.json({
-    apiKey: process.env.FIREBASE_API_KEY || "AIzaSyDummyKeyForSamePathApp12345678",
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN || "samepath-web.firebaseapp.com",
-    projectId: process.env.FIREBASE_PROJECT_ID || "samepath-web",
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "samepath-web.firebasestorage.app",
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "123456789012",
-    appId: process.env.FIREBASE_APP_ID || "1:123456789012:web:abcdef1234567890"
+    apiKey: process.env.FIREBASE_API_KEY || "AIzaSyANoB6-PHmSVQ9OuiyNX2L_ORfATsB_Gs8",
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN || "samepath-c3749.firebaseapp.com",
+    projectId: process.env.FIREBASE_PROJECT_ID || "samepath-c3749",
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "samepath-c3749.firebasestorage.app",
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "543979822804",
+    appId: process.env.FIREBASE_APP_ID || "1:543979822804:web:eb6f606455f54258bca541"
   });
 });
 
