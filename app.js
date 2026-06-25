@@ -171,9 +171,75 @@ document.addEventListener('DOMContentLoaded', () => {
   let goalStepsToAsk = [];
   let currentGoalStepIndex = 0;
 
-  // Config objects declared in outer scope for access by renderResultsPage and other outside-quizCard functions
   let quizContentConfig = {};
   let statusDescriptions = {};
+
+  // Config objects declared in outer scope for access by renderResultsPage and other outside-quizCard functions
+  function getChecklistItems(focusArea, bottleneck) {
+    const focusKey = getFocusKey(focusArea);
+    
+    // Fallback seed checklists specific to focus areas if not found in dynamic config
+    const fallbackChecklists = {
+      status: {
+        status: [
+          { label: "Get or renew my work/student visa", val: "visa" },
+          { label: "Determine eligibility for special talent/national interest visa", val: "talent" },
+          { label: "Find a local immigration lawyer referral", val: "lawyer" },
+          { label: "Explore digital nomad or remote work visas", val: "nomad" }
+        ],
+        career: [
+          { label: "Organize certified translations of official records", val: "translations" },
+          { label: "Prepare cover letter, application forms, and history logs", val: "forms" },
+          { label: "Bring my family or dependents here", val: "family" },
+          { label: "Submit and track applications without errors", val: "tracking" }
+        ],
+        finance: [
+          { label: "Get my Green Card or long-term residency", val: "greencard" },
+          { label: "Understand local stay and physical presence rules", val: "presence" },
+          { label: "Navigate paperwork audits and legal rules", val: "audits" },
+          { label: "Transition from temporary status to permanent status", val: "transition" }
+        ]
+      },
+      career: {
+        status: [
+          { label: "Optimize local CV format and build target job list", val: "cv_format" },
+          { label: "Identify top 10 expat-friendly employers in target city", val: "employer_list" }
+        ],
+        career: [
+          { label: "Setup LinkedIn search alerts and local recruiter outreach", val: "recruiter_outreach" },
+          { label: "Draft cultural-specific cover letter and intro templates", val: "cover_letters" }
+        ],
+        finance: [
+          { label: "Practice local mock interviews and negotiate package templates", val: "mock_interviews" },
+          { label: "Review labor law, work permit compliance, and contract standards", val: "labor_law" }
+        ]
+      },
+      finance: {
+        status: [
+          { label: "Compare local bank account options and account opening requirements", val: "bank_requirements" },
+          { label: "Translate and notarize proof of address/residency documents", val: "notarize_docs" }
+        ],
+        career: [
+          { label: "Apply for local tax identification number (SSN/TIN equivalent)", val: "tax_number" },
+          { label: "Establish local credit history and apply for secured starter card", val: "secured_card" }
+        ],
+        finance: [
+          { label: "Set up multi-currency transfer service to avoid high bank fees", val: "currency_transfer" },
+          { label: "Consult local tax guide or advisor regarding double-taxation rules", val: "tax_rules" }
+        ]
+      }
+    };
+    
+    // First try to look inside quizContentConfig[focusKey][9]
+    if (quizContentConfig && quizContentConfig[focusKey] && quizContentConfig[focusKey][9] && quizContentConfig[focusKey][9].checklists) {
+      const lists = quizContentConfig[focusKey][9].checklists;
+      if (lists[bottleneck]) {
+        return lists[bottleneck];
+      }
+    }
+    
+    return fallbackChecklists[focusKey][bottleneck] || fallbackChecklists['status']['status'];
+  }
 
   const mockBookingsData = {
     'Status & Visas': {
@@ -3124,21 +3190,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const checklistContainer = document.getElementById('db-checklist-container');
       if (checklistContainer) {
         checklistContainer.innerHTML = '';
-        const focusKey = getFocusKey(focusArea);
-        const focusConfig = quizContentConfig[focusKey] || quizContentConfig['status'];
-        let checklistItems = (focusConfig && focusConfig.checklists && focusConfig.checklists[bottleneck]) 
-          ? focusConfig.checklists[bottleneck] 
-          : [];
-
-        if (checklistItems.length === 0) {
-          // Seeding mock checkpoints so the roadmap is never empty!
-          checklistItems = [
-            { label: "Confirm relocation visa eligibility and pathways", val: "visa_eligibility" },
-            { label: "Compile academic diplomas, certifications, and career history", val: "compile_diplomas" },
-            { label: "Setup introduction call with matched expat advisor", val: "advisor_call" },
-            { label: "Review physical presence and residency tax compliance guidelines", val: "residency_tax" }
-          ];
-        }
+        let checklistItems = getChecklistItems(focusArea, bottleneck);
 
         const savedGoals = quizResults.selectedGoals || [];
         
