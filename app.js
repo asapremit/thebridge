@@ -33,16 +33,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
           updateHeaderNavActions(true, user);
 
-          // Swap view immediately to portal dashboard
-          sections.forEach(sec => {
-            const target = userRole === 'advisor' ? 'advisor-portal' : 'dashboard';
-            sec.classList.toggle('active', sec.id === target);
-          });
-
-          if (userRole === 'advisor') {
-            renderAdvisorDashboard();
+          // If the user just completed the quiz, remain on the results page to show them their scores and advisor match!
+          if (justCompletedQuiz && userRole === 'client') {
+            sections.forEach(sec => {
+              sec.classList.toggle('active', sec.id === 'results');
+            });
+            renderResultsPage();
           } else {
-            renderClientDashboard();
+            // Otherwise transition them directly to the dashboard
+            sections.forEach(sec => {
+              const target = userRole === 'advisor' ? 'advisor-portal' : 'dashboard';
+              sec.classList.toggle('active', sec.id === target);
+            });
+
+            if (userRole === 'advisor') {
+              renderAdvisorDashboard();
+            } else {
+              renderClientDashboard();
+            }
           }
         } else {
           isUserLoggedIn = false;
@@ -167,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let userRole = 'client'; // Current active dashboard role ('client' or 'advisor')
   let ratings = { status: 0, career: 0, finance: 0 };
   let portalActiveFocusArea = null; // Active dashboard category filter
+  let justCompletedQuiz = false; // Flag to check if user completed quiz in this session
   // Dynamic goal selection steps state
   let goalStepsToAsk = [];
   let currentGoalStepIndex = 0;
@@ -1313,6 +1322,7 @@ document.addEventListener('DOMContentLoaded', () => {
         goToStep(10);
       } else if (stepAttr === '10') {
         // Show results section in locked state
+        justCompletedQuiz = true;
         sections.forEach(sec => sec.classList.toggle('active', sec.id === 'results'));
         navLinks.forEach(l => l.classList.remove('active'));
         renderResultsPage();
@@ -2817,6 +2827,24 @@ document.addEventListener('DOMContentLoaded', () => {
         navLinks.forEach(l => l.classList.remove('active'));
         homeLink.classList.add('active');
       }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Bind Results page "Go to Expat Hub" button
+  const btnResultsGoToHub = document.getElementById('btn-results-go-to-hub');
+  if (btnResultsGoToHub) {
+    btnResultsGoToHub.addEventListener('click', () => {
+      justCompletedQuiz = false; // Reset the flag
+      sections.forEach(sec => {
+        sec.classList.toggle('active', sec.id === 'dashboard');
+      });
+      const hubLink = document.getElementById('nav-link-dashboard');
+      if (hubLink) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        hubLink.classList.add('active');
+      }
+      renderClientDashboard();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }

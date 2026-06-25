@@ -1211,11 +1211,16 @@
       </div>
 
       <!-- Welcome Banner (shown when logged in) -->
-      <div id="results-welcome-banner" style="display: none; max-width: 800px; margin: 0 auto 40px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); color: #065f46; padding: 18px 24px; border-radius: 12px; align-items: center; gap: 12px; font-weight: 500;">
-        <span style="font-size: 1.2rem;">✨</span>
-        <div>
-          <strong>Account active!</strong> Your readiness scores and checklist are saved to your profile. You can now book a session below.
+      <div id="results-welcome-banner" style="display: none; max-width: 800px; margin: 0 auto 40px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); color: #065f46; padding: 18px 24px; border-radius: 12px; align-items: center; justify-content: space-between; gap: 20px; font-weight: 500;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 1.2rem;">✨</span>
+          <div>
+            <strong>Account active!</strong> Your readiness scores and checklist are saved to your profile.
+          </div>
         </div>
+        <button class="btn btn-primary" id="btn-results-go-to-hub" style="padding: 10px 20px; font-size: 0.88rem; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;">
+          Go to Expat Hub ➔
+        </button>
       </div>
 
       <!-- Two Column Layout: Left Column (Readiness Scores & Goals), Right Column (Advisor Card & Booking Widget) -->
