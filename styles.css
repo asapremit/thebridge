@@ -4323,3 +4323,64 @@ button, input, textarea {
 .db-goal-checkbox:hover {
   border-color: var(--accent);
 }
+
+/* Success Hub Custom Styling & Typography Overrides */
+#dashboard, #dashboard * {
+  font-family: var(--font-sans) !important;
+}
+
+.db-tab-btn {
+  border-bottom: 2px solid transparent !important;
+  outline: none;
+}
+.db-tab-btn.active {
+  color: var(--text-primary) !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid var(--accent) !important;
+}
+
+.bookings-sub-tab {
+  background: none;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 10px 0;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.bookings-sub-tab.active {
+  font-weight: 700;
+  color: var(--text-primary);
+  border-bottom: 3px solid var(--accent);
+}
+
+.booking-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.booking-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.vault-file-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+

@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, orderBy, onSnapshot, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 let auth = null;
@@ -84,16 +84,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (targetId === 'dashboard') {
         renderClientDashboard().then(() => {
           const scrollId = link.getAttribute('data-scroll');
-          if (scrollId) {
-            const elementToScroll = document.getElementById(scrollId);
-            if (elementToScroll) {
-              setTimeout(() => {
-                elementToScroll.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }, 150);
-            }
+          if (scrollId === 'document-locker-card') {
+            switchDashboardTab('documents');
+          } else if (scrollId === 'message-center-card') {
+            switchDashboardTab('messages');
           } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            switchDashboardTab('roadmap');
           }
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       } else {
         if (targetId === 'advisor-portal') {
@@ -103,6 +101,46 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // Bind dashboard tab click events
+  document.querySelectorAll('.db-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.getAttribute('data-tab');
+      switchDashboardTab(tabId);
+    });
+  });
+
+  function switchDashboardTab(tabId) {
+    document.querySelectorAll('.db-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
+    });
+    document.querySelectorAll('.db-panel').forEach(panel => {
+      panel.style.display = panel.id === `panel-${tabId}` ? 'block' : 'none';
+      panel.classList.toggle('active', panel.id === `panel-${tabId}`);
+    });
+  }
+
+  // Bind bookings sub-tabs click events
+  const subtabUpcoming = document.getElementById('subtab-upcoming');
+  const subtabPast = document.getElementById('subtab-past');
+  const upcomingContent = document.getElementById('bookings-upcoming-content');
+  const pastContent = document.getElementById('bookings-past-content');
+
+  if (subtabUpcoming && subtabPast) {
+    subtabUpcoming.addEventListener('click', () => {
+      subtabUpcoming.classList.add('active');
+      subtabPast.classList.remove('active');
+      if (upcomingContent) upcomingContent.style.display = 'block';
+      if (pastContent) pastContent.style.display = 'none';
+    });
+
+    subtabPast.addEventListener('click', () => {
+      subtabPast.classList.add('active');
+      subtabUpcoming.classList.remove('active');
+      if (upcomingContent) upcomingContent.style.display = 'none';
+      if (pastContent) pastContent.style.display = 'block';
+    });
+  }
 
   // Bind sub-nav category click events
   document.querySelectorAll('.sub-nav-cat').forEach(cat => {
@@ -136,6 +174,179 @@ document.addEventListener('DOMContentLoaded', () => {
   // Config objects declared in outer scope for access by renderResultsPage and other outside-quizCard functions
   let quizContentConfig = {};
   let statusDescriptions = {};
+
+  const mockBookingsData = {
+    'Status & Visas': {
+      upcoming: [
+        {
+          guideName: "David K.",
+          guideRole: "Immigration Expert",
+          guideAvatar: "david_k_portrait.png",
+          type: "Visa Application Review",
+          date: "June 28, 2026",
+          time: "10:00 AM - 11:00 AM (EST)",
+          joinLink: "https://zoom.us/j/123456789",
+          rescheduleId: "resched1"
+        }
+      ],
+      past: [
+        {
+          guideName: "David K.",
+          guideRole: "Immigration Expert",
+          guideAvatar: "david_k_portrait.png",
+          type: "Eligibility Intake Consultation",
+          date: "June 12, 2026",
+          time: "2:00 PM - 2:30 PM (EST)",
+          status: "Completed"
+        }
+      ]
+    },
+    'Career & Jobs': {
+      upcoming: [
+        {
+          guideName: "Hassan M.",
+          guideRole: "Expat Career Coach",
+          guideAvatar: "hassan_portrait.png",
+          type: "CV & Portfolio Deep Dive",
+          date: "July 3, 2026",
+          time: "2:00 PM - 3:00 PM (EST)",
+          joinLink: "https://meet.google.com/abc-defg-hij",
+          rescheduleId: "resched2"
+        }
+      ],
+      past: [
+        {
+          guideName: "Hassan M.",
+          guideRole: "Expat Career Coach",
+          guideAvatar: "hassan_portrait.png",
+          type: "Introduction & Strategy Session",
+          date: "June 18, 2026",
+          time: "1:00 PM - 1:45 PM (EST)",
+          status: "Completed"
+        }
+      ]
+    },
+    'Finance & Credit': {
+      upcoming: [],
+      past: [
+        {
+          guideName: "Sarah L.",
+          guideRole: "Financial Consultant",
+          guideAvatar: "sarah_portrait.png",
+          type: "Expat Taxation & Banking Briefing",
+          date: "June 15, 2026",
+          time: "4:00 PM - 4:45 PM (EST)",
+          status: "Completed"
+        }
+      ]
+    }
+  };
+
+  const mockDocumentsData = {
+    'Status & Visas': [
+      { name: "visa_application_draft_v2.pdf", size: "2.4 MB", dateStr: "Yesterday" },
+      { name: "certified_academic_transcript.pdf", size: "1.8 MB", dateStr: "3 days ago" },
+      { name: "employer_offer_letter.png", size: "920 KB", dateStr: "5 days ago" }
+    ],
+    'Career & Jobs': [
+      { name: "optimized_expat_cv_europe.pdf", size: "1.2 MB", dateStr: "Yesterday" },
+      { name: "cover_letter_template.docx", size: "340 KB", dateStr: "2 days ago" }
+    ],
+    'Finance & Credit': [
+      { name: "proof_of_residency_utility.pdf", size: "3.1 MB", dateStr: "June 14, 2026" },
+      { name: "local_bank_application.pdf", size: "1.5 MB", dateStr: "June 15, 2026" }
+    ]
+  };
+
+  const mockAdvisorsData = {
+    'Status & Visas': { name: "David K.", role: "Immigration Expert", avatar: "david_k_portrait.png" },
+    'Career & Jobs': { name: "Hassan M.", role: "Expat Career Coach", avatar: "hassan_portrait.png" },
+    'Finance & Credit': { name: "Sarah L.", role: "Financial Consultant", avatar: "sarah_portrait.png" }
+  };
+
+  function renderBookings(focusArea) {
+    const upcomingList = document.getElementById('bookings-upcoming-list');
+    const upcomingEmpty = document.getElementById('bookings-upcoming-empty');
+    const pastList = document.getElementById('bookings-past-list');
+    const pastEmpty = document.getElementById('bookings-past-empty');
+
+    if (!upcomingList || !pastList) return;
+
+    upcomingList.innerHTML = '';
+    pastList.innerHTML = '';
+
+    const bookings = mockBookingsData[focusArea] || { upcoming: [], past: [] };
+
+    // Render Upcoming Bookings
+    if (bookings.upcoming.length === 0) {
+      if (upcomingEmpty) upcomingEmpty.style.display = 'block';
+    } else {
+      if (upcomingEmpty) upcomingEmpty.style.display = 'none';
+      bookings.upcoming.forEach(b => {
+        const card = document.createElement('div');
+        card.className = 'booking-card';
+        card.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <img src="${b.guideAvatar}" alt="${b.guideName}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);" />
+            <div>
+              <h4 style="font-weight: 700; color: var(--text-primary); font-size: 1rem; margin: 0;">${b.type}</h4>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 2px 0 6px 0;">with ${b.guideName} • ${b.guideRole}</p>
+              <div style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; color: var(--accent);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>${b.date} at ${b.time}</span>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <a href="${b.joinLink}" target="_blank" class="btn btn-primary" style="padding: 10px 18px; border-radius: 8px; font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+              📹 Join Call
+            </a>
+            <button class="btn btn-outline btn-reschedule-booking" data-id="${b.rescheduleId}" style="padding: 10px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer;">
+              Reschedule
+            </button>
+          </div>
+        `;
+        upcomingList.appendChild(card);
+      });
+    }
+
+    // Render Past Bookings
+    if (bookings.past.length === 0) {
+      if (pastEmpty) pastEmpty.style.display = 'block';
+    } else {
+      if (pastEmpty) pastEmpty.style.display = 'none';
+      bookings.past.forEach(b => {
+        const card = document.createElement('div');
+        card.className = 'booking-card';
+        card.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <img src="${b.guideAvatar}" alt="${b.guideName}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; opacity: 0.8; border: 1px solid var(--border-color);" />
+            <div>
+              <h4 style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem; margin: 0;">${b.type}</h4>
+              <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 2px 0 6px 0;">with ${b.guideName} • ${b.guideRole}</p>
+              <div style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-secondary);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>${b.date}</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span style="font-size: 0.82rem; font-weight: 600; color: #10B981; background: rgba(16, 185, 129, 0.1); padding: 6px 14px; border-radius: 20px;">
+              ✓ Completed
+            </span>
+          </div>
+        `;
+        pastList.appendChild(card);
+      });
+    }
+
+    // Attach reschedule alert
+    upcomingList.querySelectorAll('.btn-reschedule-booking').forEach(btn => {
+      btn.addEventListener('click', () => {
+        alert("To reschedule this coaching session, please send a direct message to your advisor in the Message Center.");
+      });
+    });
+  }
 
   function getBiggestBottleneck() {
     let bottleneck = 'status';
@@ -2617,6 +2828,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const globalErrorMsg = document.getElementById('global-auth-error-msg');
   const btnGoogleGlobal = document.getElementById('btn-google-global');
 
+  const globalBtnForgotPassword = document.getElementById('global-btn-forgot-password');
+
   let globalAuthIsSignup = true;
 
   if (btnCloseGlobalAuth && globalAuthModal) {
@@ -2641,7 +2854,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (globalGroupFullname) globalGroupFullname.style.display = 'block';
       if (globalFullnameInput) globalFullnameInput.setAttribute('required', 'required');
       if (globalSubmitBtn) globalSubmitBtn.innerText = 'Create Account';
-      if (globalErrorMsg) globalErrorMsg.style.display = 'none';
+      if (globalErrorMsg) {
+        globalErrorMsg.style.display = 'none';
+        globalErrorMsg.style.color = '#c85a5a';
+      }
+      if (globalBtnForgotPassword) globalBtnForgotPassword.style.display = 'none';
     });
 
     globalTabLogin.addEventListener('click', () => {
@@ -2651,7 +2868,49 @@ document.addEventListener('DOMContentLoaded', () => {
       if (globalGroupFullname) globalGroupFullname.style.display = 'none';
       if (globalFullnameInput) globalFullnameInput.removeAttribute('required');
       if (globalSubmitBtn) globalSubmitBtn.innerText = 'Log In';
-      if (globalErrorMsg) globalErrorMsg.style.display = 'none';
+      if (globalErrorMsg) {
+        globalErrorMsg.style.display = 'none';
+        globalErrorMsg.style.color = '#c85a5a';
+      }
+      if (globalBtnForgotPassword) globalBtnForgotPassword.style.display = 'inline';
+    });
+  }
+
+  if (globalBtnForgotPassword) {
+    globalBtnForgotPassword.addEventListener('click', (e) => {
+      e.preventDefault();
+      const email = globalEmailInput.value.trim();
+      if (!email) {
+        if (globalErrorMsg) {
+          globalErrorMsg.innerText = "Please enter your email address first.";
+          globalErrorMsg.style.color = "#c85a5a";
+          globalErrorMsg.style.display = 'block';
+        }
+        return;
+      }
+      
+      globalBtnForgotPassword.innerText = "Sending...";
+      globalBtnForgotPassword.style.pointerEvents = 'none';
+      
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          globalBtnForgotPassword.innerText = "Forgot Password?";
+          globalBtnForgotPassword.style.pointerEvents = 'auto';
+          if (globalErrorMsg) {
+            globalErrorMsg.innerText = "Password reset email sent! Please check your inbox.";
+            globalErrorMsg.style.color = "#10b981"; // Success green
+            globalErrorMsg.style.display = 'block';
+          }
+        })
+        .catch((error) => {
+          globalBtnForgotPassword.innerText = "Forgot Password?";
+          globalBtnForgotPassword.style.pointerEvents = 'auto';
+          if (globalErrorMsg) {
+            globalErrorMsg.innerText = error.message || "Failed to send password reset email.";
+            globalErrorMsg.style.color = "#c85a5a";
+            globalErrorMsg.style.display = 'block';
+          }
+        });
     });
   }
 
@@ -2907,12 +3166,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
+      // Update Message Center Advisor details dynamically
+      const advisor = mockAdvisorsData[focusArea] || mockAdvisorsData['Status & Visas'];
+      const chatAvatar = document.getElementById('chat-advisor-avatar');
+      const chatName = document.getElementById('chat-advisor-name');
+      if (chatAvatar) chatAvatar.src = advisor.avatar;
+      if (chatName) chatName.innerText = `Chat with ${advisor.name} (${advisor.role})`;
+
       // 1.2 Document Vault File Listing & Dropzone
-      renderVaultFileList(uid);
+      renderVaultFileList(uid, focusArea);
       setupVaultUpload(uid);
 
       // 1.3 Connect Client Chat
       connectClientChat(uid);
+
+      // 1.4 Render Bookings tab details
+      renderBookings(focusArea);
 
     } catch (err) {
       console.error("Error rendering client dashboard:", err);
@@ -2920,7 +3189,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Helper to Render File Locker List
-  async function renderVaultFileList(userId) {
+  async function renderVaultFileList(userId, focusArea) {
     const fileListContainer = document.getElementById('vault-file-list');
     const emptyText = document.getElementById('vault-empty-text');
     if (!fileListContainer || !db) return;
@@ -2934,12 +3203,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (docsSnap.empty) {
         if (emptyText) emptyText.style.display = 'none';
-        const mockFiles = [
-          { id: "mock1", name: "visa_application_draft_v2.pdf", size: "2.4 MB", dateStr: "Yesterday" },
-          { id: "mock2", name: "certified_academic_transcript.pdf", size: "1.8 MB", dateStr: "3 days ago" },
-          { id: "mock3", name: "employer_offer_letter.png", size: "920 KB", dateStr: "5 days ago" }
-        ];
-        mockFiles.forEach(fileData => {
+        const mockFiles = mockDocumentsData[focusArea] || [];
+        mockFiles.forEach((fileData, idx) => {
           const fileRow = document.createElement('div');
           fileRow.className = 'vault-file-row';
           fileRow.innerHTML = `
@@ -2950,7 +3215,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span style="font-size: 0.75rem; color: var(--text-secondary);">${fileData.size} • ${fileData.dateStr}</span>
               </div>
             </div>
-            <button class="btn-delete-file" data-id="${fileData.id}" style="background: transparent; border: none; color: #ef4444; font-size: 1.1rem; cursor: pointer; padding: 4px;">&times;</button>
+            <button class="btn-delete-file" data-id="mock-${idx}" style="background: transparent; border: none; color: #ef4444; font-size: 1.1rem; cursor: pointer; padding: 4px;">&times;</button>
           `;
           fileListContainer.appendChild(fileRow);
         });
@@ -2991,7 +3256,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
               await deleteDoc(doc(db, 'users', userId, 'documents', fileId));
               console.log("File metadata deleted from Firestore.");
-              renderVaultFileList(userId);
+              renderVaultFileList(userId, focusArea);
             } catch (err) {
               console.error("Error deleting file:", err);
             }

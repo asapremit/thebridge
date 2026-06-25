@@ -1348,81 +1348,113 @@
         </div>
       </div>
 
-      <div class="dashboard-grid" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: start;">
-        <!-- Left Column: Dynamic Roadmap Checklist -->
-        <div class="dashboard-left" style="display: flex; flex-direction: column; gap: 32px;">
-          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
+      <!-- Dashboard Tab Navigation Bar -->
+      <div class="dashboard-tabs" style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; overflow-x: auto; white-space: nowrap;">
+        <button class="db-tab-btn active" data-tab="roadmap" style="background: none; border: none; font-size: 0.95rem; font-weight: 600; color: var(--text-primary); cursor: pointer; padding: 8px 16px; border-bottom: 2px solid var(--accent); position: relative; bottom: -14px; transition: all 0.2s;">My Roadmap</button>
+        <button class="db-tab-btn" data-tab="documents" style="background: none; border: none; font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; padding: 8px 16px; transition: all 0.2s; border-bottom: 2px solid transparent; position: relative; bottom: -14px;">Document Locker</button>
+        <button class="db-tab-btn" data-tab="messages" style="background: none; border: none; font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; padding: 8px 16px; transition: all 0.2s; border-bottom: 2px solid transparent; position: relative; bottom: -14px;">Message Center</button>
+        <button class="db-tab-btn" data-tab="bookings" style="background: none; border: none; font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; padding: 8px 16px; transition: all 0.2s; border-bottom: 2px solid transparent; position: relative; bottom: -14px;">My 1-1 Bookings</button>
+      </div>
+
+      <!-- Tab Panels Container -->
+      <div class="dashboard-panels">
+        
+        <!-- Panel 1: Roadmap Timeline -->
+        <div class="db-panel active" id="panel-roadmap">
+          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; box-shadow: var(--shadow-sm);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
               <div>
-                <h3 style="font-family: var(--font-serif); font-size: 1.5rem; font-style: italic; color: var(--text-primary); margin: 0;">Expat Success Roadmap</h3>
+                <h3 style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin: 0;">Expat Success Roadmap</h3>
                 <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 4px 0 0 0;">Check off completed actions to update your relocation timeline.</p>
               </div>
-              <!-- Roadmap Progress Badge -->
               <div id="roadmap-progress-badge" style="background: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 0.85rem; padding: 6px 14px; border-radius: 20px;">
                 0% Completed
               </div>
             </div>
-            
-            <!-- Progress Bar -->
             <div style="width: 100%; height: 8px; background: rgba(0,0,0,0.05); border-radius: 4px; margin-bottom: 24px; overflow: hidden;">
               <div id="roadmap-progress-bar" style="width: 0%; height: 100%; background: var(--accent); transition: width 0.3s ease;"></div>
             </div>
-
-            <!-- Checklist Items -->
-            <div id="db-checklist-container" style="display: flex; flex-direction: column; gap: 12px;">
+            <div id="db-checklist-container" style="display: flex; flex-direction: column; gap: 14px;">
               <!-- Dynamically populated checklist -->
             </div>
           </div>
         </div>
 
-        <!-- Right Column: Document Vault & Secure Chat -->
-        <div class="dashboard-right" style="display: flex; flex-direction: column; gap: 32px;">
-          <!-- Document Vault Locker -->
-          <div class="results-card" id="document-locker-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
-            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-style: italic; margin-bottom: 6px; color: var(--text-primary);">Document Vault Locker</h3>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">Upload applications, visa draft paperwork, and CVs for guide review.</p>
-            
-            <!-- Upload Dropzone -->
-            <div class="vault-upload-dropzone" id="vault-dropzone" style="border: 2px dashed var(--border-color); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: background 0.2s; background: rgba(0,0,0,0.01); margin-bottom: 20px;">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent); margin-bottom: 8px; display: inline-block;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-              <p style="font-size: 0.88rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Click or drag files to upload</p>
-              <p style="font-size: 0.75rem; color: var(--text-secondary);">PDF, JPG, PNG or DOCX (max 10MB)</p>
+        <!-- Panel 2: Document Vault Locker -->
+        <div class="db-panel" id="panel-documents" style="display: none;">
+          <div class="results-card" id="document-locker-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; box-shadow: var(--shadow-sm);">
+            <h3 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 6px; color: var(--text-primary);">Document Vault Locker</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 24px;">Upload applications, visa draft paperwork, and CVs for guide review.</p>
+            <div class="vault-upload-dropzone" id="vault-dropzone" style="border: 2px dashed var(--border-color); border-radius: 12px; padding: 36px; text-align: center; cursor: pointer; transition: background 0.2s; background: rgba(0,0,0,0.01); margin-bottom: 24px;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent); margin-bottom: 12px; display: inline-block;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              <p style="font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Click or drag files to upload</p>
+              <p style="font-size: 0.78rem; color: var(--text-secondary);">PDF, JPG, PNG or DOCX (max 10MB)</p>
               <input type="file" id="vault-file-input" style="display: none;" />
             </div>
-
-            <!-- Uploaded Documents List -->
-            <div id="vault-file-list" style="display: flex; flex-direction: column; gap: 10px;">
-              <!-- Dynamically populated list -->
+            <div id="vault-file-list" style="display: flex; flex-direction: column; gap: 12px;">
               <p style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;" id="vault-empty-text">No documents uploaded yet.</p>
             </div>
           </div>
+        </div>
 
-          <!-- Secure Message Center -->
-          <div class="results-card" id="message-center-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; height: 500px;">
+        <!-- Panel 3: Secure Message Center -->
+        <div class="db-panel" id="panel-messages" style="display: none;">
+          <div class="results-card" id="message-center-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; height: 600px;">
             <div class="chat-header" style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
               <div style="display: flex; align-items: center; gap: 12px;">
-                <img id="chat-advisor-avatar" src="david_k_portrait.png" alt="Advisor" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);" />
+                <img id="chat-advisor-avatar" src="david_k_portrait.png" alt="Advisor" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);" />
                 <div>
-                  <h4 style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);" id="chat-advisor-name">Advisor Chat</h4>
+                  <h4 style="font-weight: 600; font-size: 1rem; color: var(--text-primary);" id="chat-advisor-name">Advisor Chat</h4>
                   <p style="font-size: 0.78rem; color: #10B981; display: flex; align-items: center; gap: 4px; margin: 0;"><span style="width: 6px; height: 6px; background: #10B981; border-radius: 50%;"></span> Matched Expat Guide</p>
                 </div>
               </div>
-              <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 0.7rem; border-radius: 12px; padding: 4px 10px;">Message Center</span>
+              <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 0.75rem; border-radius: 12px; padding: 6px 12px;">Message Center</span>
             </div>
-
-            <!-- Message Area -->
             <div class="chat-messages-container" id="chat-messages" style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-right: 8px; margin-bottom: 16px;">
-              <!-- Messages load here -->
-              <div style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; font-style: italic; margin-top: 100px;">Start typing to begin your consultation.</div>
+              <div style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; font-style: italic; margin-top: 150px;">Start typing to begin your consultation.</div>
             </div>
-
-            <!-- Input Area -->
             <form id="chat-input-form" style="display: flex; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 16px;">
-              <input type="text" id="chat-message-input" placeholder="Type a message..." required style="flex-grow: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.88rem;" />
-              <button type="submit" class="btn btn-primary" style="padding: 12px 20px; border-radius: 8px; cursor: pointer;">Send</button>
+              <input type="text" id="chat-message-input" placeholder="Type a message..." required style="flex-grow: 1; padding: 14px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.9rem;" />
+              <button type="submit" class="btn btn-primary" style="padding: 14px 24px; border-radius: 8px; cursor: pointer;">Send</button>
             </form>
           </div>
         </div>
+
+        <!-- Panel 4: My 1-1 Bookings -->
+        <div class="db-panel" id="panel-bookings" style="display: none;">
+          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 24px;">
+              <div>
+                <h3 style="font-size: 1.8rem; font-weight: 700; color: var(--text-primary); margin: 0;">My 1-1 Bookings</h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 4px 0 0 0;">Manage and view your scheduled appointments with matches.</p>
+              </div>
+            </div>
+
+            <!-- Bookings Sub-Tabs -->
+            <div style="display: flex; gap: 24px; border-bottom: 1px solid var(--border-color); margin-bottom: 24px; padding-bottom: 2px;">
+              <button class="bookings-sub-tab active" id="subtab-upcoming">Upcoming</button>
+              <button class="bookings-sub-tab" id="subtab-past">Past</button>
+            </div>
+
+            <!-- Sub-tab Content: Upcoming -->
+            <div id="bookings-upcoming-content">
+              <div id="bookings-upcoming-list" style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Dynamically populated upcoming appointments -->
+              </div>
+              <p id="bookings-upcoming-empty" style="font-size: 0.95rem; color: var(--text-secondary); padding: 24px 0; display: none;">You don't have any upcoming session.</p>
+            </div>
+
+            <!-- Sub-tab Content: Past -->
+            <div id="bookings-past-content" style="display: none;">
+              <div id="bookings-past-list" style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Dynamically populated past appointments -->
+              </div>
+              <p id="bookings-past-empty" style="font-size: 0.95rem; color: var(--text-secondary); padding: 24px 0; display: none;">You don't have any past sessions.</p>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -2459,7 +2491,10 @@
           </div>
           
           <div class="auth-input-group">
-            <label for="global-password">Password</label>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="global-password" style="margin: 0;">Password</label>
+              <a href="#" id="global-btn-forgot-password" style="font-size: 0.78rem; color: var(--accent); text-decoration: none; font-weight: 600; display: none;">Forgot Password?</a>
+            </div>
             <input type="password" id="global-password" placeholder="••••••••" required />
           </div>
           
