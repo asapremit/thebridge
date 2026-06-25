@@ -3095,107 +3095,115 @@ document.addEventListener('DOMContentLoaded', () => {
       // Load user profile goals
       const userDocRef = doc(db, 'users', uid);
       const userDoc = await getDoc(userDocRef);
+      let quizResults = {};
+      let bottleneck = 'status';
+      let focusArea = 'Status & Visas';
+
       if (userDoc.exists()) {
         const data = userDoc.data();
-        const quizResults = data.quizResults || {};
-        const bottleneck = quizResults.biggestBottleneck || 'status';
-        
-        const focusArea = portalActiveFocusArea || quizResults.focusArea || 'Status & Visas';
-        
-        // Update subheading details on success hub header
-        const subheading = document.getElementById('db-user-subheading');
-        if (subheading) {
-          subheading.innerText = `${focusArea} Relocation Journey • Bottleneck: ${bottleneck.charAt(0).toUpperCase() + bottleneck.slice(1)}`;
+        quizResults = data.quizResults || {};
+        bottleneck = quizResults.biggestBottleneck || 'status';
+        focusArea = portalActiveFocusArea || quizResults.focusArea || 'Status & Visas';
+      } else {
+        focusArea = portalActiveFocusArea || 'Status & Visas';
+      }
+
+      // Update subheading details on success hub header
+      const subheading = document.getElementById('db-user-subheading');
+      if (subheading) {
+        subheading.innerText = `${focusArea} Relocation Journey • Bottleneck: ${bottleneck.charAt(0).toUpperCase() + bottleneck.slice(1)}`;
+      }
+
+      // Highlight category nav tab
+      document.querySelectorAll('.sub-nav-cat').forEach(cat => {
+        const focusVal = cat.getAttribute('data-focus');
+        cat.classList.toggle('active', focusVal === focusArea);
+      });
+      
+      // 1.1 Checklist Population
+      const checklistContainer = document.getElementById('db-checklist-container');
+      if (checklistContainer) {
+        checklistContainer.innerHTML = '';
+        const focusKey = getFocusKey(focusArea);
+        const focusConfig = quizContentConfig[focusKey] || quizContentConfig['status'];
+        let checklistItems = (focusConfig && focusConfig.checklists && focusConfig.checklists[bottleneck]) 
+          ? focusConfig.checklists[bottleneck] 
+          : [];
+
+        if (checklistItems.length === 0) {
+          // Seeding mock checkpoints so the roadmap is never empty!
+          checklistItems = [
+            { label: "Confirm relocation visa eligibility and pathways", val: "visa_eligibility" },
+            { label: "Compile academic diplomas, certifications, and career history", val: "compile_diplomas" },
+            { label: "Setup introduction call with matched expat advisor", val: "advisor_call" },
+            { label: "Review physical presence and residency tax compliance guidelines", val: "residency_tax" }
+          ];
         }
 
-        // Highlight category nav tab
-        document.querySelectorAll('.sub-nav-cat').forEach(cat => {
-          const focusVal = cat.getAttribute('data-focus');
-          cat.classList.toggle('active', focusVal === focusArea);
+        const savedGoals = quizResults.selectedGoals || [];
+        
+        // Calculate progress
+        const checklistVals = checklistItems.map(item => typeof item === 'object' ? item.val : item);
+        const checkedCount = savedGoals.filter(g => checklistVals.includes(g)).length;
+        const totalCount = checklistItems.length;
+        const pct = Math.round((checkedCount / totalCount) * 100);
+        
+        const progressBadge = document.getElementById('roadmap-progress-badge');
+        const progressBar = document.getElementById('roadmap-progress-bar');
+        if (progressBadge) {
+          progressBadge.innerText = `${pct}% Completed`;
+        }
+        if (progressBar) {
+          progressBar.style.width = `${pct}%`;
+        }
+
+        checklistItems.forEach((item, idx) => {
+          const text = typeof item === 'object' ? item.label : item;
+          const val = typeof item === 'object' ? item.val : item;
+          const checked = savedGoals.includes(val) ? 'checked' : '';
+          const goalRow = document.createElement('label');
+          goalRow.style.cssText = 'display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 0.9rem; line-height: 1.4; color: var(--text-primary); margin-bottom: 8px;';
+          goalRow.innerHTML = `
+            <input type="checkbox" class="db-goal-checkbox" data-goal="${val}" ${checked} style="margin-top: 3px;" />
+            <span>${text}</span>
+          `;
+          checklistContainer.appendChild(goalRow);
         });
-        
-        // 1.1 Checklist Population
-        const checklistContainer = document.getElementById('db-checklist-container');
-        if (checklistContainer) {
-          checklistContainer.innerHTML = '';
-          const focusKey = getFocusKey(focusArea);
-          const focusConfig = quizContentConfig[focusKey] || quizContentConfig['status'];
-          let checklistItems = (focusConfig && focusConfig.checklists && focusConfig.checklists[bottleneck]) 
-            ? focusConfig.checklists[bottleneck] 
-            : [];
 
-          if (checklistItems.length === 0) {
-            // Seeding mock checkpoints so the roadmap is never empty!
-            checklistItems = [
-              { label: "Confirm relocation visa eligibility and pathways", val: "visa_eligibility" },
-              { label: "Compile academic diplomas, certifications, and career history", val: "compile_diplomas" },
-              { label: "Setup introduction call with matched expat advisor", val: "advisor_call" },
-              { label: "Review physical presence and residency tax compliance guidelines", val: "residency_tax" }
-            ];
-          }
+        // Attach checkbox update listeners
+        checklistContainer.querySelectorAll('.db-goal-checkbox').forEach(box => {
+          box.addEventListener('change', async () => {
+            let updatedSelectedGoals = [...savedGoals];
+            const boxGoal = box.getAttribute('data-goal');
+            
+            if (box.checked) {
+              if (!updatedSelectedGoals.includes(boxGoal)) {
+                updatedSelectedGoals.push(boxGoal);
+              }
+            } else {
+              updatedSelectedGoals = updatedSelectedGoals.filter(g => g !== boxGoal);
+            }
 
-          const savedGoals = quizResults.selectedGoals || [];
-          
-          // Calculate progress
-          const checklistVals = checklistItems.map(item => typeof item === 'object' ? item.val : item);
-          const checkedCount = savedGoals.filter(g => checklistVals.includes(g)).length;
-          const totalCount = checklistItems.length;
-          const pct = Math.round((checkedCount / totalCount) * 100);
-          
-          const progressBadge = document.getElementById('roadmap-progress-badge');
-          const progressBar = document.getElementById('roadmap-progress-bar');
-          if (progressBadge) {
-            progressBadge.innerText = `${pct}% Completed`;
-          }
-          if (progressBar) {
-            progressBar.style.width = `${pct}%`;
-          }
-
-          checklistItems.forEach((item, idx) => {
-            const text = typeof item === 'object' ? item.label : item;
-            const val = typeof item === 'object' ? item.val : item;
-            const checked = savedGoals.includes(val) ? 'checked' : '';
-            const goalRow = document.createElement('label');
-            goalRow.style.cssText = 'display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 0.9rem; line-height: 1.4; color: var(--text-primary); margin-bottom: 8px;';
-            goalRow.innerHTML = `
-              <input type="checkbox" class="db-goal-checkbox" data-goal="${val}" ${checked} style="margin-top: 3px;" />
-              <span>${text}</span>
-            `;
-            checklistContainer.appendChild(goalRow);
-          });
-
-          // Attach checkbox update listeners
-          checklistContainer.querySelectorAll('.db-goal-checkbox').forEach(box => {
-            box.addEventListener('change', async () => {
-              let updatedSelectedGoals = [...savedGoals];
-              const boxGoal = box.getAttribute('data-goal');
+            try {
+              await setDoc(userDocRef, {
+                quizResults: {
+                  ...quizResults,
+                  selectedGoals: updatedSelectedGoals
+                },
+                updatedAt: new Date()
+              }, { merge: true });
+              console.log("Goal checklist updated in Firestore.");
               
-              if (box.checked) {
-                if (!updatedSelectedGoals.includes(boxGoal)) {
-                  updatedSelectedGoals.push(boxGoal);
-                }
-              } else {
-                updatedSelectedGoals = updatedSelectedGoals.filter(g => g !== boxGoal);
-              }
-
-              try {
-                await updateDoc(userDocRef, {
-                  'quizResults.selectedGoals': updatedSelectedGoals,
-                  updatedAt: new Date()
-                });
-                console.log("Goal checklist updated in Firestore.");
-                
-                // Re-evaluate progress badge & bar locally
-                const newCheckedCount = updatedSelectedGoals.filter(g => checklistVals.includes(g)).length;
-                const newPct = Math.round((newCheckedCount / totalCount) * 100);
-                if (progressBadge) progressBadge.innerText = `${newPct}% Completed`;
-                if (progressBar) progressBar.style.width = `${newPct}%`;
-              } catch (err) {
-                console.error("Error saving goal state to Firestore:", err);
-              }
-            });
+              // Re-evaluate progress badge & bar locally
+              const newCheckedCount = updatedSelectedGoals.filter(g => checklistVals.includes(g)).length;
+              const newPct = Math.round((newCheckedCount / totalCount) * 100);
+              if (progressBadge) progressBadge.innerText = `${newPct}% Completed`;
+              if (progressBar) progressBar.style.width = `${newPct}%`;
+            } catch (err) {
+              console.error("Error saving goal state to Firestore:", err);
+            }
           });
-        }
+        });
       }
 
       // Update Message Center Advisor details dynamically
