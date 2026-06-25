@@ -465,7 +465,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function syncUserData(user) {
-    if (!db) return;
+    if (!db) {
+      saveUserDataToLocal(user);
+      return;
+    }
     try {
       const userDocRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(userDocRef);
@@ -509,8 +512,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
       console.log("Synced user onboarding data to Firestore successfully.");
+      // Always sync to local storage as well for resilience
+      saveUserDataToLocal(user);
     } catch (err) {
-      console.error("Error syncing user data to Firestore:", err);
+      console.warn("Error syncing user data to Firestore, falling back to local storage:", err);
+      saveUserDataToLocal(user);
     }
   }
 
@@ -3210,18 +3216,31 @@ document.addEventListener('DOMContentLoaded', () => {
       avatar.innerText = name.charAt(0).toUpperCase();
     }
 
-    if (!db) return;
-
     try {
-      // Load user profile goals
-      const userDocRef = doc(db, 'users', uid);
-      const userDoc = await getDoc(userDocRef);
+      let data = null;
       let quizResults = {};
       let bottleneck = 'status';
       let focusArea = 'Status & Visas';
 
-      if (userDoc.exists()) {
-        const data = userDoc.data();
+      if (db) {
+        try {
+          const userDocRef = doc(db, 'users', uid);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            data = userDoc.data();
+          }
+        } catch (err) {
+          console.warn("Firestore getDoc failed, falling back to localStorage:", err);
+        }
+      }
+
+      if (!data) {
+        // Load from localStorage fallback
+        let localUsers = JSON.parse(localStorage.getItem('bridge_users') || '{}');
+        data = localUsers[uid];
+      }
+
+      if (data) {
         quizResults = data.quizResults || {};
         bottleneck = quizResults.biggestBottleneck || 'status';
         focusArea = portalActiveFocusArea || getDisplayFocusArea(quizResults.focusArea) || 'Status & Visas';
@@ -3292,23 +3311,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-              await setDoc(userDocRef, {
-                quizResults: {
-                  ...quizResults,
-                  selectedGoals: updatedSelectedGoals
-                },
-                updatedAt: new Date()
-              }, { merge: true });
-              console.log("Goal checklist updated in Firestore.");
-              
-              // Re-evaluate progress badge & bar locally
-              const newCheckedCount = updatedSelectedGoals.filter(g => checklistVals.includes(g)).length;
-              const newPct = Math.round((newCheckedCount / totalCount) * 100);
-              if (progressBadge) progressBadge.innerText = `${newPct}% Completed`;
-              if (progressBar) progressBar.style.width = `${newPct}%`;
+              if (db) {
+                const userDocRef = doc(db, 'users', uid);
+                await setDoc(userDocRef, {
+                  quizResults: {
+                    ...quizResults,
+                    selectedGoals: updatedSelectedGoals
+                  },
+                  updatedAt: new Date()
+                }, { merge: true });
+                console.log("Goal checklist updated in Firestore.");
+              }
             } catch (err) {
-              console.error("Error saving goal state to Firestore:", err);
+              console.warn("Error saving goal state to Firestore, saving locally:", err);
             }
+            
+            // Sync to local storage for resilience
+            saveGoalToLocal(uid, quizResults, updatedSelectedGoals);
+
+            // Re-evaluate progress badge & bar locally
+            const newCheckedCount = updatedSelectedGoals.filter(g => checklistVals.includes(g)).length;
+            const newPct = Math.round((newCheckedCount / totalCount) * 100);
+            if (progressBadge) progressBadge.innerText = `${newPct}% Completed`;
+            if (progressBar) progressBar.style.width = `${newPct}%`;
           });
         });
       }
@@ -3339,79 +3364,88 @@ document.addEventListener('DOMContentLoaded', () => {
   async function renderVaultFileList(userId, focusArea) {
     const fileListContainer = document.getElementById('vault-file-list');
     const emptyText = document.getElementById('vault-empty-text');
-    if (!fileListContainer || !db) return;
+    if (!fileListContainer) return;
 
     // Clear previous items
     fileListContainer.querySelectorAll('.vault-file-row').forEach(row => row.remove());
 
-    try {
-      const docColRef = collection(db, 'users', userId, 'documents');
-      const docsSnap = await getDocs(docColRef);
+    let docsSnap = null;
+    let fallbackToLocal = false;
 
-      if (docsSnap.empty) {
-        if (emptyText) emptyText.style.display = 'none';
-        const mockFiles = mockDocumentsData[focusArea] || [];
-        mockFiles.forEach((fileData, idx) => {
-          const fileRow = document.createElement('div');
-          fileRow.className = 'vault-file-row';
-          fileRow.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-secondary);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              <div>
-                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.85rem; display: block;">${fileData.name}</span>
-                <span style="font-size: 0.75rem; color: var(--text-secondary);">${fileData.size} • ${fileData.dateStr}</span>
-              </div>
-            </div>
-            <button class="btn-delete-file" data-id="mock-${idx}" style="background: transparent; border: none; color: #ef4444; font-size: 1.1rem; cursor: pointer; padding: 4px;">&times;</button>
-          `;
-          fileListContainer.appendChild(fileRow);
-        });
+    if (db) {
+      try {
+        const docColRef = collection(db, 'users', userId, 'documents');
+        docsSnap = await getDocs(docColRef);
+      } catch (err) {
+        console.warn("Firestore getDocs failed for documents, falling back to localStorage:", err);
+        fallbackToLocal = true;
+      }
+    } else {
+      fallbackToLocal = true;
+    }
 
-        fileListContainer.querySelectorAll('.btn-delete-file').forEach(delBtn => {
-          delBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            delBtn.closest('.vault-file-row').remove();
-            if (fileListContainer.querySelectorAll('.vault-file-row').length === 0) {
-              if (emptyText) emptyText.style.display = 'block';
-            }
-          });
-        });
+    let files = [];
+    if (!fallbackToLocal && docsSnap && !docsSnap.empty) {
+      docsSnap.forEach(fileDoc => {
+        files.push({ id: fileDoc.id, ...fileDoc.data() });
+      });
+    } else {
+      // Try to load from localStorage
+      let localFiles = JSON.parse(localStorage.getItem(`bridge_files_${userId}`) || '[]');
+      if (localFiles.length > 0) {
+        files = localFiles;
       } else {
-        if (emptyText) emptyText.style.display = 'none';
-        docsSnap.forEach(fileDoc => {
-          const fileData = fileDoc.data();
-          const fileRow = document.createElement('div');
-          fileRow.className = 'vault-file-row';
-          fileRow.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-secondary);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              <div>
-                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.85rem; display: block;">${fileData.name}</span>
-                <span style="font-size: 0.75rem; color: var(--text-secondary);">${fileData.size} • ${fileData.uploadedAt ? new Date(fileData.uploadedAt.seconds * 1000).toLocaleDateString() : 'Just now'}</span>
-              </div>
-            </div>
-            <button class="btn-delete-file" data-id="${fileDoc.id}" style="background: transparent; border: none; color: #ef4444; font-size: 1.1rem; cursor: pointer; padding: 4px;">&times;</button>
-          `;
-          fileListContainer.appendChild(fileRow);
-        });
-
-        // Bind delete action
-        fileListContainer.querySelectorAll('.btn-delete-file').forEach(delBtn => {
-          delBtn.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            const fileId = delBtn.getAttribute('data-id');
-            try {
-              await deleteDoc(doc(db, 'users', userId, 'documents', fileId));
-              console.log("File metadata deleted from Firestore.");
-              renderVaultFileList(userId, focusArea);
-            } catch (err) {
-              console.error("Error deleting file:", err);
-            }
-          });
+        // Fallback to mock files
+        const mockFiles = mockDocumentsData[focusArea] || [];
+        mockFiles.forEach((f, idx) => {
+          files.push({ id: `mock-${idx}`, ...f, isMock: true });
         });
       }
-    } catch (err) {
-      console.error("Error fetching files:", err);
+    }
+
+    if (files.length === 0) {
+      if (emptyText) emptyText.style.display = 'block';
+    } else {
+      if (emptyText) emptyText.style.display = 'none';
+      files.forEach((fileData) => {
+        const fileRow = document.createElement('div');
+        fileRow.className = 'vault-file-row';
+        fileRow.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-secondary);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div>
+              <span style="font-weight: 600; color: var(--text-primary); font-size: 0.85rem; display: block;">${fileData.name}</span>
+              <span style="font-size: 0.75rem; color: var(--text-secondary);">${fileData.size} • ${fileData.uploadedAt ? (typeof fileData.uploadedAt === 'string' ? new Date(fileData.uploadedAt).toLocaleDateString() : new Date(fileData.uploadedAt.seconds * 1000).toLocaleDateString()) : (fileData.dateStr || 'Just now')}</span>
+            </div>
+          </div>
+          <button class="btn-delete-file" data-id="${fileData.id}" style="background: transparent; border: none; color: #ef4444; font-size: 1.1rem; cursor: pointer; padding: 4px;">&times;</button>
+        `;
+        fileListContainer.appendChild(fileRow);
+      });
+
+      fileListContainer.querySelectorAll('.btn-delete-file').forEach(delBtn => {
+        delBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const fileId = delBtn.getAttribute('data-id');
+          delBtn.closest('.vault-file-row').remove();
+
+          if (fileId.startsWith('mock-') || fileId.startsWith('local-')) {
+            let localFiles = JSON.parse(localStorage.getItem(`bridge_files_${userId}`) || '[]');
+            localFiles = localFiles.filter(f => f.id !== fileId && `mock-${localFiles.indexOf(f)}` !== fileId);
+            localStorage.setItem(`bridge_files_${userId}`, JSON.stringify(localFiles));
+          } else if (db) {
+            try {
+              await deleteDoc(doc(db, 'users', userId, 'documents', fileId));
+            } catch (err) {
+              console.warn("Firestore deleteDoc failed, removing locally:", err);
+            }
+          }
+
+          if (fileListContainer.querySelectorAll('.vault-file-row').length === 0) {
+            if (emptyText) emptyText.style.display = 'block';
+          }
+        });
+      });
     }
   }
 
@@ -3434,38 +3468,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Simulated File Upload (save metadata details to Firestore)
   async function handleFileUpload(userId, file) {
-    if (!db) return;
-    try {
-      const docColRef = collection(db, 'users', userId, 'documents');
-      // Format file size
-      const sizeStr = file.size > 1024 * 1024 
-        ? (file.size / (1024 * 1024)).toFixed(1) + ' MB' 
-        : (file.size / 1024).toFixed(0) + ' KB';
+    // Format file size
+    const sizeStr = file.size > 1024 * 1024 
+      ? (file.size / (1024 * 1024)).toFixed(1) + ' MB' 
+      : (file.size / 1024).toFixed(0) + ' KB';
 
-      const payload = {
-        name: file.name,
-        size: sizeStr,
-        uploadedAt: new Date()
-      };
+    const fileData = {
+      name: file.name,
+      size: sizeStr,
+      uploadedAt: new Date().toISOString()
+    };
 
-      await addDoc(docColRef, payload);
-      console.log("Uploaded file metadata details successfully.");
-      renderVaultFileList(userId);
-    } catch (err) {
-      console.error("Simulated file upload error:", err);
+    if (db) {
+      try {
+        const docColRef = collection(db, 'users', userId, 'documents');
+        await addDoc(docColRef, fileData);
+        console.log("Uploaded file metadata details successfully.");
+      } catch (err) {
+        console.warn("Firestore file upload failed, saving locally:", err);
+      }
     }
+
+    // Always sync locally as well for resilience
+    let localFiles = JSON.parse(localStorage.getItem(`bridge_files_${userId}`) || '[]');
+    fileData.id = 'local-' + Date.now();
+    localFiles.push(fileData);
+    localStorage.setItem(`bridge_files_${userId}`, JSON.stringify(localFiles));
+
+    const focusArea = portalActiveFocusArea || 'Status & Visas';
+    renderVaultFileList(userId, focusArea);
   }
 
-  // Connect Real-Time Client Chat
   function connectClientChat(clientId) {
     if (chatUnsubscribe) chatUnsubscribe();
-    if (!db) return;
 
     const chatContainer = document.getElementById('chat-messages');
     const inputForm = document.getElementById('chat-input-form');
     const messageInput = document.getElementById('chat-message-input');
 
     if (!chatContainer || !inputForm || !messageInput) return;
+
+    if (!db) {
+      fallbackLocalChat(clientId, chatContainer, inputForm, messageInput);
+      return;
+    }
 
     const chatSessionId = `chat_${clientId}`;
     const messagesCol = collection(db, 'chats', chatSessionId, 'messages');
@@ -3505,6 +3551,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       // Scroll to bottom
       chatContainer.scrollTop = chatContainer.scrollHeight;
+    }, (err) => {
+      console.warn("Firestore connectClientChat onSnapshot failed, using local storage chat:", err);
+      fallbackLocalChat(clientId, chatContainer, inputForm, messageInput);
     });
 
     // Send Message
@@ -3522,14 +3571,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         messageInput.value = '';
       } catch (err) {
-        console.error("Error sending message:", err);
+        console.warn("Error sending message to Firestore, using local chat fallback:", err);
+        fallbackLocalChatSend(clientId, text, chatContainer, messageInput);
       }
     };
   }
 
   // 2. Advisor Dashboard Logic
   async function renderAdvisorDashboard() {
-    if (!db) return;
+    if (!db) {
+      fallbackAdvisorDashboard();
+      return;
+    }
 
     const rosterContainer = document.getElementById('adv-clients-list');
     if (!rosterContainer) return;
@@ -3585,14 +3638,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
     } catch (err) {
-      console.error("Error loading advisor roster:", err);
+      console.warn("Firestore advisor roster load failed, using local storage fallback:", err);
+      fallbackAdvisorDashboard();
     }
   }
 
   // Load Client Detail Views in Advisor Portal
   async function loadClientDetailsForAdvisor(clientId, clientName) {
     activeSelectedClientId = clientId;
-    if (!db) return;
+    if (!db) {
+      fallbackLoadClientDetailsForAdvisor(clientId, clientName);
+      return;
+    }
 
     // Set Header
     const clientHeader = document.getElementById('chat-client-header-name');
@@ -3657,20 +3714,25 @@ document.addEventListener('DOMContentLoaded', () => {
       connectAdvisorChat(clientId);
 
     } catch (err) {
-      console.error("Error loading client details for advisor:", err);
+      console.warn("Firestore advisor client load failed, using local fallback:", err);
+      fallbackLoadClientDetailsForAdvisor(clientId, clientName);
     }
   }
 
   // Connect Real-Time Advisor Chat
   function connectAdvisorChat(clientId) {
     if (advChatUnsubscribe) advChatUnsubscribe();
-    if (!db) return;
 
     const chatContainer = document.getElementById('adv-chat-messages');
     const inputForm = document.getElementById('adv-chat-input-form');
     const messageInput = document.getElementById('adv-chat-message-input');
 
     if (!chatContainer || !inputForm || !messageInput) return;
+
+    if (!db) {
+      connectAdvisorLocalChat(clientId);
+      return;
+    }
 
     const chatSessionId = `chat_${clientId}`;
     const messagesCol = collection(db, 'chats', chatSessionId, 'messages');
@@ -3693,6 +3755,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       // Scroll to bottom
       chatContainer.scrollTop = chatContainer.scrollHeight;
+    }, (err) => {
+      console.warn("Firestore connectAdvisorChat failed, using local fallback:", err);
+      connectAdvisorLocalChat(clientId);
     });
 
     // Send Message (Advisor Response)
@@ -3710,8 +3775,326 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         messageInput.value = '';
       } catch (err) {
-        console.error("Error sending response message:", err);
+        console.warn("Error sending message to Firestore, using local chat fallback:", err);
+        fallbackLocalAdvisorChatSend(clientId, text, chatContainer, messageInput);
       }
+    };
+  }
+
+  // ==========================================================================
+  // RESILIENCY FALLBACKS FOR LOCAL STORAGE & OFFLINE CAPABILITIES
+  // ==========================================================================
+
+  function saveUserDataToLocal(user) {
+    let localUsers = JSON.parse(localStorage.getItem('bridge_users') || '{}');
+    let userDoc = localUsers[user.uid] || {};
+    
+    userDoc.uid = user.uid;
+    userDoc.email = user.email;
+    userDoc.displayName = user.displayName || user.email.split('@')[0];
+    userDoc.role = "client";
+    userDoc.updatedAt = new Date().toISOString();
+    
+    const existingQuizResults = userDoc.quizResults || {};
+    let newQuizResults = { ...existingQuizResults };
+    
+    if (selectedFocus || !existingQuizResults.focusArea) {
+      newQuizResults = {
+        focusArea: selectedFocus || existingQuizResults.focusArea || "",
+        scores: ratings || existingQuizResults.scores || { status: 0, career: 0, finance: 0 },
+        biggestBottleneck: getBiggestBottleneck() || existingQuizResults.biggestBottleneck || "status",
+        selectedGoals: (selectedStep9 && selectedStep9.length > 0) ? selectedStep9 : (existingQuizResults.selectedGoals || [])
+      };
+    }
+    
+    userDoc.quizResults = newQuizResults;
+    localUsers[user.uid] = userDoc;
+    localStorage.setItem('bridge_users', JSON.stringify(localUsers));
+    localStorage.setItem('bridge_current_user_id', user.uid);
+  }
+
+  function saveGoalToLocal(uid, quizResults, updatedSelectedGoals) {
+    let localUsers = JSON.parse(localStorage.getItem('bridge_users') || '{}');
+    if (localUsers[uid]) {
+      localUsers[uid].quizResults = {
+        ...quizResults,
+        selectedGoals: updatedSelectedGoals
+      };
+      localUsers[uid].updatedAt = new Date().toISOString();
+      localStorage.setItem('bridge_users', JSON.stringify(localUsers));
+    }
+  }
+
+  function fallbackLocalChat(clientId, chatContainer, inputForm, messageInput) {
+    if (chatUnsubscribe) {
+      chatUnsubscribe();
+      chatUnsubscribe = null;
+    }
+
+    const loadLocalMessages = () => {
+      chatContainer.innerHTML = '';
+      let localMsgs = JSON.parse(localStorage.getItem(`bridge_chat_${clientId}`) || '[]');
+      
+      const mockMessages = [
+        { text: "Hi there! I am your relocation guide. Welcome to Same Path! 👋", senderId: 'advisor', timeStr: "10:15 AM" },
+        { text: "I've reviewed your scorecard bottleneck. I'd love to help you get your paperwork organized. Feel free to drop any draft documents in the Vault Locker on the left, and let me know if you have any questions!", senderId: 'advisor', timeStr: "10:16 AM" }
+      ];
+
+      const allMsgs = localMsgs.length > 0 ? localMsgs : mockMessages;
+
+      allMsgs.forEach(msg => {
+        const bubble = document.createElement('div');
+        bubble.className = `chat-message-bubble ${msg.senderId === clientId ? 'client' : 'advisor'}`;
+        bubble.innerHTML = `
+          <div>${msg.text}</div>
+          <span class="chat-timestamp">${msg.timeStr}</span>
+        `;
+        chatContainer.appendChild(bubble);
+      });
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    };
+
+    loadLocalMessages();
+
+    inputForm.onsubmit = (e) => {
+      e.preventDefault();
+      const text = messageInput.value.trim();
+      if (!text) return;
+
+      fallbackLocalChatSend(clientId, text, chatContainer, messageInput);
+
+      // Trigger automatic simulated advisor response after 1.5 seconds
+      setTimeout(() => {
+        let currentMsgs = JSON.parse(localStorage.getItem(`bridge_chat_${clientId}`) || '[]');
+        const advisorReply = {
+          senderId: 'advisor',
+          text: `Thanks for the message! I've received your note: "${text}". I will review this and follow up shortly.`,
+          timeStr: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        currentMsgs.push(advisorReply);
+        localStorage.setItem(`bridge_chat_${clientId}`, JSON.stringify(currentMsgs));
+        loadLocalMessages();
+      }, 1500);
+    };
+  }
+
+  function fallbackLocalChatSend(clientId, text, chatContainer, messageInput) {
+    let localMsgs = JSON.parse(localStorage.getItem(`bridge_chat_${clientId}`) || '[]');
+    const newMsg = {
+      senderId: clientId,
+      text: text,
+      timeStr: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+    localMsgs.push(newMsg);
+    localStorage.setItem(`bridge_chat_${clientId}`, JSON.stringify(localMsgs));
+    if (messageInput) messageInput.value = '';
+    
+    // Refresh display
+    const inputForm = document.getElementById('chat-input-form');
+    fallbackLocalChat(clientId, chatContainer, inputForm, messageInput);
+  }
+
+  function fallbackLocalAdvisorChatSend(clientId, text, chatContainer, messageInput) {
+    let localMsgs = JSON.parse(localStorage.getItem(`bridge_chat_${clientId}`) || '[]');
+    const newMsg = {
+      senderId: 'advisor',
+      text: text,
+      timeStr: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+    localMsgs.push(newMsg);
+    localStorage.setItem(`bridge_chat_${clientId}`, JSON.stringify(localMsgs));
+    if (messageInput) messageInput.value = '';
+    
+    // Refresh display
+    connectAdvisorLocalChat(clientId);
+  }
+
+  function fallbackAdvisorDashboard() {
+    const rosterContainer = document.getElementById('adv-clients-list');
+    if (!rosterContainer) return;
+    rosterContainer.innerHTML = '';
+
+    let localUsers = JSON.parse(localStorage.getItem('bridge_users') || '{}');
+    let activeRowBound = false;
+
+    Object.values(localUsers).forEach(uData => {
+      if (uData.uid && uData.role === 'client') {
+        const clientRow = document.createElement('div');
+        clientRow.className = `client-row ${!activeRowBound ? 'active' : ''}`;
+        clientRow.setAttribute('data-id', uData.uid);
+        clientRow.style.cssText = 'padding: 16px; border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; background: var(--bg-primary); display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;';
+        
+        clientRow.innerHTML = `
+          <div>
+            <h4 style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);">${uData.displayName || uData.email.split('@')[0]}</h4>
+            <p style="font-size: 0.78rem; color: var(--text-secondary);">${uData.email}</p>
+          </div>
+          <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 0.7rem; border-radius: 12px;">Active Session</span>
+        `;
+        
+        rosterContainer.appendChild(clientRow);
+
+        clientRow.addEventListener('click', () => {
+          rosterContainer.querySelectorAll('.client-row').forEach(row => row.classList.remove('active'));
+          clientRow.classList.add('active');
+          fallbackLoadClientDetailsForAdvisor(uData.uid, uData.displayName || uData.email.split('@')[0]);
+        });
+
+        if (!activeRowBound) {
+          fallbackLoadClientDetailsForAdvisor(uData.uid, uData.displayName || uData.email.split('@')[0]);
+          activeRowBound = true;
+        }
+      }
+    });
+
+    if (!activeRowBound) {
+      const defaultUser = {
+        uid: "local-user-id",
+        email: "onboarding-user@example.com",
+        displayName: "Asap Remit",
+        role: "client"
+      };
+      
+      const clientRow = document.createElement('div');
+      clientRow.className = 'client-row active';
+      clientRow.setAttribute('data-id', defaultUser.uid);
+      clientRow.style.cssText = 'padding: 16px; border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; background: var(--bg-primary); display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;';
+      clientRow.innerHTML = `
+        <div>
+          <h4 style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);">${defaultUser.displayName}</h4>
+          <p style="font-size: 0.78rem; color: var(--text-secondary);">${defaultUser.email}</p>
+        </div>
+        <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 0.7rem; border-radius: 12px;">Active Session</span>
+      `;
+      rosterContainer.appendChild(clientRow);
+      fallbackLoadClientDetailsForAdvisor(defaultUser.uid, defaultUser.displayName);
+    }
+  }
+
+  function fallbackLoadClientDetailsForAdvisor(clientId, clientName) {
+    activeSelectedClientId = clientId;
+    const clientHeader = document.getElementById('chat-client-header-name');
+    const clientAvatar = document.getElementById('chat-client-avatar');
+    if (clientHeader) clientHeader.innerText = clientName;
+    if (clientAvatar) clientAvatar.innerText = clientName.charAt(0).toUpperCase();
+
+    const goalsContainer = document.getElementById('adv-client-goals');
+    if (goalsContainer) {
+      goalsContainer.innerHTML = '';
+      let localUsers = JSON.parse(localStorage.getItem('bridge_users') || '{}');
+      const uData = localUsers[clientId] || {};
+      const quizResults = uData.quizResults || {};
+      const selectedGoals = quizResults.selectedGoals || [];
+      const focusArea = quizResults.focusArea || 'status';
+      const safeFocus = getDisplayFocusArea(focusArea);
+      const bottleneck = quizResults.biggestBottleneck || 'status';
+
+      let checklistItems = getChecklistItems(safeFocus, bottleneck);
+
+      if (selectedGoals.length === 0) {
+        goalsContainer.innerHTML = `<span style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">No milestones checked yet.</span>`;
+      } else {
+        checklistItems.forEach(item => {
+          const text = typeof item === 'object' ? item.label : item;
+          const val = typeof item === 'object' ? item.val : item;
+          if (selectedGoals.includes(val)) {
+            const goalRow = document.createElement('div');
+            goalRow.style.cssText = 'font-size: 0.88rem; color: var(--accent); font-weight: 600; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;';
+            goalRow.innerHTML = `✓ <span style="color: var(--text-primary); font-weight: 400;">${text}</span>`;
+            goalsContainer.appendChild(goalRow);
+          }
+        });
+      }
+    }
+
+    const filesContainer = document.getElementById('adv-client-files');
+    if (filesContainer) {
+      filesContainer.innerHTML = '';
+      let localFiles = JSON.parse(localStorage.getItem(`bridge_files_${clientId}`) || '[]');
+      if (localFiles.length === 0) {
+        // Fallback to mock files
+        const mockFiles = [
+          { name: "visa_application_draft_v2.pdf", size: "2.4 MB" },
+          { name: "certified_academic_transcript.pdf", size: "1.8 MB" },
+          { name: "employer_offer_letter.png", size: "920 KB" }
+        ];
+        mockFiles.forEach(fData => {
+          const fRow = document.createElement('div');
+          fRow.style.cssText = 'padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; margin-bottom: 8px;';
+          fRow.innerHTML = `
+            <span>📄 <strong>${fData.name}</strong> (${fData.size})</span>
+            <a href="#" onclick="alert('Downloading shared file...'); return false;" style="color: var(--accent); font-weight: 600; text-decoration: none;">Download</a>
+          `;
+          filesContainer.appendChild(fRow);
+        });
+      } else {
+        localFiles.forEach(file => {
+          const fRow = document.createElement('div');
+          fRow.style.cssText = 'padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; margin-bottom: 8px;';
+          fRow.innerHTML = `
+            <span>📄 <strong>${file.name}</strong> (${file.size})</span>
+            <a href="#" onclick="alert('Downloading shared file...'); return false;" style="color: var(--accent); font-weight: 600; text-decoration: none;">Download</a>
+          `;
+          filesContainer.appendChild(fRow);
+        });
+      }
+    }
+
+    connectAdvisorLocalChat(clientId);
+  }
+
+  function connectAdvisorLocalChat(clientId) {
+    if (advChatUnsubscribe) {
+      advChatUnsubscribe();
+      advChatUnsubscribe = null;
+    }
+
+    const chatContainer = document.getElementById('adv-chat-messages');
+    const inputForm = document.getElementById('adv-chat-input-form');
+    const messageInput = document.getElementById('adv-chat-message-input');
+
+    if (!chatContainer || !inputForm || !messageInput) return;
+
+    const loadLocalMsgs = () => {
+      chatContainer.innerHTML = '';
+      let localMsgs = JSON.parse(localStorage.getItem(`bridge_chat_${clientId}`) || '[]');
+      
+      const mockMessages = [
+        { text: "Hi there! I am your relocation guide. Welcome to Same Path! 👋", senderId: 'advisor', timeStr: "10:15 AM" },
+        { text: "I've reviewed your scorecard bottleneck. I'd love to help you get your paperwork organized. Feel free to drop any draft documents in the Vault Locker on the left, and let me know if you have any questions!", senderId: 'advisor', timeStr: "10:16 AM" }
+      ];
+
+      const allMsgs = localMsgs.length > 0 ? localMsgs : mockMessages;
+
+      allMsgs.forEach(msg => {
+        const bubble = document.createElement('div');
+        bubble.className = `chat-message-bubble ${msg.senderId === 'advisor' ? 'client' : 'advisor'}`;
+        bubble.innerHTML = `
+          <div>${msg.text}</div>
+          <span class="chat-timestamp">${msg.timeStr}</span>
+        `;
+        chatContainer.appendChild(bubble);
+      });
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    };
+
+    loadLocalMsgs();
+
+    inputForm.onsubmit = (e) => {
+      e.preventDefault();
+      const text = messageInput.value.trim();
+      if (!text) return;
+
+      let localMsgs = JSON.parse(localStorage.getItem(`bridge_chat_${clientId}`) || '[]');
+      const newMsg = {
+        senderId: 'advisor',
+        text: text,
+        timeStr: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      localMsgs.push(newMsg);
+      localStorage.setItem(`bridge_chat_${clientId}`, JSON.stringify(localMsgs));
+      messageInput.value = '';
+      loadLocalMsgs();
     };
   }
 
