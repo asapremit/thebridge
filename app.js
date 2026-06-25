@@ -186,7 +186,8 @@ document.addEventListener('DOMContentLoaded', () => {
           date: "June 28, 2026",
           time: "10:00 AM - 11:00 AM (EST)",
           joinLink: "https://zoom.us/j/123456789",
-          rescheduleId: "resched1"
+          rescheduleId: "resched1",
+          tip: "Please upload your passport copy and academic transcripts to the Document Locker before our session so I can review them in advance."
         }
       ],
       past: [
@@ -197,7 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
           type: "Eligibility Intake Consultation",
           date: "June 12, 2026",
           time: "2:00 PM - 2:30 PM (EST)",
-          status: "Completed"
+          status: "Completed",
+          notes: "Reviewed regional visa options. Recommended proceeding with the talent visa pathway due to your high qualification scores. Next step is gathering letter of recommendation templates."
         }
       ]
     },
@@ -211,7 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
           date: "July 3, 2026",
           time: "2:00 PM - 3:00 PM (EST)",
           joinLink: "https://meet.google.com/abc-defg-hij",
-          rescheduleId: "resched2"
+          rescheduleId: "resched2",
+          tip: "Please update your LinkedIn profile URL and share it in our chat channel before the call starts."
         }
       ],
       past: [
@@ -222,7 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
           type: "Introduction & Strategy Session",
           date: "June 18, 2026",
           time: "1:00 PM - 1:45 PM (EST)",
-          status: "Completed"
+          status: "Completed",
+          notes: "Conducted CV deep dive. Standardized professional layout for target European market. Recommended highlighting technical project ownership metrics."
         }
       ]
     },
@@ -236,7 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
           type: "Expat Taxation & Banking Briefing",
           date: "June 15, 2026",
           time: "4:00 PM - 4:45 PM (EST)",
-          status: "Completed"
+          status: "Completed",
+          notes: "Explained steps for opening a local resident bank account without credit history. Shared utility bill registration checklists."
         }
       ]
     }
@@ -285,26 +290,42 @@ document.addEventListener('DOMContentLoaded', () => {
       bookings.upcoming.forEach(b => {
         const card = document.createElement('div');
         card.className = 'booking-card';
+        card.style.cssText = 'display: flex; flex-direction: column; gap: 14px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; transition: all 0.2s; margin-bottom: 12px;';
         card.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 16px;">
-            <img src="${b.guideAvatar}" alt="${b.guideName}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);" />
-            <div>
-              <h4 style="font-weight: 700; color: var(--text-primary); font-size: 1rem; margin: 0;">${b.type}</h4>
-              <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 2px 0 6px 0;">with ${b.guideName} • ${b.guideRole}</p>
-              <div style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; color: var(--accent);">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                <span>${b.date} at ${b.time}</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <img src="${b.guideAvatar}" alt="${b.guideName}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);" />
+              <div>
+                <h4 style="font-weight: 700; color: var(--text-primary); font-size: 1rem; margin: 0; display: flex; align-items: center; gap: 8px;">
+                  ${b.type}
+                  <span style="font-size: 0.72rem; font-weight: 600; color: #10b981; background: rgba(16,185,129,0.1); padding: 2px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;">
+                    <span style="width: 6px; height: 6px; background: #10b981; border-radius: 50%; display: inline-block;"></span> Confirmed
+                  </span>
+                </h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 2px 0 6px 0;">with ${b.guideName} • ${b.guideRole}</p>
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; color: var(--accent);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  <span>${b.date} at ${b.time}</span>
+                </div>
               </div>
             </div>
+            <div style="display: flex; gap: 10px;">
+              <a href="${b.joinLink}" target="_blank" class="btn btn-primary" style="padding: 10px 18px; border-radius: 8px; font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                📹 Join Call
+              </a>
+              <button class="btn btn-outline btn-reschedule-booking" data-id="${b.rescheduleId}" style="padding: 10px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer;">
+                Reschedule
+              </button>
+            </div>
           </div>
-          <div style="display: flex; gap: 10px;">
-            <a href="${b.joinLink}" target="_blank" class="btn btn-primary" style="padding: 10px 18px; border-radius: 8px; font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
-              📹 Join Call
-            </a>
-            <button class="btn btn-outline btn-reschedule-booking" data-id="${b.rescheduleId}" style="padding: 10px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer;">
-              Reschedule
-            </button>
-          </div>
+          ${b.tip ? `
+            <div style="background: rgba(17,47,32,0.02); border-left: 3px solid var(--accent); padding: 12px 16px; border-radius: 4px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45;">
+              <strong style="color: var(--accent); font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 2px;">
+                💡 Preparation Tip:
+              </strong> 
+              ${b.tip}
+            </div>
+          ` : ''}
         `;
         upcomingList.appendChild(card);
       });
@@ -318,23 +339,34 @@ document.addEventListener('DOMContentLoaded', () => {
       bookings.past.forEach(b => {
         const card = document.createElement('div');
         card.className = 'booking-card';
+        card.style.cssText = 'display: flex; flex-direction: column; gap: 14px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; transition: all 0.2s; margin-bottom: 12px;';
         card.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 16px;">
-            <img src="${b.guideAvatar}" alt="${b.guideName}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; opacity: 0.8; border: 1px solid var(--border-color);" />
-            <div>
-              <h4 style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem; margin: 0;">${b.type}</h4>
-              <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 2px 0 6px 0;">with ${b.guideName} • ${b.guideRole}</p>
-              <div style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-secondary);">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                <span>${b.date}</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <img src="${b.guideAvatar}" alt="${b.guideName}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; opacity: 0.8; border: 1px solid var(--border-color);" />
+              <div>
+                <h4 style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem; margin: 0;">${b.type}</h4>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 2px 0 6px 0;">with ${b.guideName} • ${b.guideRole}</p>
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-secondary);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  <span>${b.date}</span>
+                </div>
               </div>
             </div>
+            <div>
+              <span style="font-size: 0.82rem; font-weight: 600; color: #10B981; background: rgba(16, 185, 129, 0.1); padding: 6px 14px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;">
+                ✓ Completed
+              </span>
+            </div>
           </div>
-          <div>
-            <span style="font-size: 0.82rem; font-weight: 600; color: #10B981; background: rgba(16, 185, 129, 0.1); padding: 6px 14px; border-radius: 20px;">
-              ✓ Completed
-            </span>
-          </div>
+          ${b.notes ? `
+            <div style="background: rgba(0,0,0,0.02); border-left: 3px solid #10b981; padding: 12px 16px; border-radius: 4px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45;">
+              <strong style="color: #10b981; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 2px;">
+                📝 Advisor Summary Notes:
+              </strong>
+              ${b.notes}
+            </div>
+          ` : ''}
         `;
         pastList.appendChild(card);
       });
