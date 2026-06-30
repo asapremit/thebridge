@@ -1082,95 +1082,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let matchId = '';
-      if (selectedFocus === 'status') {
-        if (selectedStep3 === 'peer') {
-          matchId = 'aisha';
-        } else {
-          if (selectedStep2 === 'family') {
-            matchId = 'david_chee';
-          } else if (selectedStep2 === 'greencard') {
-            matchId = 'hassan';
-          } else {
-            matchId = 'sarah';
-          }
-        }
-      } else if (selectedFocus === 'career') {
-        if (selectedStep2 === 'hired') {
-          matchId = 'david';
-        } else {
-          matchId = 'michael';
-        }
-      } else if (selectedFocus === 'finance') {
-        matchId = 'amanda';
-      }
-      
-      if (!matchId) {
-        matchId = 'sarah';
-      }
-      
-      if (matchId) {
-        const dirLink = document.querySelector('.nav-link[data-target="directory"]');
-        if (dirLink) {
-          dirLink.click();
-        }
+      // Hide main navigation and portal sub-navigation for a focused experience
+      const navbar = document.querySelector('.navbar');
+      const subnav = document.getElementById('portal-sub-nav');
+      if (navbar) navbar.style.display = 'none';
+      if (subnav) subnav.style.display = 'none';
 
-        const categoryBtn = document.querySelector(`.filter-pill-btn[data-category="${selectedFocus}"]`);
-        if (categoryBtn) {
-          categoryBtn.click();
-        }
-
-        const card = document.querySelector(`.advisor-intro-card[data-advisor-id="${matchId}"]`);
-        if (card) {
-          document.querySelectorAll('.advisor-intro-card').forEach(c => {
-            c.classList.remove('highlight-match');
-            const oldBadge = c.querySelector('.top-match-badge');
-            if (oldBadge) oldBadge.remove();
-          });
-
-          const badge = document.createElement('div');
-          badge.className = 'top-match-badge';
-          badge.innerText = '⭐ TOP MATCH';
-          badge.style.position = 'absolute';
-          badge.style.top = '16px';
-          badge.style.left = '16px';
-          badge.style.background = 'var(--accent)';
-          badge.style.color = '#000';
-          badge.style.fontWeight = '800';
-          badge.style.fontSize = '0.72rem';
-          badge.style.letterSpacing = '0.05em';
-          badge.style.padding = '6px 12px';
-          badge.style.borderRadius = '30px';
-          badge.style.zIndex = '10';
-          badge.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
-          badge.style.pointerEvents = 'none';
-
-          card.style.position = 'relative';
-          card.appendChild(badge);
-          card.classList.add('highlight-match');
-
-          setTimeout(() => {
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }, 300);
-        }
-
-        // Reset the quiz state
-        ratings = { status: 0, career: 0, finance: 0 };
-        selectedFocus = '';
-        selectedStep2 = '';
-        selectedStep3 = '';
-        selectedStep7 = '';
-        selectedStep8 = '';
-        selectedStep9 = [];
-        selectedStep10 = '';
-        
-        quizCard.querySelectorAll('.goal-checkbox-row').forEach(r => r.classList.remove('checked'));
-        quizCard.querySelectorAll('.goal-checkbox-input').forEach(i => i.checked = false);
-        if (ratingBtns) ratingBtns.forEach(b => b.classList.remove('active'));
-        
-        restorePathOpacities();
-        updateHorizonVisuals();
-        goToStep(1);
+      if (typeof window.initMatchReveal === 'function') {
+        window.initMatchReveal();
       }
     }
 
@@ -1332,28 +1251,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Step 9 & 10 Continue button handler — use event delegation on quizCard
-    // to reliably catch clicks regardless of slide visibility state
-    quizCard.addEventListener('click', (e) => {
-      const btn = e.target.closest('.btn-goal-continue');
-      if (!btn) return;
-
-      const slide = btn.closest('.quiz-step-slide');
-      if (!slide) return;
-      const stepAttr = slide.getAttribute('data-step');
-
-      if (stepAttr === '9') {
-        goToStep(10);
-      } else if (stepAttr === '10') {
-        // Show results section in locked state
-        justCompletedQuiz = true;
-        sections.forEach(sec => sec.classList.toggle('active', sec.id === 'results'));
-        navLinks.forEach(l => l.classList.remove('active'));
-        renderResultsPage();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-
     // Signup / Login Form Handling
     const tabSignup = document.getElementById('btn-tab-signup');
     const tabLogin = document.getElementById('btn-tab-login');
@@ -1505,6 +1402,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentSelection = '';
         if (step === 7) currentSelection = selectedStep7;
         else if (step === 8) currentSelection = selectedStep8;
+        else if (step === 9) currentSelection = (selectedStep9 && selectedStep9[0]) ? selectedStep9[0] : '';
         else if (step === 10) currentSelection = selectedStep10;
         
         if (currentSelection === ch.val) {
@@ -1528,6 +1426,9 @@ document.addEventListener('DOMContentLoaded', () => {
           } else if (step === 8) {
             selectedStep8 = ch.val;
             setTimeout(() => goToStep(9), 600);
+          } else if (step === 9) {
+            selectedStep9 = [ch.val];
+            setTimeout(() => goToStep(10), 600);
           } else if (step === 10) {
             selectedStep10 = ch.val;
             setTimeout(() => goToStep('signup'), 600);
@@ -1576,11 +1477,6 @@ document.addEventListener('DOMContentLoaded', () => {
           } else {
             selectedStep9 = selectedStep9.filter(v => v !== item.val);
           }
-          
-          // Auto-advance to Step 10 after selection to keep uniform transition behavior
-          setTimeout(() => {
-            goToStep(10);
-          }, 600);
         });
         
         container.appendChild(label);
@@ -1651,7 +1547,7 @@ document.addEventListener('DOMContentLoaded', () => {
               bottleneck = 'finance';
             }
 
-            if (step === 9) {
+          if (step === 9) {
               let bottleneckIndex = 0;
               if (bottleneck === 'career') bottleneckIndex = 1;
               else if (bottleneck === 'finance') bottleneckIndex = 2;
@@ -1664,7 +1560,12 @@ document.addEventListener('DOMContentLoaded', () => {
                   title.innerHTML = `What would it take to move your <strong>${bottleneckName}</strong> from <strong>${bottleneckScore}</strong> closer to 10?`;
                 }
               }
-              renderDynamicChecklist(slide, config, bottleneck);
+              const choices = config.checklists[bottleneck] || [];
+              const step9Config = {
+                ...config,
+                choices: choices
+              };
+              renderDynamicChoices(slide, step9Config, step);
             } else {
               if (title) title.innerText = config.title;
             }
@@ -1675,16 +1576,22 @@ document.addEventListener('DOMContentLoaded', () => {
               renderDynamicChoices(slide, config, step);
             }
             
-            // Append/Move Visualizer to placeholder in the active slide!
+            // Append/Move Visualizer to placeholder in the active slide
             const placeholder = slide.querySelector('.visualizer-placeholder');
             if (placeholder && sharedVisualizer) {
+              placeholder.style.cssText = ''; // reset any collapsed styling
               placeholder.appendChild(sharedVisualizer);
               sharedVisualizer.style.display = 'flex';
             }
           }
           
           slide.style.display = 'block';
-          setTimeout(() => slide.classList.add('active'), 10);
+          setTimeout(() => {
+            slide.classList.add('active');
+            // Scroll quiz card into view so Continue button is always reachable
+            const quizTop = quizCard.getBoundingClientRect().top + window.scrollY - 80;
+            window.scrollTo({ top: quizTop, behavior: 'smooth' });
+          }, 10);
         }
         
         // Handle curve opacities for the visualizer
@@ -1760,6 +1667,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
         } else if (step === 'signup') {
+          if (isUserLoggedIn) {
+            triggerMatching();
+            return;
+          }
           slideSelector = '.quiz-step-slide[data-step="signup"]';
         }
         
@@ -2264,32 +2175,18 @@ document.addEventListener('DOMContentLoaded', () => {
     cheap_transfers: { title: "International Wire Pipelines", desc: "Review low-fee wire services and minimize forex conversion markups." },
     tax_id: { title: "Tax ID Applications (SSN/ITIN)", desc: "Receive document checkers and guidance to apply for your local tax ID quickly." },
     utility_link: { title: "Utility Reporting Setup", desc: "Report rent and utilities history to double your credit growth rate." },
-    file_taxes: { title: "Dual-Status Tax Filings", desc: "Get mapped to expat tax preparers for clean dual-status or resident tax returns." },
+file_taxes: { title: "Dual-Status Tax Filings", desc: "Get mapped to expat tax preparers for clean dual-status or resident tax returns." },
     asset_report: { title: "Foreign Assets Disclosures (FBAR)", desc: "Map required FBAR/FATCA compliance forms to avoid high penalty fees." },
     mortgage: { title: "Expat Mortgage Qualification", desc: "Prepare document checklists and map expat-friendly lenders for home buying." },
     investments: { title: "Cross-Border Wealth Setup", desc: "Safeguard assets, avoid double taxes, and set up local broker accounts." }
   };
 
-  // Dynamically populate Results View
   function renderResultsPage() {
-    // 1. Update Scores Dashboard
     const valStatus = ratings.status || 0;
     const valCareer = ratings.career || 0;
     const valFinance = ratings.finance || 0;
 
-    document.getElementById('results-score-status').innerText = `${valStatus}/10`;
-    document.getElementById('results-score-career').innerText = `${valCareer}/10`;
-    document.getElementById('results-score-finance').innerText = `${valFinance}/10`;
-
-    // Category Label Names based on selectedFocus
-    const focusConfig = quizContentConfig[selectedFocus || 'status'];
-    if (focusConfig && focusConfig.categories) {
-      document.getElementById('results-lbl-status').innerText = focusConfig.categories[0];
-      document.getElementById('results-lbl-career').innerText = focusConfig.categories[1];
-      document.getElementById('results-lbl-finance').innerText = focusConfig.categories[2];
-    }
-
-    // 2. Identify biggest bottleneck
+    // 1. Identify biggest bottleneck
     let bottleneck = 'status';
     let lowestScore = valStatus;
     if (valCareer < lowestScore) {
@@ -2301,47 +2198,36 @@ document.addEventListener('DOMContentLoaded', () => {
       bottleneck = 'finance';
     }
 
+    const focusConfig = quizContentConfig[selectedFocus || 'status'];
     const bottleneckIdx = bottleneck === 'status' ? 0 : bottleneck === 'career' ? 1 : 2;
     const bottleneckName = (focusConfig && focusConfig.categories) ? focusConfig.categories[bottleneckIdx] : 'Immigration Status';
-    
-    document.getElementById('results-bottleneck-name').innerText = bottleneckName;
-    
-    const lookupFocus = selectedFocus || 'status';
-    const bottleneckDesc = statusDescriptions[lookupFocus] ? statusDescriptions[lookupFocus][lowestScore] : 'Rate your score inside the quiz.';
-    document.getElementById('results-bottleneck-desc').innerText = bottleneckDesc;
 
-    // 3. Render Selected Goals action items list
-    const goalsContainer = document.getElementById('results-goals-list');
-    goalsContainer.innerHTML = '';
-    
-    if (selectedStep9 && selectedStep9.length > 0) {
-      selectedStep9.forEach(val => {
-        const expl = goalExplanations[val] || { title: val, desc: "Your matched advisor will define a concrete roadmap for this priority." };
-        const goalEl = document.createElement('div');
-        goalEl.className = 'results-goal-item';
-        goalEl.innerHTML = `
-          <div class="results-goal-icon">🎯</div>
-          <div class="results-goal-info">
-            <span class="results-goal-title">${expl.title}</span>
-            <span class="results-goal-desc">${expl.desc}</span>
-          </div>
-        `;
-        goalsContainer.appendChild(goalEl);
-      });
-    } else {
-      // Default placeholder if none selected
-      goalsContainer.innerHTML = `
-        <div class="results-goal-item">
-          <div class="results-goal-icon">💡</div>
-          <div class="results-goal-info">
-            <span class="results-goal-title">Custom Relocation Audit</span>
-            <span class="results-goal-desc">Your matched advisor will perform a complete audit of your destination paperwork and timeline.</span>
-          </div>
-        </div>
-      `;
+    // Update bottleneck name with styled version
+    const bottleneckStyledEl = document.getElementById('results-bottleneck-name-styled');
+    if (bottleneckStyledEl) {
+      bottleneckStyledEl.innerText = bottleneckName;
     }
 
-    // 4. Determine Matched Advisor (using same matching logic)
+    // 2. Update category status dials
+    const categories = (focusConfig && focusConfig.categories) ? focusConfig.categories : ["Immigration", "Career", "Finance"];
+    
+    document.getElementById('dial-lbl-1').innerText = categories[0];
+    document.getElementById('dial-lbl-2').innerText = categories[1];
+    document.getElementById('dial-lbl-3').innerText = categories[2];
+    
+    const pct1 = Math.max(0, Math.min(100, valStatus * 10));
+    const pct2 = Math.max(0, Math.min(100, valCareer * 10));
+    const pct3 = Math.max(0, Math.min(100, valFinance * 10));
+    
+    document.getElementById('dial-val-1').innerText = `${pct1}%`;
+    document.getElementById('dial-val-2').innerText = `${pct2}%`;
+    document.getElementById('dial-val-3').innerText = `${pct3}%`;
+    
+    document.getElementById('dial-ring-1').setAttribute('stroke-dasharray', `${pct1}, 100`);
+    document.getElementById('dial-ring-2').setAttribute('stroke-dasharray', `${pct2}, 100`);
+    document.getElementById('dial-ring-3').setAttribute('stroke-dasharray', `${pct3}, 100`);
+
+    // 3. Determine Matched Advisor (using same matching logic)
     let matchId = 'sarah';
     if (selectedFocus === 'status') {
       if (selectedStep3 === 'peer') {
@@ -2366,8 +2252,194 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const adv = advisorDb[matchId] || advisorDb.sarah;
+
+    // 4. Update dynamic success quote block citing their timeline and goal
+    const goalNames = {
+      visa: "Visa Prep & Documentation",
+      family: "Family Reunification & Dependent Visas",
+      citizenship: "Citizenship & Naturalization",
+      asylum: "Asylum & Humanitarian Relief",
+      hired: "Job Placement & Career Placement",
+      business: "Expat Business & Entity Formation",
+      credit: "Credit Building & Local Banking",
+      investing: "Expat Mortgage Sourcing & Wealth Setup"
+    };
+
+    const timelineVal = selectedStep10 || "your target timeline";
+    const targetGoal = goalNames[selectedStep2] || "your relocation setup";
+
+    const quotes = {
+      status: {
+        text: `\"Preparing our files for ${targetGoal} within ${timelineVal} required highly structured timelines. Our legal matched advisor prevented consular delays.\"`,
+        author: "— ELENA R., BRAZIL ➔ BOSTON"
+      },
+      career: {
+        text: `\"Relocating and job hunting under ${timelineVal} timeline was challenging. Rebuilding my cross-border profile for local recruiters unlocked calls.\"`,
+        author: "— CHEN W., SINGAPORE ➔ AUSTIN"
+      },
+      finance: {
+        text: `\"Setting up credit history and local checking inside ${timelineVal} saved us thousands. The transfer networks playbook made a huge impact.\"`,
+        author: "— SOPHIA M., LONDON ➔ NEW YORK"
+      }
+    };
     
-    // Render advisor card details
+    const quote = quotes[bottleneck] || quotes.status;
+    document.getElementById('results-quote-text').innerText = quote.text;
+    document.getElementById('results-quote-author').innerText = quote.author;
+
+    // 5. Render Dynamic Strategic Recommendations based on their chosen priority
+    const categoryKeys = {
+      status: ['visa', 'talent', 'lawyer', 'nomad', 'translations', 'forms', 'family', 'tracking', 'greencard', 'presence', 'audits', 'transition'],
+      career: ['resume', 'linkedin', 'portfolio', 'requirements', 'target_list', 'recruiters', 'outreach', 'meetups', 'mock', 'behavioral', 'negotiation', 'benchmarks'],
+      finance: ['builder_card', 'foreign_link', 'monitor', 'utilization', 'open_checking', 'cheap_transfers', 'tax_id', 'utility_link', 'file_taxes', 'asset_report', 'mortgage', 'investments']
+    };
+
+    const activeKeys = categoryKeys[selectedFocus || 'status'] || categoryKeys.status;
+    const userSelectedKey = (selectedStep9 && selectedStep9[0]) ? selectedStep9[0] : activeKeys[0];
+    
+    const chosenKeys = [userSelectedKey];
+    for (let k of activeKeys) {
+      if (chosenKeys.length >= 3) break;
+      if (!chosenKeys.includes(k)) {
+        chosenKeys.push(k);
+      }
+    }
+
+    const recsContainer = document.getElementById('results-recommendations-list');
+    recsContainer.innerHTML = '';
+    chosenKeys.forEach((key, idx) => {
+      const expl = goalExplanations[key] || { title: key, desc: "Custom strategic recommendation based on onboarding goals." };
+      const item = document.createElement('div');
+      item.className = 'results-goal-item';
+      item.style.cssText = 'background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; transition: transform 0.2s;';
+      
+      const isUserChoice = idx === 0;
+      const badgeHtml = isUserChoice ? '<span style="background: rgba(217, 119, 6, 0.1); color: #d97706; font-size: 0.65rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; align-self: flex-start; margin-bottom: 2px;">★ Priority Target</span>' : '';
+      
+      item.innerHTML = `
+        ${badgeHtml}
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="color: ${isUserChoice ? '#d97706' : '#10B981'}; font-size: 1.1rem; flex-shrink: 0;">${isUserChoice ? '🎯' : '🔸'}</span>
+          <span style="color: var(--text-primary); font-weight: 700; font-size: 0.95rem; text-align: left;">${expl.title}</span>
+        </div>
+        <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45; text-align: left; padding-left: 28px;">${expl.desc}</p>
+      `;
+      recsContainer.appendChild(item);
+    });
+
+    // 6. Generate Dynamic Findings & Pathway Suggestions
+    let stageDesignation = "Planning Stage";
+    if (lowestScore >= 7) {
+      stageDesignation = "Execution Stage";
+    } else if (lowestScore >= 4) {
+      stageDesignation = "Preparation Stage";
+    }
+
+    let findingsSentence1 = "";
+    if (selectedFocus === 'status') {
+      if (selectedStep2 === 'visa') {
+        findingsSentence1 = `You are focusing on secure immigration status, specifically targetting visa preparation and paperwork. With a target relocation window of ${timelineVal}, you need to immediately address visa application eligibility and checklist compliance.`;
+      } else if (selectedStep2 === 'family') {
+        findingsSentence1 = `Your priority is reuniting with family members in your destination country. Your target timeline of ${timelineVal} means coordinating petitions and family visas must be handled with high precision to avoid consulate delays.`;
+      } else if (selectedStep2 === 'citizenship') {
+        findingsSentence1 = `You are on the path to naturalization and citizenship. Planning this transition within ${timelineVal} requires careful travel logging and continuous physical presence verification.`;
+      } else {
+        findingsSentence1 = `You are seeking humanitarian asylum status. Navigating these requirements within ${timelineVal} requires immediate connection to specialized legal aid and local resource networks.`;
+      }
+    } else if (selectedFocus === 'career') {
+      if (selectedStep2 === 'hired') {
+        findingsSentence1 = `You are aiming to land a job and secure sponsorship in your new destination. With a relocation timeline of ${timelineVal}, optimize your CV to pass local ATS filters and focus on sponsor-friendly employers.`;
+      } else {
+        findingsSentence1 = `You are establishing an expat business or entity. Formulating E-2/L-1 structures and setting up corporate banking within ${timelineVal} is critical for authorization viability.`;
+      }
+    } else { // finance
+      if (selectedStep2 === 'credit') {
+        findingsSentence1 = `You need to build local credit history and set up accounts from scratch. With a timeline of ${timelineVal}, leveraging global credit linkage and secured accounts must begin immediately.`;
+      } else {
+        findingsSentence1 = `You are planning property investment or cross-border mortgage qualification. Structuring your foreign income proof and asset disclosures within ${timelineVal} will prevent punitive penalties.`;
+      }
+    }
+
+    let findingsSentence2 = "";
+    if (lowestScore <= 3) {
+      findingsSentence2 = `Your self-assessed readiness of ${lowestScore}/10 indicates major gaps in your roadmap. You are in the ${stageDesignation}, and immediate guidance is required to structure your next steps before your timeline is compromised.`;
+    } else if (lowestScore <= 6) {
+      findingsSentence2 = `Your self-assessed readiness of ${lowestScore}/10 places you in the ${stageDesignation}. While you have completed basic research, you have active bottlenecks in documentation and compliance that need expert validation.`;
+    } else {
+      findingsSentence2 = `Your self-assessed readiness of ${lowestScore}/10 indicates you are in the ${stageDesignation} with solid preparation. You are ready to run a final compliance audit on your files with a professional.`;
+    }
+
+    const dynamicFindingsText = `${findingsSentence1} ${findingsSentence2}`;
+
+    let suggestSentence1 = "";
+    if (selectedFocus === 'status') {
+      suggestSentence1 = `Focus on compiling visa-specific compliance files. Your matched advisor, ${adv.name}, can guide you on the exact government forms and timeline milestones required to secure your approval.`;
+    } else if (selectedFocus === 'career') {
+      suggestSentence1 = `Prioritize aligning your professional profile with the destination's local market standards. ${adv.name} will audit your profile to increase call-back rates and coach you on cross-border interview storytelling.`;
+    } else {
+      suggestSentence1 = `Leverage international credit transfer channels and expat-friendly bank accounts to establish your local footprint. ${adv.name} will design a step-by-step financial plan to protect your assets and build credit fast.`;
+    }
+
+    const primaryGoalTitle = (selectedStep9 && selectedStep9[0]) ? `${goalExplanations[selectedStep9[0]]?.title}` : "your relocation timeline";
+    const suggestSentence2 = `We recommend starting with a detailed timeline review focusing on ${primaryGoalTitle} to ensure no compliance risks arise during your transition.`;
+
+    const dynamicSuggestionsText = `${suggestSentence1} ${suggestSentence2}`;
+
+    document.getElementById('right-what-we-found').innerText = dynamicFindingsText;
+    document.getElementById('right-pathway-suggestions').innerText = dynamicSuggestionsText;
+
+    // 7. Render dynamic Action Roadmap Checklist based on focus
+    let act2Title = "Complete baseline data";
+    let act2Desc = 'Download the <a href="#" onclick="alert(\'Downloading Relocation Workbook...\'); return false;" style="color: #10b981; text-decoration: none; font-weight: 600;">Expat Relocation Workbook</a> and fill out your baseline data.';
+    let act3Title = "Submit your documents";
+    let act3Desc = "Upload your existing paperwork to your secure locker for review.";
+
+    if (selectedFocus === 'status') {
+      act2Title = "Audit your visa requirements";
+      act2Desc = 'Download the <a href="#" onclick="alert(\'Downloading Visa Compliance Checklist...\'); return false;" style="color: #10b981; text-decoration: none; font-weight: 600;">Visa Compliance Checklist</a> and gather required sponsor details.';
+      act3Title = "Upload immigration forms";
+      act3Desc = "Submit your visa application drafts or government forms for attorney review.";
+    } else if (selectedFocus === 'career') {
+      act2Title = "Rebuild your ATS profile";
+      act2Desc = 'Download the <a href="#" onclick="alert(\'Downloading Cross-Border ATS Templates...\'); return false;" style="color: #10b981; text-decoration: none; font-weight: 600;">ATS Resume Templates</a> and draft your local-format profile.';
+      act3Title = "Submit resume for review";
+      act3Desc = "Upload your draft CV and target job listings for direct recruiter audit.";
+    } else if (selectedFocus === 'finance') {
+      act2Title = "Gather credit history";
+      act2Desc = 'Download the <a href="#" onclick="alert(\'Downloading Credit Building Playbook...\'); return false;" style="color: #10b981; text-decoration: none; font-weight: 600;">Expat Credit Playbook</a> and request reports from home credit bureaus.';
+      act3Title = "Submit financial records";
+      act3Desc = "Upload your statements and tax summaries to identify double-taxation liabilities.";
+    }
+
+    const roadmapContainer = document.getElementById('right-roadmap-container');
+    if (roadmapContainer) {
+      roadmapContainer.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <div style="width: 28px; height: 28px; background: #112F20; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;">1</div>
+            <div>
+              <h5 style="margin: 0 0 4px 0; font-size: 0.95rem; font-weight: 700; color: #112F20;">Book your 1-1 session</h5>
+              <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">Select a slot with ${adv.name} below to lock in your diagnostic audit.</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <div style="width: 28px; height: 28px; background: #f3f4f6; color: #6b7280; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;">2</div>
+            <div>
+              <h5 style="margin: 0 0 4px 0; font-size: 0.95rem; font-weight: 700; color: #112F20;">${act2Title}</h5>
+              <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">${act2Desc}</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <div style="width: 28px; height: 28px; background: #f3f4f6; color: #6b7280; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;">3</div>
+            <div>
+              <h5 style="margin: 0 0 4px 0; font-size: 0.95rem; font-weight: 700; color: #112F20;">${act3Title}</h5>
+              <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">${act3Desc}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     const advContainer = document.getElementById('results-advisor-details');
     advContainer.innerHTML = `
       <div class="results-adv-info-row">
@@ -2576,78 +2648,151 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!navActions) return;
 
+    const btnSignin = document.getElementById('btn-signin');
+    const btnSignup = document.getElementById('btn-signup');
+    const avatarTrigger = document.getElementById('user-avatar-trigger');
+
     if (loggedIn) {
-      let displayName = 'Expat';
+      let fullDisplayName = 'Expat User';
+      let displayEmail = '';
+      let initials = 'E';
       const currentUserObj = user || (auth ? auth.currentUser : null);
       if (currentUserObj) {
         if (currentUserObj.displayName) {
-          displayName = currentUserObj.displayName.split(' ')[0];
+          fullDisplayName = currentUserObj.displayName;
+          initials = currentUserObj.displayName.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
         } else if (currentUserObj.email) {
-          displayName = currentUserObj.email.split('@')[0].split('.')[0];
-          displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+          fullDisplayName = currentUserObj.email.split('@')[0];
+          fullDisplayName = fullDisplayName.charAt(0).toUpperCase() + fullDisplayName.slice(1);
+          initials = fullDisplayName.charAt(0).toUpperCase();
         }
+        if (currentUserObj.email) displayEmail = currentUserObj.email;
       }
-      
-      navActions.innerHTML = `
-        <span style="font-size: 0.88rem; font-weight: 600; color: var(--accent); margin-right: 12px; display: inline-block; vertical-align: middle;">👋 Welcome, ${displayName}!</span>
-        <button class="btn btn-outline" id="btn-header-logout" style="padding: 8px 16px; font-size: 0.8rem; border-radius: 100px;">Log Out</button>
-      `;
-      
-      const logoutBtn = document.getElementById('btn-header-logout');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
+
+      // Hide guest buttons, show avatar
+      if (btnSignin) btnSignin.style.display = 'none';
+      if (btnSignup) btnSignup.style.display = 'none';
+      if (avatarTrigger) {
+        avatarTrigger.style.display = 'flex';
+        avatarTrigger.style.alignItems = 'center';
+        avatarTrigger.style.gap = '0';
+        // Initial placeholder until Firestore photo loads
+        avatarTrigger.innerHTML = `<span style="display:flex;width:38px;height:38px;border-radius:50%;overflow:hidden;background:#e8ede9;align-items:center;justify-content:center;"><svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;"><rect width="80" height="80" fill="#e8ede9"/><circle cx="40" cy="30" r="16" fill="#b0c4b1"/><ellipse cx="40" cy="72" rx="26" ry="18" fill="#b0c4b1"/></svg></span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent,#112F20);flex-shrink:0;margin-left:2px;"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+      }
+
+      // Fill dropdown header
+      const avatarLarge = document.getElementById('avatar-large');
+      const userNameEl = document.getElementById('user-name');
+      const userEmailEl = document.getElementById('user-email');
+      if (userNameEl) userNameEl.textContent = fullDisplayName;
+      if (userEmailEl) userEmailEl.textContent = displayEmail;
+
+      // Helper: render photo or blank silhouette in both small and large circles
+      const BLANK_AVATAR_SVG = `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;"><rect width="80" height="80" fill="#e8ede9"/><circle cx="40" cy="30" r="16" fill="#b0c4b1"/><ellipse cx="40" cy="72" rx="26" ry="18" fill="#b0c4b1"/></svg>`;
+
+      const CHEVRON_SVG = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent,#112F20);flex-shrink:0;margin-left:2px;"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+
+      const renderAvatar = (photoDataUrl) => {
+        const smallAvatar = document.getElementById('user-avatar-trigger');
+        if (photoDataUrl) {
+          if (smallAvatar) smallAvatar.innerHTML = `<img src="${photoDataUrl}" alt="avatar" style="width:38px;height:38px;object-fit:cover;border-radius:50%;display:block;">${CHEVRON_SVG}`;
+          if (avatarLarge) avatarLarge.innerHTML = `<img src="${photoDataUrl}" alt="avatar" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+        } else {
+          if (smallAvatar) smallAvatar.innerHTML = `<span style="display:flex;width:38px;height:38px;border-radius:50%;overflow:hidden;background:#e8ede9;align-items:center;justify-content:center;">${BLANK_AVATAR_SVG}</span>${CHEVRON_SVG}`;
+          if (avatarLarge) avatarLarge.innerHTML = BLANK_AVATAR_SVG;
+        }
+      };
+
+      // Load saved photo from Firestore for this account
+      const currentUser2 = auth ? auth.currentUser : null;
+      if (db && currentUser2) {
+        getDoc(doc(db, 'users', currentUser2.uid)).then(snap => {
+          const data = snap.exists() ? snap.data() : {};
+          renderAvatar(data.avatarPhoto || null);
+        }).catch(() => renderAvatar(null));
+      } else {
+        renderAvatar(null);
+      }
+
+      // Wire avatar-large click → file input
+      const uploadInput = document.getElementById('avatar-upload-input');
+      if (avatarLarge && uploadInput) {
+        avatarLarge.onclick = () => uploadInput.click();
+        uploadInput.value = ''; // reset so same file can re-trigger
+        uploadInput.onchange = (evt) => {
+          const file = evt.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            // Compress via canvas to max 200px wide, ~80% quality
+            const img = new Image();
+            img.onload = () => {
+              const canvas = document.createElement('canvas');
+              const maxDim = 200;
+              const ratio = Math.min(maxDim / img.width, maxDim / img.height, 1);
+              canvas.width = Math.round(img.width * ratio);
+              canvas.height = Math.round(img.height * ratio);
+              canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+              const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+              renderAvatar(dataUrl);
+              // Persist to Firestore
+              const cu = auth ? auth.currentUser : null;
+              if (db && cu) {
+                updateDoc(doc(db, 'users', cu.uid), { avatarPhoto: dataUrl }).catch(() => {
+                  setDoc(doc(db, 'users', cu.uid), { avatarPhoto: dataUrl }, { merge: true });
+                });
+              }
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        };
+      }
+
+      // Wire logout
+      const logoutLink = document.getElementById('logout-link');
+      if (logoutLink) {
+        const fresh = logoutLink.cloneNode(true);
+        logoutLink.replaceWith(fresh);
+        fresh.addEventListener('click', (e) => {
+          e.preventDefault();
+          const dropdown = document.getElementById('avatar-dropdown');
+          if (dropdown) dropdown.setAttribute('hidden', '');
           if (auth) {
-            signOut(auth)
-              .then(() => {
-                isUserLoggedIn = false;
-                renderResultsPage();
-                const homeLink = document.querySelector('.nav-link[data-target="home"]');
-                if (homeLink) homeLink.click();
-              })
-              .catch(err => console.error("Sign out failed:", err));
+            signOut(auth).then(() => { window.location.reload(); }).catch(err => console.error(err));
           } else {
-            isUserLoggedIn = false;
-            renderResultsPage();
-            const homeLink = document.querySelector('.nav-link[data-target="home"]');
-            if (homeLink) homeLink.click();
+            window.location.reload();
           }
         });
       }
     } else {
-      navActions.innerHTML = `
-        <button class="btn btn-outline" id="btn-header-signin">Sign In</button>
-        <button class="btn btn-primary" id="btn-header-signup">Sign Up</button>
-      `;
-      
-      // Wire these buttons to focus on the auth form if on results page, or just toggle state
-      const signin = document.getElementById('btn-header-signin');
-      const signup = document.getElementById('btn-header-signup');
-      
-      const resultsSec = document.getElementById('results');
-      
-      const handleAuthClick = (isLogin) => {
-        if (resultsSec && resultsSec.classList.contains('active') && !isUserLoggedIn) {
-          document.getElementById('results-auth-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
-          const tabBtn = document.getElementById(isLogin ? 'results-tab-login' : 'results-tab-signup');
-          if (tabBtn) tabBtn.click();
-        } else {
-          const globalModal = document.getElementById('global-auth-modal');
-          if (globalModal) {
-            globalModal.style.display = 'flex';
-            globalModal.classList.add('open');
-            const tabSignup = document.getElementById('global-tab-signup');
-            const tabLogin = document.getElementById('global-tab-login');
-            if (isLogin) {
-              if (tabLogin) tabLogin.click();
-            } else {
-              if (tabSignup) tabSignup.click();
-            }
-          }
-        }
+      // Show guest buttons, hide avatar
+      if (btnSignin) btnSignin.style.display = '';
+      if (btnSignup) btnSignup.style.display = '';
+      if (avatarTrigger) {
+        avatarTrigger.style.display = 'none';
+        const dropdown = document.getElementById('avatar-dropdown');
+        if (dropdown) dropdown.setAttribute('hidden', '');
+      }
+
+      // Wire sign in / sign up to open the global modal
+      const openModal = (startAsLogin) => {
+        const globalModal = document.getElementById('global-auth-modal');
+        if (!globalModal) return;
+        globalModal.style.display = 'flex';
+        globalModal.classList.add('open');
+        const tab = document.getElementById(startAsLogin ? 'global-tab-login' : 'global-tab-signup');
+        if (tab) tab.click();
       };
-      
-      if (signin) signin.addEventListener('click', () => handleAuthClick(true));
-      if (signup) signup.addEventListener('click', () => handleAuthClick(false));
+
+      if (btnSignin) {
+        btnSignin.replaceWith(btnSignin.cloneNode(true));
+        document.getElementById('btn-signin').addEventListener('click', (e) => { e.preventDefault(); openModal(true); });
+      }
+      if (btnSignup) {
+        btnSignup.replaceWith(btnSignup.cloneNode(true));
+        document.getElementById('btn-signup').addEventListener('click', (e) => { e.preventDefault(); openModal(false); });
+      }
     }
   }
 
@@ -2981,6 +3126,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const globalBtnForgotPassword = document.getElementById('global-btn-forgot-password');
 
   let globalAuthIsSignup = true;
+
+  const btnSignin = document.getElementById('btn-signin');
+  const btnSignup = document.getElementById('btn-signup');
+
+  if (btnSignin && globalAuthModal) {
+    btnSignin.addEventListener('click', (e) => {
+      e.preventDefault();
+      globalAuthModal.style.display = 'flex';
+      globalAuthModal.classList.add('open');
+      if (globalTabLogin) globalTabLogin.click();
+    });
+  }
+
+  if (btnSignup && globalAuthModal) {
+    btnSignup.addEventListener('click', (e) => {
+      e.preventDefault();
+      globalAuthModal.style.display = 'flex';
+      globalAuthModal.classList.add('open');
+      if (globalTabSignup) globalTabSignup.click();
+    });
+  }
 
   if (btnCloseGlobalAuth && globalAuthModal) {
     btnCloseGlobalAuth.addEventListener('click', () => {
@@ -4123,4 +4289,90 @@ document.addEventListener('DOMContentLoaded', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
+
+  // Avatar Dropdown Toggle — use event delegation on nav-actions so it survives innerHTML swaps
+  const navActionsEl = document.getElementById('nav-actions');
+  const avatarDropdownEl = document.getElementById('avatar-dropdown');
+  if (navActionsEl && avatarDropdownEl) {
+    navActionsEl.addEventListener('click', (e) => {
+      const trigger = e.target.closest('#user-avatar-trigger');
+      if (!trigger) return;
+      e.stopPropagation();
+      const isHidden = avatarDropdownEl.hasAttribute('hidden');
+      if (isHidden) {
+        avatarDropdownEl.removeAttribute('hidden');
+      } else {
+        avatarDropdownEl.setAttribute('hidden', '');
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (!avatarDropdownEl.hasAttribute('hidden') &&
+          !avatarDropdownEl.contains(e.target) &&
+          !e.target.closest('#user-avatar-trigger')) {
+        avatarDropdownEl.setAttribute('hidden', '');
+      }
+    });
+  }
+
+  async function saveSelectedGuideAndHandoff(guideId) {
+    if (!auth || !auth.currentUser) return;
+    const uid = auth.currentUser.uid;
+
+    // 1. Update local storage user profile
+    let localUsers = JSON.parse(localStorage.getItem('bridge_users') || '{}');
+    if (localUsers[uid]) {
+      localUsers[uid].activeGuide = guideId;
+      localUsers[uid].updatedAt = new Date().toISOString();
+      localStorage.setItem('bridge_users', JSON.stringify(localUsers));
+    }
+
+    // 2. Update Firestore user profile
+    if (db) {
+      try {
+        const userDocRef = doc(db, 'users', uid);
+        await updateDoc(userDocRef, {
+          activeGuide: guideId,
+          updatedAt: new Date()
+        });
+      } catch (err) {
+        console.warn("Firestore update failed, activeGuide saved locally:", err);
+      }
+    }
+
+    // 3. Re-enable navbar & subnav
+    const navbar = document.querySelector('.navbar');
+    const subnav = document.getElementById('portal-sub-nav');
+    if (navbar) navbar.style.display = '';
+    if (subnav) subnav.style.display = 'block';
+
+    // 4. Transition to results view (Custom Pathway page)
+    sections.forEach(sec => {
+      sec.classList.toggle('active', sec.id === 'results');
+    });
+
+    // 5. Render results page & scroll to top
+    renderResultsPage();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Expose local functions to window scope for match-reveal.js
+  window.renderClientDashboard = renderClientDashboard;
+  window.saveSelectedGuideAndHandoff = saveSelectedGuideAndHandoff;
+  window.updateHeaderNavActions = updateHeaderNavActions;
+  window.getQuizState = () => {
+    const configKey = (selectedFocus && selectedStep2) ? `${selectedFocus}-${selectedStep2}` : selectedFocus;
+    let categoriesConfig = null;
+    if (typeof quizContentConfig !== 'undefined') {
+        categoriesConfig = quizContentConfig[configKey] || quizContentConfig[selectedFocus];
+    }
+    const categories = categoriesConfig ? categoriesConfig.categories : ["Status", "Career", "Finance"];
+    return {
+      ratings,
+      selectedFocus,
+      selectedStep2,
+      selectedStep3,
+      selectedStep9,
+      categories
+    };
+  };
 });

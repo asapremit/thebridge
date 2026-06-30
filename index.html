@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>same Path — Connect with Top Advisors</title>
-  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="stylesheet" href="styles.css?v=14">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+
   <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-container">
@@ -33,10 +35,42 @@
         <li><a href="#" class="nav-link" data-target="directory" id="nav-link-directory">Browse Guides</a></li>
         <li><a href="#" class="nav-link" data-target="advisor-portal" id="nav-link-advisor-portal" style="display: none;">Guide Workspace</a></li>
       </ul>
-      <div class="nav-actions">
-        <button class="btn btn-outline">Sign In</button>
-        <button class="btn btn-primary">Sign Up</button>
-      </div>
+
+        <div class="nav-actions" id="nav-actions">
+          <!-- Avatar trigger for logged-in users (hidden by default) -->
+          <div class="user-avatar" id="user-avatar-trigger" style="display:none;"></div>
+          <!-- Dropdown menu (hidden initially) -->
+          <div class="avatar-dropdown" id="avatar-dropdown" hidden>
+            <div class="dropdown-header">
+              <div class="avatar-large" id="avatar-large"></div>
+              <div class="user-info">
+                <div class="user-name" id="user-name"></div>
+                <div class="user-email" id="user-email"></div>
+              </div>
+              <input type="file" accept="image/*" id="avatar-upload-input" hidden />
+            </div>
+            <ul class="dropdown-links">
+              <li><a href="#" data-target="bookings">My 1-1 Bookings</a></li>
+              <li><a href="#" data-target="vault">Document Vault</a></li>
+              <li><a href="#" data-target="roadmap">My Action Roadmap</a></li>
+              <hr />
+              <li><a href="#" data-target="messages">Message Center</a></li>
+              <li><a href="#" data-target="guides">My Saved Guides</a></li>
+              <hr />
+              <li><a href="#" id="guide-toggle-link">Switch to Guide View</a></li>
+              <hr />
+              <li><a href="#" data-target="profile">Edit Profile</a></li>
+              <li><a href="#" data-target="settings">Account settings</a></li>
+              <li><a href="#" data-target="billing">Payment methods</a></li>
+              <hr />
+              <li><a href="#" data-target="help">Help and Support</a></li>
+              <li><a href="#" id="logout-link">Log out</a></li>
+            </ul>
+          </div>
+          <!-- Sign In / Sign Up buttons for guests -->
+          <button class="btn btn-outline" id="btn-signin">Sign In</button>
+          <button class="btn btn-primary" id="btn-signup">Sign Up</button>
+        </div>
     </div>
   </nav>
 
@@ -423,25 +457,21 @@
             </div>
           </div>
 
-          <!-- Step 9: Dynamic Checklist (Goal Checklist) -->
+          <!-- Step 9: Dynamic Choice (Goal Selection) -->
           <div class="quiz-step-slide" data-step="9" style="display: none;">
             <span class="badge dynamic-badge" style="margin-bottom: 16px;">Action Goals</span>
             <h3 class="quiz-step-title dynamic-title" style="margin-bottom: 8px;">Action Goals</h3>
             <p class="choice-row-desc dynamic-desc" style="margin-bottom: 20px;">What would it take to reach 10?</p>
             
-            <div class="goal-checkboxes-stack dynamic-checklists-container">
-              <!-- Checkboxes dynamically generated in JS -->
+            <div class="quiz-choices-stack dynamic-choices-container">
+              <!-- Choices dynamically generated in JS -->
             </div>
             
             <!-- SVG motion goes here dynamically! -->
             <div class="visualizer-placeholder"></div>
             
-            <div class="quiz-actions-row" style="margin-top: 24px; justify-content: space-between;">
+            <div class="quiz-actions-row" style="margin-top: 24px; justify-content: center;">
               <button class="btn btn-text quiz-back-btn">Reset</button>
-              <button class="btn btn-primary btn-goal-continue" style="display: flex; align-items: center; gap: 8px;">
-                Continue
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
             </div>
           </div>
 
@@ -458,12 +488,8 @@
             <!-- SVG motion goes here dynamically! -->
             <div class="visualizer-placeholder"></div>
             
-            <div class="quiz-actions-row" style="margin-top: 24px; justify-content: space-between;">
+            <div class="quiz-actions-row" style="margin-top: 24px; justify-content: center;">
               <button class="btn btn-text quiz-back-btn">Reset</button>
-              <button class="btn btn-primary btn-goal-continue" style="display: flex; align-items: center; gap: 8px;">
-                View My Match
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
             </div>
           </div>
 
@@ -1152,10 +1178,10 @@
   <section id="results" class="view-section" style="background-color: var(--bg-primary);">
     <div class="results-container container" style="padding: 100px 24px 80px; max-width: 1100px; margin: 0 auto;">
       <!-- Top header bar with logo / title -->
-      <div class="results-header center-align" style="margin-bottom: 40px; text-align: center;">
-        <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; padding: 6px 16px; border-radius: 30px; font-size: 0.8rem; letter-spacing: 0.05em;">YOUR ASSESSMENT</span>
-        <h2 class="section-title" style="font-family: var(--font-serif); font-size: 3.2rem; margin-top: 10px; margin-bottom: 12px; font-style: italic;">Your Expat Action Plan</h2>
-        <p class="section-subtitle" style="color: var(--text-secondary); max-width: 600px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">Here is a personalized overview of your expat readiness and an actionable checklist to guide your transition.</p>
+      <div class="results-header" style="margin-bottom: 40px; text-align: left;">
+        <span style="color: #d97706; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 6px;">ANALYSIS COMPLETE</span>
+        <h2 class="section-title" style="font-family: var(--font-serif); font-size: 3.5rem; margin-top: 5px; margin-bottom: 12px; font-style: italic; color: #112F20;">Your custom pathway is ready.</h2>
+        <div style="width: 100%; height: 1px; background-color: var(--border-color); margin-top: 30px; margin-bottom: 20px;"></div>
       </div>
 
       <!-- Auth Section at the top/center of results -->
@@ -1226,60 +1252,131 @@
       <!-- Two Column Layout: Left Column (Readiness Scores & Goals), Right Column (Advisor Card & Booking Widget) -->
       <div class="results-layout" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; margin-bottom: 60px; align-items: start;">
         
-        <!-- Left Column: Scores & Checklist -->
+        <!-- Left Column: Scores & Recommendations -->
         <div class="results-left-col" style="display: flex; flex-direction: column; gap: 32px;">
           
-          <!-- Scorecard Dashboard -->
-          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
-            <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: var(--accent); letter-spacing: 0.02em;">Readiness Scores</h3>
-            
-            <div class="scores-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
-              <!-- Status Score -->
-              <div class="score-item-box" style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; text-align: center;">
-                <span class="score-label" id="results-lbl-status" style="font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); display: block; margin-bottom: 8px;">Visa & Status</span>
-                <span class="score-value" id="results-score-status" style="font-size: 2.2rem; font-family: var(--font-serif); font-weight: 700; color: var(--text-primary);">0/10</span>
-              </div>
-              
-              <!-- Career Score -->
-              <div class="score-item-box" style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; text-align: center;">
-                <span class="score-label" id="results-lbl-career" style="font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); display: block; margin-bottom: 8px;">Career & Jobs</span>
-                <span class="score-value" id="results-score-career" style="font-size: 2.2rem; font-family: var(--font-serif); font-weight: 700; color: var(--text-primary);">0/10</span>
-              </div>
-              
-              <!-- Finance Score -->
-              <div class="score-item-box" style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; text-align: center;">
-                <span class="score-label" id="results-lbl-finance" style="font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); display: block; margin-bottom: 8px;">Finance & Credit</span>
-                <span class="score-value" id="results-score-finance" style="font-size: 2.2rem; font-family: var(--font-serif); font-weight: 700; color: var(--text-primary);">0/10</span>
+          <!-- Relocation Assessment & Bottleneck Header -->
+          <div style="margin-bottom: 8px; text-align: left;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 8px;">RELOCATION ASSESSMENT</span>
+            <h3 style="font-size: 1.8rem; font-weight: 600; color: var(--text-primary); margin: 0 0 12px 0;">
+              Your primary bottleneck is <span id="results-bottleneck-name-styled" style="border-bottom: 2px solid #d97706; padding-bottom: 2px; color: #d97706;">Immigration Status</span>.
+            </h3>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+              Our system evaluated your onboarding inputs across immigration, career, and credit channels. Below are your dynamic category status dials and the top diagnostic insights.
+            </p>
+          </div>
+
+          <!-- Three Dynamic Category Dials -->
+          <div id="results-dials-container" style="display: flex; gap: 16px; margin: 8px 0 16px 0;">
+            <!-- Dial 1 -->
+            <div class="dial-card" style="flex: 1; background: #fffcf9; border: 1px solid rgba(217, 119, 6, 0.15); border-radius: 12px; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;">
+              <span class="dial-label" id="dial-lbl-1" style="font-size: 0.7rem; font-weight: 700; color: #b45309; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">PROFILE</span>
+              <div style="position: relative; width: 60px; height: 60px;">
+                <svg viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#fed7aa" stroke-width="3" />
+                  <path id="dial-ring-1" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#ea580c" stroke-width="3" stroke-dasharray="10, 100" stroke-linecap="round" />
+                </svg>
+                <div id="dial-val-1" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.8rem; font-weight: 700; color: #ea580c;">10%</div>
               </div>
             </div>
-            
-            <!-- Bottleneck Alert -->
-            <div class="bottleneck-banner" id="results-bottleneck-card" style="background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.2); padding: 16px; border-radius: 12px; text-align: left;">
-              <h4 style="font-size: 0.9rem; font-weight: 700; color: #b45309; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                ⚠️ Biggest Bottleneck Identified: <span id="results-bottleneck-name">Finance & Credit</span>
-              </h4>
-              <p id="results-bottleneck-desc" style="font-size: 0.85rem; color: #78350f; line-height: 1.4; margin-top: 4px;">Select a number to rate your current progress.</p>
+            <!-- Dial 2 -->
+            <div class="dial-card" style="flex: 1; background: #f7faf8; border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 12px; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;">
+              <span class="dial-label" id="dial-lbl-2" style="font-size: 0.7rem; font-weight: 700; color: #047857; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">OUTREACH</span>
+              <div style="position: relative; width: 60px; height: 60px;">
+                <svg viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#a7f3d0" stroke-width="3" />
+                  <path id="dial-ring-2" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#059669" stroke-width="3" stroke-dasharray="30, 100" stroke-linecap="round" />
+                </svg>
+                <div id="dial-val-2" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.8rem; font-weight: 700; color: #059669;">30%</div>
+              </div>
             </div>
-            <button class="btn btn-outline" id="results-retake-quiz-btn" style="margin-top: 16px; padding: 10px 16px; font-size: 0.8rem; width: 100%; justify-content: center; display: flex;">Retake Assessment</button>
+            <!-- Dial 3 -->
+            <div class="dial-card" style="flex: 1; background: #f0fdf4; border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;">
+              <span class="dial-label" id="dial-lbl-3" style="font-size: 0.7rem; font-weight: 700; color: #15803d; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">INTERVIEWS</span>
+              <div style="position: relative; width: 60px; height: 60px;">
+                <svg viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#bbf7d0" stroke-width="3" />
+                  <path id="dial-ring-3" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#16a34a" stroke-width="3" stroke-dasharray="90, 100" stroke-linecap="round" />
+                </svg>
+                <div id="dial-val-3" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.8rem; font-weight: 700; color: #16a34a;">90%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Success Quote -->
+          <div id="results-quote-block" style="background: var(--bg-secondary); border-left: 3px solid #d97706; padding: 16px 20px; border-radius: 0 12px 12px 0; margin-bottom: 24px; text-align: left; border: 1px solid var(--border-color); border-left-width: 3px;">
+            <p id="results-quote-text" style="font-size: 0.95rem; font-style: italic; line-height: 1.5; color: var(--text-primary); margin: 0 0 8px 0; font-family: var(--font-serif);"></p>
+            <span id="results-quote-author" style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); display: block;"></span>
+          </div>
+
+          <!-- Strategic Recommendations -->
+          <div style="text-align: left;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 12px;">STRATEGIC RECOMMENDATIONS</span>
+            <div id="results-recommendations-list" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Dynamic recommendations rendered here -->
+            </div>
+            
+            <button class="btn btn-outline" id="results-retake-quiz-btn" style="margin-top: 24px; padding: 10px 16px; font-size: 0.8rem; width: 100%; justify-content: center; display: flex;">Retake Assessment</button>
+          </div>
+        </div>
+
+        <!-- Right Column: Findings, Suggestions & Roadmap Checklist -->
+        <div class="results-right-col" style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px; padding: 32px; box-shadow: var(--shadow-sm); position: sticky; top: 100px;">
+          <!-- What We Found -->
+          <div style="margin-bottom: 28px; text-align: left;">
+            <h3 style="font-family: var(--font-serif); font-size: 2.2rem; font-style: italic; color: #112F20; margin: 0 0 10px 0;">What We Found</h3>
+            <p id="right-what-we-found" style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin: 0;"></p>
           </div>
           
-          <!-- Selected Goals & How We Can Help -->
-          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
-            <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; color: var(--accent); letter-spacing: 0.02em;">How We Can Help With Your Goals</h3>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5;">Based on your selected priorities, our advisors are prepared to assist you with these concrete steps:</p>
+          <!-- Pathway Suggestions -->
+          <div style="margin-bottom: 28px; text-align: left;">
+            <h3 style="font-family: var(--font-serif); font-size: 2.2rem; font-style: italic; color: #112F20; margin: 0 0 10px 0;">Pathway Suggestions</h3>
+            <p id="right-pathway-suggestions" style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin: 0;"></p>
+          </div>
+          
+          <!-- Your Action Roadmap -->
+          <div style="text-align: left;">
+            <h3 style="font-family: var(--font-serif); font-size: 2.2rem; font-style: italic; color: #112F20; margin: 0 0 16px 0;">Your Action Roadmap</h3>
             
-            <div id="results-goals-list" style="display: flex; flex-direction: column; gap: 16px;">
-              <!-- Dynamically populated goals checklist -->
+            <div class="roadmap-list" style="display: flex; flex-direction: column; gap: 20px;">
+              <!-- Item 1 -->
+              <div style="display: flex; gap: 14px;">
+                <div style="flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: #112F20; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700;">1</div>
+                <div>
+                  <span style="font-weight: 700; color: var(--text-primary); display: block; font-size: 0.95rem; margin-bottom: 4px;">Book your 1-1 session</span>
+                  <span style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; display: block;">Select one of your matched advisors below to review your timeline and get immediate answers.</span>
+                </div>
+              </div>
+              
+              <!-- Item 2 -->
+              <div style="display: flex; gap: 14px;">
+                <div style="flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: #e2e8f0; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700;">2</div>
+                <div>
+                  <span style="font-weight: 700; color: var(--text-primary); display: block; font-size: 0.95rem; margin-bottom: 4px;">Complete your personalized workbook</span>
+                  <span style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; display: block;">Download the <a href="#" class="relocation-workbook-download" style="color: var(--accent); font-weight: 600; text-decoration: none;">Expat Relocation Workbook</a> and fill out your baseline data.</span>
+                </div>
+              </div>
+              
+              <!-- Item 3 -->
+              <div style="display: flex; gap: 14px;">
+                <div style="flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: #e2e8f0; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700;">3</div>
+                <div>
+                  <span style="font-weight: 700; color: var(--text-primary); display: block; font-size: 0.95rem; margin-bottom: 4px;">Submit your documents for review</span>
+                  <span style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; display: block;">Upload your existing paperwork or resume to your secure portal for your advisor to audit.</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        
-        <!-- Right Column: Matched Advisor & Booking -->
-        <div class="results-right-col" style="position: sticky; top: 100px;">
-          <div class="results-card" id="results-advisor-card-container" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-              <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--accent); letter-spacing: 0.02em;">Your Matched Advisor</h3>
-              <span class="badge" style="background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">TOP MATCH</span>
+      </div>
+
+      <!-- Matched Advisor & Booking Section (below the layout) -->
+      <div id="results-advisor-section" style="margin-top: 50px; border-top: 1px solid var(--border-color); padding-top: 50px;">
+        <div style="max-width: 800px; margin: 0 auto;">
+          <div class="results-card" id="results-advisor-card-container" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <h3 style="font-family: var(--font-serif); font-size: 2.2rem; font-style: italic; color: #112F20; margin: 0;">Your Matched Advisor</h3>
+              <span class="badge" style="background: var(--accent); color: #fff; font-size: 0.72rem; font-weight: 800; padding: 6px 14px; border-radius: 20px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">TOP MATCH</span>
             </div>
             
             <!-- Advisor Details Container (unlocked dynamically) -->
@@ -1288,12 +1385,12 @@
             </div>
 
             <!-- Booking Section inside Advisor Card -->
-            <div id="results-booking-widget" style="margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 20px;">
-              <h4 style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.05em; margin-bottom: 12px;">Schedule 1-on-1 Strategy Session</h4>
+            <div id="results-booking-widget" style="margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 24px; text-align: left;">
+              <h4 style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.05em; margin-bottom: 16px;">Schedule 1-on-1 Strategy Session</h4>
               
               <!-- Scheduling Calendar slots -->
               <div class="scheduler-days-container" style="margin-bottom: 16px;">
-                <div class="scheduler-days-header" id="results-days-header" style="display: flex; gap: 8px;">
+                <div class="scheduler-days-header" id="results-days-header" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;">
                   <!-- Day tabs dynamically populated -->
                 </div>
                 
@@ -1302,14 +1399,14 @@
                 </div>
               </div>
               
-              <button class="btn btn-primary btn-full book-session-btn" id="results-book-btn" style="width: 100%;" disabled>Confirm Selected Slot</button>
+              <button class="btn btn-primary btn-full book-session-btn" id="results-book-btn" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; padding: 14px;" disabled>Confirm Selected Slot</button>
             </div>
             
             <!-- Lock Overlay for Unauthorized Users -->
             <div id="results-lock-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(16px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; z-index: 20; transition: opacity 0.3s ease;">
               <div style="font-size: 2.5rem; margin-bottom: 20px;">🔒</div>
               <h4 style="font-family: var(--font-serif); font-size: 1.8rem; margin-bottom: 12px; font-style: italic; color: var(--text-primary);">Booking Locked</h4>
-              <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; max-width: 280px; margin-bottom: 24px;">Please create a free account or log in at the top of the page to unlock direct bookings and message logs with your matched advisor.</p>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; max-width: 320px; margin-bottom: 24px;">Please create a free account or log in at the top of the page to unlock direct bookings and message logs with your matched advisor.</p>
               <button class="btn btn-primary" onclick="document.getElementById('results-auth-container').scrollIntoView({ behavior: 'smooth', block: 'center' });" style="padding: 12px 24px; font-size: 0.85rem; border-radius: 100px; font-weight: 600; background-color: #002D20; border-color: #002D20; color: #fff;">Sign Up / Log In</button>
             </div>
           </div>
@@ -1353,17 +1450,108 @@
 
       <!-- Dashboard Tab Navigation Bar -->
       <div class="dashboard-tabs" style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; overflow-x: auto; white-space: nowrap;">
-        <button class="db-tab-btn active" data-tab="roadmap" style="background: none; border: none; font-size: 0.95rem; font-weight: 600; color: var(--text-primary); cursor: pointer; padding: 8px 16px; border-bottom: 2px solid var(--accent); position: relative; bottom: -14px; transition: all 0.2s;">My Roadmap</button>
-        <button class="db-tab-btn" data-tab="documents" style="background: none; border: none; font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; padding: 8px 16px; transition: all 0.2s; border-bottom: 2px solid transparent; position: relative; bottom: -14px;">Document Locker</button>
+        <button class="db-tab-btn active" data-tab="overview" style="background: none; border: none; font-size: 0.95rem; font-weight: 600; color: var(--text-primary); cursor: pointer; padding: 8px 16px; border-bottom: 2px solid var(--accent); position: relative; bottom: -14px; transition: all 0.2s;">Overview</button>
+        <button class="db-tab-btn" data-tab="roadmap" style="background: none; border: none; font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; padding: 8px 16px; transition: all 0.2s; border-bottom: 2px solid transparent; position: relative; bottom: -14px;">Action Roadmap</button>
+        <button class="db-tab-btn" data-tab="documents" style="background: none; border: none; font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; padding: 8px 16px; transition: all 0.2s; border-bottom: 2px solid transparent; position: relative; bottom: -14px;">Document Vault</button>
         <button class="db-tab-btn" data-tab="messages" style="background: none; border: none; font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; padding: 8px 16px; transition: all 0.2s; border-bottom: 2px solid transparent; position: relative; bottom: -14px;">Message Center</button>
-        <button class="db-tab-btn" data-tab="bookings" style="background: none; border: none; font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; padding: 8px 16px; transition: all 0.2s; border-bottom: 2px solid transparent; position: relative; bottom: -14px;">My 1-1 Bookings</button>
+        <button class="db-tab-btn" data-tab="bookings" style="background: none; border: none; font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; padding: 8px 16px; transition: all 0.2s; border-bottom: 2px solid transparent; position: relative; bottom: -14px;">1-1 Bookings</button>
       </div>
 
       <!-- Tab Panels Container -->
       <div class="dashboard-panels">
-        
+
+        <!-- Panel 0: Overview Dashboard -->
+        <div class="db-panel active" id="panel-overview" style="display: block;">
+          <div class="overview-grid" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: start;">
+            
+            <!-- Left Column: Scores & Next Actions -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+              <!-- Scorecard Card -->
+              <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm);">
+                <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 16px; color: var(--text-primary);">Your Readiness Scores</h3>
+                <div id="overview-scorecards-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px;">
+                  <!-- Dynamic SVG Progress Rings -->
+                </div>
+                <div id="overview-bottleneck-alert" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.15); color: #b91c1c; font-size: 0.85rem; font-weight: 500; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 8px;">
+                  ⚠️ <span style="font-weight: 600;">Main Focus Area:</span> <span id="overview-bottleneck-txt">Analyzing bottleneck...</span>
+                </div>
+              </div>
+
+              <!-- Top Priorities Card -->
+              <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                  <h3 style="font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin: 0;">Top Onboarding Actions</h3>
+                  <a href="#" class="db-link-to-roadmap" id="link-to-roadmap-checklist" style="font-size: 0.82rem; font-weight: 600; color: var(--accent); text-decoration: none;">View Full Roadmap ➔</a>
+                </div>
+                <div id="overview-checklist-container" style="display: flex; flex-direction: column; gap: 10px;">
+                  <!-- Top 3 actions -->
+                </div>
+              </div>
+
+              <!-- Breakthroughs & Milestones Card -->
+              <div class="results-card" id="breakthroughs-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm);">
+                <h3 style="font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                  ✨ Personal Breakthroughs & Milestones
+                </h3>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0 0 16px 0;">
+                  Keep a permanent log of your key takeaways and growth on your relocation journey.
+                </p>
+                
+                <!-- Log Entry Form -->
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; background: var(--bg-primary); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color);">
+                  <label for="takeaway-input" style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Log a takeaway from your last 1-1 session:</label>
+                  <textarea id="takeaway-input" placeholder="e.g., David explained that Blue Card applications in Berlin are faster if submitted via the employer pathway..." style="width: 100%; height: 60px; padding: 8px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.82rem; background: var(--bg-secondary); color: var(--text-primary); resize: none; box-sizing: border-box;"></textarea>
+                  <button class="btn btn-primary" id="btn-add-takeaway" style="padding: 8px 16px; font-size: 0.78rem; border-radius: 6px; font-weight: 600; align-self: flex-end; cursor: pointer;">
+                    🚀 Log Breakthrough
+                  </button>
+                </div>
+                
+                <!-- Chronological Log List -->
+                <div id="breakthroughs-log-list" style="display: flex; flex-direction: column; gap: 12px; max-height: 250px; overflow-y: auto;">
+                  <!-- Dynamically populated takeaways -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Advisor & Next Session -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+              <!-- Matched Advisor Card -->
+              <div id="overview-matched-advisor-card" class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm);">
+                <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; margin-bottom: 12px; display: inline-block;">MATCHED EXPERT ADVISOR</span>
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                  <img id="overview-advisor-avatar" src="david_k_portrait.png" alt="Advisor" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);" />
+                  <div>
+                    <h4 style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin: 0;" id="overview-advisor-name">David K.</h4>
+                    <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 2px 0 0 0;" id="overview-advisor-role">Immigration Expert</p>
+                  </div>
+                </div>
+                <p id="overview-advisor-match-reason" style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.45; margin-bottom: 20px;">
+                  I've customized your checklist based on your relocation answers. Let's align on your next requirements in a 1-1 session or chat below.
+                </p>
+                <div style="display: flex; gap: 10px;">
+                  <button class="btn btn-outline" id="btn-overview-chat" style="flex: 1; padding: 12px; font-size: 0.82rem; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;">
+                    💬 Open Chat
+                  </button>
+                  <button class="btn btn-primary" id="btn-overview-book" style="flex: 1; padding: 12px; font-size: 0.82rem; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;">
+                    📅 Book Call
+                  </button>
+                </div>
+              </div>
+
+              <!-- Next Session Widget -->
+              <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm);">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">Next Scheduled 1-1 Session</h3>
+                <div id="overview-session-box">
+                  <!-- Booked session or empty call-to-action state -->
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
         <!-- Panel 1: Roadmap Timeline -->
-        <div class="db-panel active" id="panel-roadmap">
+        <div class="db-panel" id="panel-roadmap" style="display: none;">
           <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; box-shadow: var(--shadow-sm);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
               <div>
@@ -1476,72 +1664,190 @@
         </button>
       </div>
 
-      <div class="dashboard-grid" style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: start;">
-        <!-- Left Side: Roster and Client Info -->
-        <div class="dashboard-left" style="display: flex; flex-direction: column; gap: 32px;">
-          <!-- Clients List -->
-          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
-            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-style: italic; margin-bottom: 16px; color: var(--text-primary);">Active Clients</h3>
-            
-            <div id="adv-clients-list" style="display: flex; flex-direction: column; gap: 12px;">
-              <!-- Matches listing -->
-              <div class="client-row active" style="padding: 16px; border: 1px solid var(--accent); border-radius: 10px; cursor: pointer; background: var(--bg-primary); display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                  <h4 style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);" id="adv-client-row-name">Client Name</h4>
-                  <p style="font-size: 0.78rem; color: var(--text-secondary);" id="adv-client-row-email">client@email.com</p>
-                </div>
-                <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 0.7rem; border-radius: 12px;">Active Session</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Client Details & Shared Vault -->
-          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm);">
-            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-style: italic; margin-bottom: 8px; color: var(--text-primary);">Client Onboarding Profile</h3>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;">Review this client's goals and shared files.</p>
-            
-            <!-- Checklist items completed -->
-            <div style="margin-bottom: 24px;">
-              <h4 style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 12px;">Action Items Checked</h4>
-              <div id="adv-client-goals" style="display: flex; flex-direction: column; gap: 10px;">
-                <!-- Goals -->
-              </div>
-            </div>
-
-            <!-- Client shared files -->
-            <div>
-              <h4 style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 12px;">Shared Files Locker</h4>
-              <div id="adv-client-files" style="display: flex; flex-direction: column; gap: 10px;">
-                <!-- Files listing -->
-              </div>
-            </div>
-          </div>
+      <!-- Impact Metrics Header Cards (Phase 1) -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px; width: 100%; box-sizing: border-box;">
+        <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; box-shadow: var(--shadow-sm);">
+          <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.05em; display: block; margin-bottom: 6px;">Total Hours Mentored</span>
+          <span style="font-size: 2.2rem; font-family: var(--font-serif); font-weight: 700; color: var(--accent);">12.5 hrs</span>
         </div>
+        <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; box-shadow: var(--shadow-sm);">
+          <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.05em; display: block; margin-bottom: 6px;">Expatriates Helped</span>
+          <span style="font-size: 2.2rem; font-family: var(--font-serif); font-weight: 700; color: var(--accent);">4 Peers</span>
+        </div>
+        <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; box-shadow: var(--shadow-sm);">
+          <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.05em; display: block; margin-bottom: 6px;">Quest Success Rate</span>
+          <span style="font-size: 2.2rem; font-family: var(--font-serif); font-weight: 700; color: var(--accent);">92%</span>
+        </div>
+      </div>
 
-        <!-- Right Side: Chat with Client -->
-        <div class="dashboard-right" style="display: flex; flex-direction: column; gap: 32px; height: 100%;">
-          <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; height: 600px;">
-            <div class="chat-header" style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
-              <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;" id="chat-client-avatar">C</div>
-              <div>
-                <h4 style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);" id="chat-client-header-name">Client Name</h4>
-                <p style="font-size: 0.78rem; color: var(--text-secondary);">Direct Messaging Channel</p>
-              </div>
+      <!-- Active Roster Kanban Dashboard (Phase 1) -->
+      <div class="results-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); margin-bottom: 32px; width: 100%; box-sizing: border-box;">
+        <h3 style="font-family: var(--font-serif); font-size: 1.5rem; font-style: italic; margin-bottom: 24px; color: var(--text-primary); margin-top: 0;">Guide Active Roster (Kanban View)</h3>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start; width: 100%; box-sizing: border-box;">
+          <!-- Column 1: Today's Sessions -->
+          <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; min-height: 300px; box-sizing: border-box;">
+            <h4 style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--accent); margin: 0 0 16px 0; border-bottom: 2px solid var(--accent); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+              Today's Sessions <span id="roster-count-today" style="background: var(--accent-light); color: var(--accent); border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700;">0</span>
+            </h4>
+            <div id="roster-col-today" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Today's session cards -->
             </div>
+          </div>
 
-            <!-- Message Area -->
-            <div class="chat-messages-container" id="adv-chat-messages" style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-right: 8px; margin-bottom: 16px;">
-              <!-- Messages load here -->
+          <!-- Column 2: Upcoming This Week -->
+          <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; min-height: 300px; box-sizing: border-box;">
+            <h4 style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin: 0 0 16px 0; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+              Upcoming This Week <span id="roster-count-week" style="background: var(--border-color); color: var(--text-secondary); border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700;">0</span>
+            </h4>
+            <div id="roster-col-week" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Week session cards -->
             </div>
+          </div>
 
-            <!-- Input Area -->
-            <form id="adv-chat-input-form" style="display: flex; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 16px;">
-              <input type="text" id="adv-chat-message-input" placeholder="Type a response..." required style="flex-grow: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.88rem;" />
-              <button type="submit" class="btn btn-primary" style="padding: 12px 20px; border-radius: 8px; cursor: pointer;">Reply</button>
-            </form>
+          <!-- Column 3: Pending Requests -->
+          <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; min-height: 300px; box-sizing: border-box;">
+            <h4 style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin: 0 0 16px 0; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+              Pending Requests <span id="roster-count-pending" style="background: var(--border-color); color: var(--text-secondary); border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700;">0</span>
+            </h4>
+            <div id="roster-col-pending" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Pending requests cards -->
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- Guide Context Brief & Continuity Log Side Panel (Phase 2 & 3) -->
+      <div id="guide-context-brief-panel" style="position: fixed; top: 0; right: -550px; width: 500px; height: 100vh; background: var(--bg-secondary); border-left: 1px solid var(--border-color); box-shadow: -4px 0 20px rgba(0,0,0,0.15); z-index: 1050; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-sizing: border-box;">
+        <!-- Panel Header -->
+        <div style="padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-primary); box-sizing: border-box;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div id="panel-mentee-avatar" style="width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;">M</div>
+            <div>
+              <h4 id="panel-mentee-name" style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin: 0;">Mentee Name</h4>
+              <span class="badge" style="background-color: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 0.68rem; padding: 2px 8px; border-radius: 12px; margin-top: 4px; display: inline-block;" id="panel-mentee-phase">Active Quest</span>
+            </div>
+          </div>
+          <button id="btn-close-side-panel" style="background: none; border: none; font-size: 1.5rem; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; transition: background 0.2s;">&times;</button>
+        </div>
+
+        <!-- Panel Content (Scrollable) -->
+        <div style="flex: 1; overflow-y: auto; padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px;">
+          <!-- Context Brief (Phase 2) -->
+          <div class="results-card" style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; box-shadow: var(--shadow-sm); box-sizing: border-box;">
+            <h4 style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin: 0 0 12px 0;">Mentee Context Brief</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: var(--text-primary); margin-bottom: 16px;">
+              <div><strong>Active Bottleneck:</strong> <span id="panel-mentee-bottleneck" style="color: #b91c1c; font-weight: 600;">None</span></div>
+            </div>
+            
+            <!-- Mentee Scores Progress Rings -->
+            <div id="panel-mentee-scores" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; box-sizing: border-box;">
+              <!-- Progress rings -->
+            </div>
+          </div>
+
+          <!-- Continuity Log Form (Phase 3 & 4) -->
+          <div class="results-card" style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; box-shadow: var(--shadow-sm); box-sizing: border-box;">
+            <h4 style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin: 0 0 4px 0;">Log Session Continuity</h4>
+            
+            <!-- Metadata Header -->
+            <div style="font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); background: var(--bg-secondary); border-radius: 6px; padding: 8px 12px; margin: 12px 0 16px 0; border: 1px dashed var(--border-color); display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between;" id="panel-log-metadata">
+              <!-- Date | Time | Guide Name | Mentee Phase -->
+            </div>
+
+            <form id="session-continuity-form" style="display: flex; flex-direction: column; gap: 14px;">
+              <!-- Topic Focus Multi-select -->
+              <div>
+                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 6px;">Topic Focus (Select all that apply):</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--bg-secondary); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); box-sizing: border-box;" id="panel-topic-checkboxes">
+                  <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-primary);"><input type="checkbox" name="topic-focus" value="Visa Options" /> Visa Options</label>
+                  <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-primary);"><input type="checkbox" name="topic-focus" value="Interview Prep" /> Interview Prep</label>
+                  <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-primary);"><input type="checkbox" name="topic-focus" value="Housing Search" /> Housing Search</label>
+                  <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-primary);"><input type="checkbox" name="topic-focus" value="Credit Building" /> Credit Building</label>
+                  <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-primary);"><input type="checkbox" name="topic-focus" value="Bank Accounts" /> Bank Accounts</label>
+                  <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-primary);"><input type="checkbox" name="topic-focus" value="Local Networking" /> Local Networking</label>
+                </div>
+              </div>
+
+              <!-- Takeaways Strictly Capped Area -->
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <label for="panel-takeaways" style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Core Takeaways (Max 500 characters):</label>
+                  <span id="takeaways-char-counter" style="font-size: 0.72rem; color: var(--text-secondary); font-weight: 500;">0/500</span>
+                </div>
+                <textarea id="panel-takeaways" maxlength="500" placeholder="Summarize key takeaways, progress made, and main topics covered in this call..." style="width: 100%; height: 80px; padding: 8px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.82rem; background: var(--bg-secondary); color: var(--text-primary); resize: none; box-sizing: border-box;" required></textarea>
+              </div>
+
+              <!-- Internal Notes for Next Guide -->
+              <div>
+                <label for="panel-notes-next-guide" style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 6px;">Note for the Next Guide (Internal):</label>
+                <textarea id="panel-notes-next-guide" placeholder="Internal context, morale hints, or strategic tips for the next Guide..." style="width: 100%; height: 50px; padding: 8px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.82rem; background: var(--bg-secondary); color: var(--text-primary); resize: none; box-sizing: border-box;" required></textarea>
+              </div>
+
+              <!-- Orchestrated Action Items / Homework Form (Phase 4) -->
+              <div>
+                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 6px;">Assign Homework (Pushed to mentee's roadmap):</label>
+                <div style="display: flex; flex-direction: column; gap: 8px; background: var(--bg-secondary); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); box-sizing: border-box;">
+                  <input type="text" id="panel-hw-text" placeholder="e.g. Gather letters of recommendation templates..." style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.8rem; box-sizing: border-box;" />
+                  <button type="button" id="btn-add-hw-item" class="btn btn-outline" style="padding: 6px; font-size: 0.76rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; font-weight: 600; background: var(--bg-primary); border-color: var(--border-color);">
+                    ➕ Add Homework Item
+                  </button>
+                  <div id="panel-hw-list" style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
+                    <!-- Pending homework items list -->
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="padding: 12px; font-size: 0.82rem; border-radius: 8px; font-weight: 700; width: 100%; cursor: pointer;">
+                🚀 Save & Log Continuity
+              </button>
+            </form>
+          </div>
+
+          <!-- Log History (Phase 3 & 4) -->
+          <div class="results-card" style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; box-shadow: var(--shadow-sm); box-sizing: border-box;">
+            <h4 style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin: 0 0 12px 0;">Continuity Log History</h4>
+            <div id="panel-log-history" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Historical case logs -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MATCH REVEAL VIEW -->
+  <section id="match-reveal" class="view-section" style="background-color: var(--bg-primary); min-height: 100vh; padding: 120px 24px 80px; box-sizing: border-box; display: none;">
+    <div class="container" style="max-width: 1000px; margin: 0 auto; text-align: center;">
+      
+      <!-- Loading State Panel -->
+      <div id="reveal-loading-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50vh; gap: 24px;">
+        <div class="loading-pulse-ring" style="position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--accent-light);">
+          <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--accent);"></div>
+          <div class="pulse-wave" style="position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--accent); opacity: 0; animation: pulseWave 1.6s infinite ease-out;"></div>
+        </div>
+        <h3 id="reveal-loading-text" style="font-family: var(--font-serif); font-size: 2rem; font-style: italic; color: var(--text-primary); margin: 0; min-height: 2.5rem; transition: opacity 0.2s;">Analyzing timeline...</h3>
+      </div>
+
+      <!-- Reveal Diagnosis & Matching Guides Panel -->
+      <div id="reveal-content-container" style="display: none; flex-direction: column; align-items: center; gap: 40px; animation: fadeInSection 0.5s ease forwards;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h1 id="reveal-diagnosis-h1" style="font-family: var(--font-serif); font-size: 2.8rem; font-style: italic; font-weight: 700; color: var(--text-primary); line-height: 1.2; margin: 0 0 16px 0; max-width: 850px; margin-left: auto; margin-right: auto;">
+            Your current bottleneck is Immigration Status. We've built your custom roadmap to clear it.
+          </h1>
+        </div>
+
+        <!-- Matching Cards Grid -->
+        <div id="reveal-cards-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; width: 100%; box-sizing: border-box; text-align: left; max-width: 900px; margin: 0 auto;">
+          <!-- Dynamically populated GuideMatchCards -->
+        </div>
+
+        <!-- Skip Action Link -->
+        <div style="margin-top: 30px;">
+          <a href="#" id="link-skip-reveal" style="font-size: 0.95rem; color: var(--text-secondary); text-decoration: none; font-weight: 600; transition: color 0.2s; border-bottom: 1px dashed var(--text-secondary);" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-secondary)'">Skip for now</a>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -1832,7 +2138,6 @@
             </div>
             <div class="advisor-intro-footer">
               <div class="advisor-intro-rating">
-            <div class="advisor-intro-rating">
                 <span class="star-icon">★</span>
                 <span class="rating-val">4.9</span>
                 <span class="reviews-count">(34)</span>
@@ -2546,6 +2851,7 @@
     </div>
   </div>
 
-  <script type="module" src="app.js?v=11"></script>
+  <script src="match-reveal.js?v=13"></script>
+  <script type="module" src="app.js?v=34"></script>
 </body>
 </html>

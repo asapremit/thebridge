@@ -32,6 +32,9 @@ app.get('/api/firebase-config', (req, res) => {
 
 // Fallback all other routes to dist/index.html (Single Page App routing)
 app.get(/^(?!\/api).*$/, (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
