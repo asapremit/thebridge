@@ -143,6 +143,7 @@ async function renderMatchUI(overlay, capturedQuizState) {
     const ratings = quizState.ratings || { status: 3, career: 8, finance: 8 };
     const selectedFocus = quizState.selectedFocus || 'status';
     const selectedStep2 = quizState.selectedStep2 || '';
+    const selectedStep7 = quizState.selectedStep7 || '';
     const selectedStep9 = quizState.selectedStep9 || [];
     const categories = quizState.categories || ["Status", "Career", "Finance"];
 
@@ -183,8 +184,8 @@ async function renderMatchUI(overlay, capturedQuizState) {
       investing: "Expat Mortgage Sourcing & Wealth Setup"
     };
 
-    // Safely look up selectedStep10 (timeline)
-    const timelineVal = (typeof selectedStep10 !== 'undefined' && selectedStep10) ? selectedStep10 : (window.selectedStep10 || "3-6 months");
+    // Safely look up timelineVal
+    const timelineVal = "your target timeline";
     const targetGoal = goalNames[selectedStep2] || "your relocation setup";
 
     let stageDesignation = "Planning Stage";
@@ -428,10 +429,18 @@ async function renderMatchUI(overlay, capturedQuizState) {
         }
     ];
 
-    // Determine 4 recommended advisors based on selectedFocus
+    // Determine 4 recommended advisors based on selectedFocus & specific quiz choices
     let recommendedIds = [];
     if (selectedFocus === 'status') {
-        recommendedIds = ['sarah', 'hassan', 'elena', 'david_chee'];
+        if (selectedStep7 === 'study_education') {
+            recommendedIds = ['aisha', 'sarah', 'hassan', 'elena'];
+        } else if (selectedStep7 === 'family_marriage' || selectedStep2 === 'family') {
+            recommendedIds = ['david_chee', 'sarah', 'hassan', 'elena'];
+        } else if (selectedStep7 === 'long_term_residency' || selectedStep2 === 'greencard') {
+            recommendedIds = ['hassan', 'sarah', 'elena', 'david_chee'];
+        } else {
+            recommendedIds = ['sarah', 'hassan', 'elena', 'david_chee'];
+        }
     } else if (selectedFocus === 'career') {
         recommendedIds = ['david', 'michael', 'aisha', 'sarah'];
     } else if (selectedFocus === 'finance') {

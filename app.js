@@ -577,15 +577,15 @@ document.addEventListener('DOMContentLoaded', () => {
           category: "finance"
         },
         7: {
-          badge: "Relocation Timeline",
-          title: "When do you need your visa or status sorted?",
-          desc: "Select your target timeline for moving or securing residency:",
+          badge: "IMMIGRATION GOAL",
+          title: "What is your primary focus for your status right now?",
+          desc: "Select the primary focus area for your status right now:",
           type: "choice",
           choices: [
-            { label: "Immediately (Within 1 month)", val: "immediate" },
-            { label: "Soon (1 to 3 months)", val: "soon" },
-            { label: "Planning ahead (3 to 6 months)", val: "planning" },
-            { label: "Just exploring options", val: "exploring" }
+            { label: "Work & Career: Employer sponsorship, work permits, or specialized talent visas.", val: "work_career" },
+            { label: "Study & Education: Student visas, graduation transitions, or training extensions.", val: "study_education" },
+            { label: "Family & Marriage: Spousal visas, or bringing family members over.", val: "family_marriage" },
+            { label: "Long-Term Residency: Path to permanent residency (Green Card) or citizenship.", val: "long_term_residency" }
           ]
         },
         8: {
@@ -2230,12 +2230,14 @@ file_taxes: { title: "Dual-Status Tax Filings", desc: "Get mapped to expat tax p
     // 3. Determine Matched Advisor (using same matching logic)
     let matchId = 'sarah';
     if (selectedFocus === 'status') {
-      if (selectedStep3 === 'peer') {
+      if (selectedStep7 === 'study_education') {
+        matchId = 'aisha';
+      } else if (selectedStep3 === 'peer') {
         matchId = 'aisha';
       } else {
-        if (selectedStep2 === 'family') {
+        if (selectedStep2 === 'family' || selectedStep7 === 'family_marriage') {
           matchId = 'david_chee';
-        } else if (selectedStep2 === 'greencard') {
+        } else if (selectedStep2 === 'greencard' || selectedStep7 === 'long_term_residency') {
           matchId = 'hassan';
         } else {
           matchId = 'sarah';
@@ -2265,7 +2267,7 @@ file_taxes: { title: "Dual-Status Tax Filings", desc: "Get mapped to expat tax p
       investing: "Expat Mortgage Sourcing & Wealth Setup"
     };
 
-    const timelineVal = selectedStep10 || "your target timeline";
+    const timelineVal = "your target timeline";
     const targetGoal = goalNames[selectedStep2] || "your relocation setup";
 
     const quotes = {
@@ -4371,7 +4373,10 @@ file_taxes: { title: "Dual-Status Tax Filings", desc: "Get mapped to expat tax p
       selectedFocus,
       selectedStep2,
       selectedStep3,
+      selectedStep7,
+      selectedStep8,
       selectedStep9,
+      selectedStep10,
       categories
     };
   };
