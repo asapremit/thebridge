@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Message Center — same Path</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
+          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; margin-right: 6px;" fill="none" stroke="#112F20" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16h8a4 4 0 0 0 4-4V4"/><path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706"/></svg>
+          same Path
+        </a>
+      </div>
+      <ul class="nav-links portal-nav-links">
+        <li><a href="/" class="nav-link active">Expat Hub</a></li>
+        <li><a href="/" class="nav-link">Browse Guides</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="user-avatar" style="background-color: var(--sage); color: white; display: flex; align-items: center; justify-content: center;">O</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard -->
+  <div class="dashboard-wrapper">
+    <div class="container dashboard-container">
+      
+      <!-- Sidebar -->
+      <aside class="dashboard-sidebar">
+        <div class="dashboard-sidebar-profile">
+          <div class="avatar-container" style="position: relative; cursor: pointer;" onclick="document.getElementById('sidebar-avatar-upload').click()">
+            <div class="avatar" style="width: 64px; height: 64px; border-radius: 50%; background-color: var(--sage); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 600;">O</div>
+            <div style="position: absolute; bottom: 0; right: 0; background: white; border: 1px solid var(--border-color); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+              <svg width="12" height="12" fill="none" stroke="var(--text-primary)" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+            </div>
+            <input type="file" id="sidebar-avatar-upload" style="display: none;" accept="image/*">
+          </div>
+          <div>
+            <h3>oluwashinayomi...</h3>
+            <p>Client Account</p>
+          </div>
+        </div>
+
+        <div class="dashboard-nav-group">
+          <h4>My Workspace</h4>
+          <ul class="dashboard-nav">
+            <li><a href="/bookings.html" class="">My 1-1 Bookings</a></li>
+            <li><a href="/vault.html" class="">Document Vault</a></li>
+            <li><a href="/roadmap.html" class="">My Action Roadmap</a></li>
+            <li><a href="/messages.html" class="active">Message Center</a></li>
+            <li><a href="/saved-guides.html" class="">My Saved Guides</a></li>
+          </ul>
+        </div>
+
+        <div class="dashboard-nav-group">
+          <h4>Account</h4>
+          <ul class="dashboard-nav">
+            <li><a href="/profile.html" class="">Public Profile</a></li>
+            <li><a href="/settings.html" class="">Account Settings</a></li>
+            <li><a href="/billing.html" class="">Payment Methods</a></li>
+            <li><a href="/credits.html" class="">Platform Credits</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="dashboard-content">
+        <h1>Message Center</h1>
+        
+      <div class="dashboard-card" style="padding: 0; display: flex; height: 500px; overflow: hidden;">
+        <!-- Left Sidebar (Contacts) -->
+        <div style="width: 280px; border-right: 1px solid var(--border-color); background: #fafafa; display: flex; flex-direction: column;">
+          <div style="padding: 24px 16px; border-bottom: 1px solid var(--border-color);">
+            <h3 style="font-size: 1.1rem; font-weight: 600;">Conversations</h3>
+          </div>
+          <div id="contact-list" style="flex-grow: 1; overflow-y: auto;">
+            <!-- Mock Contact -->
+            <div id="contact-sarah" style="padding: 16px; border-bottom: 1px solid var(--border-color); cursor: pointer; background: white; border-left: 4px solid var(--accent);">
+              <div style="font-weight: 600; font-size: 0.95rem;">Sarah (Advisor)</div>
+              <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Looking forward to our session!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side (Chat) -->
+        <div style="flex-grow: 1; display: flex; flex-direction: column; background: white;">
+          <!-- Chat Header -->
+          <div style="padding: 16px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-weight: 600; font-size: 1.1rem;">Sarah</div>
+            <button id="btn-view-profile" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Profile</button>
+          </div>
+          
+          <!-- Chat Messages -->
+          <div id="chat-messages" style="flex-grow: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;">
+            <div style="align-self: flex-start; background: var(--bg-secondary); padding: 12px 16px; border-radius: 12px; border-top-left-radius: 4px; max-width: 80%;">
+              <p style="font-size: 0.95rem;">Hi there! Looking forward to our upcoming consultation. Did you have any specific questions you want to cover first?</p>
+              <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px; text-align: right;">10:00 AM</div>
+            </div>
+          </div>
+          
+          <!-- Chat Input -->
+          <div style="padding: 16px 24px; border-top: 1px solid var(--border-color); display: flex; gap: 12px;">
+            <input type="text" id="chat-input" placeholder="Type a message..." style="flex-grow: 1; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 24px; font-family: inherit; font-size: 0.95rem; outline: none;">
+            <button id="btn-send" style="width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: white; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const chatInput = document.getElementById('chat-input');
+          const btnSend = document.getElementById('btn-send');
+          const chatMessages = document.getElementById('chat-messages');
+          const btnViewProfile = document.getElementById('btn-view-profile');
+          const contactSarah = document.getElementById('contact-sarah');
+
+          btnViewProfile.addEventListener('click', () => {
+            alert('Loading full public profile for Sarah...');
+            // Normally this would navigate, e.g. window.location.href = '/advisor-profile.html'
+          });
+
+          contactSarah.addEventListener('click', () => {
+             // Mock switching conversations
+             alert('You are already viewing the conversation with Sarah.');
+          });
+
+          const sendMessage = () => {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            
+            // Create user message bubble
+            const msgDiv = document.createElement('div');
+            msgDiv.style.cssText = 'align-self: flex-end; background: var(--accent); color: white; padding: 12px 16px; border-radius: 12px; border-top-right-radius: 4px; max-width: 80%;';
+            
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            msgDiv.innerHTML = `
+              <p style="font-size: 0.95rem; margin: 0;">${text}</p>
+              <div style="font-size: 0.75rem; color: rgba(255,255,255,0.8); margin-top: 4px; text-align: right;">${time}</div>
+            `;
+            
+            chatMessages.appendChild(msgDiv);
+            chatInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          };
+
+          btnSend.addEventListener('click', sendMessage);
+          chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+          });
+        });
+      </script>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="color: white;">
+            <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; display: inline-block; vertical-align: middle; margin-right: 6px;" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 16h8a4 4 0 0 0 4-4V4" stroke="#FAF9F5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            same Path
+          </div>
+          <p style="color: #9ca3af; margin-top: 16px; font-size: 0.9rem;">Connecting global talent with local expertise.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Browse Directory</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/help-center.html">Help Center</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 same Path. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+      <script type="module">
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, collection, addDoc, getDoc, getDocs, query, orderBy, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyANoB6-PHmSVQ9OuiyNX2L_ORfATsB_Gs8",
+          authDomain: "samepath-c3749.firebaseapp.com",
+          projectId: "samepath-c3749",
+          storageBucket: "samepath-c3749.firebasestorage.app",
+          messagingSenderId: "543979822804",
+          appId: "1:543979822804:web:eb6f606455f54258bca541",
+          measurementId: "G-BV27FDTK8G"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.auth = auth;
+        window.firebaseCol = collection;
+        window.firebaseAdd = addDoc;
+        window.firebaseGet = getDocs;
+        window.firebaseDoc = doc;
+        window.firebaseUpdate = updateDoc;
+        window.firebaseQuery = query;
+        window.firebaseOrderBy = orderBy;
+        window.firebaseOnSnap = onSnapshot;
+        window.firebaseDel = deleteDoc;
+      </script>
+
+
+<script type="module">
+  document.addEventListener('DOMContentLoaded', () => {
+    // We already have some logic in messages.html. Let's override the sendMessage function
+    window.auth.onAuthStateChanged((user) => {
+      if(!user) return;
+      const chatMessages = document.getElementById('chat-messages');
+      const chatInput = document.getElementById('chat-input');
+      const btnSend = document.getElementById('btn-send');
+      
+      const messagesRef = window.firebaseCol(window.db, "users", user.uid, "messages");
+      const q = window.firebaseQuery(messagesRef, window.firebaseOrderBy("timestamp", "asc"));
+      
+      window.firebaseOnSnap(q, (snapshot) => {
+        chatMessages.innerHTML = '';
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          const msgDiv = document.createElement('div');
+          
+          if(data.sender === 'client') {
+            msgDiv.style.cssText = 'align-self: flex-end; background: var(--accent); color: white; padding: 12px 16px; border-radius: 12px; border-top-right-radius: 4px; max-width: 80%;';
+          } else {
+            msgDiv.style.cssText = 'align-self: flex-start; background: var(--bg-secondary); padding: 12px 16px; border-radius: 12px; border-top-left-radius: 4px; max-width: 80%;';
+          }
+          
+          const time = data.timestamp ? data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+          
+          msgDiv.innerHTML = `<p style="font-size: 0.95rem; margin: 0;">${data.text}</p>
+            <div style="font-size: 0.75rem; color: ${data.sender === 'client' ? 'rgba(255,255,255,0.8)' : 'var(--text-secondary)'}; margin-top: 4px; text-align: right;">${time}</div>`;
+          chatMessages.appendChild(msgDiv);
+        });
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      });
+
+      // Override the old send button (which is attached via addEventListener in the original script)
+      // by cloning it
+      if(btnSend) {
+        const newBtn = btnSend.cloneNode(true);
+        btnSend.parentNode.replaceChild(newBtn, btnSend);
+        
+        const sendMessage = async () => {
+          const text = chatInput.value.trim();
+          if (!text) return;
+          chatInput.value = '';
+          try {
+            await window.firebaseAdd(messagesRef, {
+              text: text,
+              sender: 'client',
+              timestamp: new Date()
+            });
+          } catch(err) { console.error(err); }
+        };
+        newBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') sendMessage();
+        });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

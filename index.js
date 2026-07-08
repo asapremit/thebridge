@@ -8,8 +8,14 @@ const PORT = process.env.PORT || 8080;
 // Body parser middleware
 app.use(express.json());
 
-// Serve static assets from build dist directory
-app.use(express.static(path.join(__dirname, 'dist')));
+// Serve static assets from build dist directory with caching disabled for rapid development
+app.use(express.static(path.join(__dirname, 'dist'), {
+  setHeaders: (res, filepath) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+}));
 
 // API Routes
 app.get('/api/health', (req, res) => {

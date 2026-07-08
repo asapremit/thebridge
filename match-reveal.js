@@ -97,6 +97,9 @@ function getMatchRationale(advisorId, selectedFocus, selectedStep9, selectedStep
         return "David Chee specializes in consular family sponsorship and will meticulously verify your petition affidavits of support to prevent costly delays.";
     }
     if (advisorId === 'david') {
+        if (selectedStep2 === 'transfer') {
+            return "David K. specializes in mapping foreign CV profiles and credentials to local hiring standards. He will guide you on degree evaluation and re-certification steps to translate your career.";
+        }
         if (selectedStep2 === 'find_job') {
             return "David K. is a former FAANG recruiter who knows exactly what sponsors look for. He will rebuild your resume to bypass strict ATS scanners and connect you with hidden employer networks that actively sponsor visas.";
         }
@@ -268,13 +271,34 @@ async function renderMatchUI(overlay, capturedQuizState) {
       file_taxes: { title: "Dual-Status Tax Filings", desc: "Expat tax preparers for clean dual-status filings." },
       asset_report: { title: "Foreign Assets Disclosures (FBAR)", desc: "Map required FBAR/FATCA compliance forms." },
       mortgage: { title: "Expat Mortgage Qualification", desc: "Prepare checklists and map lenders for home buying." },
-      investments: { title: "Cross-Border Wealth Setup", desc: "Safeguard assets, avoid double taxes, and set up local accounts." }
+      investments: { title: "Cross-Border Wealth Setup", desc: "Safeguard assets, avoid double taxes, and set up local accounts." },
+      degree_translation: { title: "Degree Translation & Evaluation", desc: "Course-by-course evaluations (e.g. WES, ECE) for credential equivalency." },
+      recertification: { title: "Professional Licensing Audits", desc: "Detailed breakdown of local board exams and regulatory checklists." },
+      bridging_gaps: { title: "Bridging Gaps Roadmap", desc: "Map local courses, certification tests, and study plans." },
+      translate_docs: { title: "Official Translation Service", desc: "Translate foreign transcripts, degree certificates, and syllabi." },
+      wes_evaluation: { title: "Academic Credential Evaluators", desc: "Select and submit files to accredited credential evaluation services." },
+      board_requirements: { title: "Verify Board Eligibility", desc: "Identify and audit state-specific regulatory board guidelines." },
+      exam_study: { title: "Licensing Exam Prep", desc: "Draft study routines and compile review materials for exams." },
+      bridging_courses: { title: "Accredited Bridging Programs", desc: "Find recognized university courses or training modules." },
+      transfer_funding: { title: "Relocation Grants & Loans", desc: "Access grants or funding for immigrant re-certification fees." },
+      custom_rules: { title: "Review Guidelines & Rules", desc: "Identify official regulations and compliance requirements." },
+      custom_help: { title: "Find Professional Contacts", desc: "Connect with vetted specialists and local guides." },
+      custom_forms: { title: "Fill & Submit Applications", desc: "Compile paperwork, fill out web forms, and complete submissions." },
+      custom_info_blocker: { title: "Research Gap", desc: "Locate checklist guides to clarify local laws." },
+      custom_cost_blocker: { title: "Financial Feasibility", desc: "Audit expected fees and source funding or payment plans." },
+      custom_time_blocker: { title: "Timeline Constraints", desc: "Structure target completion dates to bypass scheduling bottlenecks." },
+      custom_action_research: { title: "Compile Guidelines", desc: "Research and document official guidelines and requirements." },
+      custom_action_budget: { title: "Define Budget Roadmap", desc: "Establish a clear financial and relocation cost forecast." },
+      custom_action_experts: { title: "Connect with Specialists", desc: "Engage with advisors or settled expats who have achieved this." },
+      custom_action_docs: { title: "Gather Records", desc: "Collect required background checks, translations, and certificates." },
+      custom_action_apply: { title: "Submit Form Applications", desc: "Complete registrations and submit online file packets." },
+      custom_action_sign: { title: "Review Local Contracts", desc: "Perform due diligence audits on rental leases or service contracts." }
     };
 
     const categoryKeys = {
-      status: ['visa', 'talent', 'lawyer', 'nomad', 'translations', 'forms', 'family', 'tracking', 'greencard', 'presence', 'audits', 'transition'],
-      career: ['resume', 'linkedin', 'portfolio', 'requirements', 'target_list', 'recruiters', 'outreach', 'meetups', 'mock', 'behavioral', 'negotiation', 'benchmarks'],
-      finance: ['builder_card', 'foreign_link', 'monitor', 'utilization', 'open_checking', 'cheap_transfers', 'tax_id', 'utility_link', 'file_taxes', 'asset_report', 'mortgage', 'investments']
+      status: ['visa', 'talent', 'lawyer', 'nomad', 'translations', 'forms', 'family', 'tracking', 'greencard', 'presence', 'audits', 'transition', 'custom_action_research', 'custom_action_budget', 'custom_rules', 'custom_info_blocker'],
+      career: ['resume', 'linkedin', 'portfolio', 'requirements', 'target_list', 'recruiters', 'outreach', 'meetups', 'mock', 'behavioral', 'negotiation', 'benchmarks', 'degree_translation', 'recertification', 'bridging_gaps', 'translate_docs', 'wes_evaluation', 'board_requirements', 'exam_study', 'bridging_courses', 'transfer_funding', 'custom_action_experts', 'custom_action_docs', 'custom_help', 'custom_cost_blocker'],
+      finance: ['builder_card', 'foreign_link', 'monitor', 'utilization', 'open_checking', 'cheap_transfers', 'tax_id', 'utility_link', 'file_taxes', 'asset_report', 'mortgage', 'investments', 'custom_action_apply', 'custom_action_sign', 'custom_forms', 'custom_time_blocker']
     };
 
     const activeKeys = categoryKeys[selectedFocus || 'status'] || categoryKeys.status;

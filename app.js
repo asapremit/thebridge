@@ -1,25 +1,51 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, orderBy, onSnapshot, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 let auth = null;
 let db = null;
+let storage = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Fetch dynamic Firebase configuration from the Express backend with cache busting
-  fetch('/api/firebase-config?cb=' + Date.now())
-    .then(res => res.json())
-    .then(config => {
-      const app = initializeApp(config);
-      auth = getAuth(app);
-      db = getFirestore(app);
+  const config = {
+    apiKey: "AIzaSyANoB6-PHmSVQ9OuiyNX2L_ORfATsB_Gs8",
+    authDomain: "samepath-c3749.firebaseapp.com",
+    projectId: "samepath-c3749",
+    storageBucket: "samepath-c3749.firebasestorage.app",
+    messagingSenderId: "543979822804",
+    appId: "1:543979822804:web:eb6f606455f54258bca541",
+    measurementId: "G-BV27FDTK8G"
+  };
 
-      // Listen for authentication changes
-      onAuthStateChanged(auth, async (user) => {
+  try {
+    const app = initializeApp(config);
+    auth = getAuth(app);
+    db = getFirestore(app);
+    storage = getStorage(app);
+
+    // Listen for authentication changes
+    onAuthStateChanged(auth, async (user) => {
         if (user) {
           isUserLoggedIn = true;
           // Sync onboarding quiz choices to Firestore
           await syncUserData(user);
+
+          // Track Login History (only if db is available)
+          if (db && !window.hasLoggedSessionIn) {
+            window.hasLoggedSessionIn = true;
+            try {
+              const loginHistoryRef = collection(db, 'users', user.uid, 'login_history');
+              await addDoc(loginHistoryRef, {
+                timestamp: new Date(),
+                userAgent: navigator.userAgent || "Unknown",
+                // IP address would typically be grabbed server-side in a Firebase Cloud Function, 
+                // but we are recording client-side session metadata here.
+              });
+            } catch (err) {
+              console.warn("Could not log session history:", err);
+            }
+          }
 
           // Get user document to verify role
           try {
@@ -57,8 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
           updateHeaderNavActions(false);
         }
       });
-    })
-    .catch(err => console.error("Error initializing Firebase Client SDK:", err));
+  } catch (err) {
+    console.error("Error initializing Firebase Client SDK:", err);
+  }
 
 
   const navLinks = document.querySelectorAll('.nav-link');
@@ -483,6 +510,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!docSnap.exists()) {
         payload.createdAt = new Date();
+        payload.profile = {
+          firstName: payload.displayName,
+          lastName: "",
+          headline: "",
+          bio: "",
+          language: "English (US)",
+          avatarUrl: ""
+        };
+        payload.socialLinks = {
+          website: "",
+          facebook: "",
+          instagram: "",
+          linkedin: "",
+          tiktok: "",
+          twitter: "",
+          youtube: ""
+        };
+        payload.wallet = {
+          creditBalance: 0
+        };
+        payload.settings = {
+          emailNotifications: {
+            directMessages: true,
+            bookingReminders: true
+          }
+        };
         payload.quizResults = {
           focusArea: selectedFocus || "",
           scores: ratings || { status: 0, career: 0, finance: 0 },
@@ -490,6 +543,27 @@ document.addEventListener('DOMContentLoaded', () => {
           selectedGoals: selectedStep9 || []
         };
         await setDoc(userDocRef, payload);
+        
+        // Initialize mock booking
+        try {
+          await addDoc(collection(db, "users", user.uid, "bookings"), {
+            advisorName: "Sarah",
+            advisorRole: "Immigration Specialist",
+            date: new Date(Date.now() + 86400000 * 2).toLocaleDateString(), // 2 days from now
+            time: "10:00 AM",
+            status: "upcoming"
+          });
+        } catch(e) { console.warn(e); }
+        
+        // Initialize mock saved guide
+        try {
+          await addDoc(collection(db, "users", user.uid, "saved_guides"), {
+            title: "Navigating Tech Visas in the US",
+            author: "Sarah (Advisor)",
+            savedAt: new Date()
+          });
+        } catch(e) { console.warn(e); }
+
       } else {
         const existingData = docSnap.data();
         const existingQuizResults = existingData.quizResults || {};
@@ -722,6 +796,83 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: "Mock interviews & active interview coaching", val: "interview_coaching" },
             { label: "Direct job referrals and recruiter connections", val: "referrals" },
             { label: "Local salary benchmarking & negotiation advice", val: "salary_bench" }
+          ]
+        }
+      },
+      'career-transfer': {
+        categories: ["Credentials", "Equivalency", "Licensing"],
+        4: {
+          badge: "Credentials",
+          title: "Degree & Document Readiness",
+          desc: "How prepared are your foreign transcripts and syllabus records?",
+          type: "rating",
+          category: "status"
+        },
+        5: {
+          badge: "Equivalency",
+          title: "Degree Evaluation Status",
+          desc: "Have you started or completed course equivalency mapping (e.g. WES)?",
+          type: "rating",
+          category: "career"
+        },
+        6: {
+          badge: "Licensing",
+          title: "Licensing Board Preparation",
+          desc: "How confident are you in passing professional certification or board exams?",
+          type: "rating",
+          category: "finance"
+        },
+        7: {
+          badge: "CREDENTIAL PATH",
+          title: "What is your primary credential concern?",
+          desc: "Select the area where you need the most guidance:",
+          type: "choice",
+          choices: [
+            { label: "Degree Translation & Evaluation: Equivalence mapping.", val: "degree_translation" },
+            { label: "Professional licensing re-certification: Meeting board rules.", val: "recertification" },
+            { label: "Bridging credential gaps: Finding courses or exams to qualify.", val: "bridging_gaps" }
+          ]
+        },
+        8: {
+          badge: "TRANSFER BLOCKER",
+          title: "What is your biggest transfer hurdle?",
+          desc: "Identify the main bottleneck preventing your transfer:",
+          type: "choice",
+          choices: [
+            { label: "Unsure which local agency to use for evaluation", val: "agency_blocker" },
+            { label: "Complex licensing exams or state-specific boards", val: "licensing_blocker" },
+            { label: "High cost or long timeline of local bridging programs", val: "bridging_blocker" }
+          ]
+        },
+        9: {
+          badge: "TRANSFER GOALS",
+          title: "What would it take to move your career transfer closer to 10?",
+          desc: "Select the transfer actions you want to prioritize:",
+          type: "checklist",
+          checklists: {
+            status: [
+              { label: "Translate official transcripts and syllabi", val: "translate_docs" },
+              { label: "Get a course-by-course evaluation (WES, ECE, etc.)", val: "wes_evaluation" }
+            ],
+            career: [
+              { label: "Identify local board or licensing requirements", val: "board_requirements" },
+              { label: "Map out re-certification exam study plans", val: "exam_study" }
+            ],
+            finance: [
+              { label: "Find credit-bridging university courses", val: "bridging_courses" },
+              { label: "Apply for credential-bridging grants or loans", val: "transfer_funding" }
+            ]
+          }
+        },
+        10: {
+          badge: "ADVISOR SUPPORT",
+          title: "How do you want your advisor to help with your transfer?",
+          desc: "Choose the support area that fits your needs:",
+          type: "choice",
+          choices: [
+            { label: "Auditing my foreign transcripts and mapping equivalence", val: "transcript_audit" },
+            { label: "Step-by-step guidance through local board licensing", val: "licensing_coaching" },
+            { label: "Sourcing low-cost bridging programs and certifications", val: "program_sourcing" }
           ]
         }
       },
@@ -992,8 +1143,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (financeValEl) financeValEl.innerText = displayRatings.finance > 0 ? `${displayRatings.finance}/10` : '-';
 
       // Update scoreboard labels dynamically based on focus
-      if (selectedFocus && quizContentConfig[selectedFocus]) {
-        const catNames = quizContentConfig[selectedFocus].categories;
+      const configKey = (selectedFocus && selectedStep2) ? `${selectedFocus}-${selectedStep2}` : selectedFocus;
+      const currentConfig = quizContentConfig[configKey] || quizContentConfig[selectedFocus];
+      if (currentConfig && currentConfig.categories) {
+        const catNames = currentConfig.categories;
         const statusLabelEl = document.querySelector('#score-pill-status .score-label');
         if (statusLabelEl) statusLabelEl.innerText = catNames[0].toUpperCase();
         
@@ -1038,12 +1191,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (statusText) {
         if (lowestCategory && count === 3 && currentStep === 6) {
           let categoryName = '';
-          if (selectedFocus && quizContentConfig[selectedFocus]) {
+          const configKey = (selectedFocus && selectedStep2) ? `${selectedFocus}-${selectedStep2}` : selectedFocus;
+          const currentConfig = quizContentConfig[configKey] || quizContentConfig[selectedFocus];
+          if (currentConfig && currentConfig.categories) {
             let idx = 0;
             if (lowestCategory === 'status') idx = 0;
             else if (lowestCategory === 'career') idx = 1;
             else if (lowestCategory === 'finance') idx = 2;
-            categoryName = quizContentConfig[selectedFocus].categories[idx];
+            categoryName = currentConfig.categories[idx];
           } else {
             if (lowestCategory === 'status') categoryName = 'Visa & Documentation';
             else if (lowestCategory === 'career') categoryName = 'Career & Jobs';
@@ -1171,6 +1326,13 @@ document.addEventListener('DOMContentLoaded', () => {
       prevBtn.addEventListener('click', () => {
         if (currentStep === 'signup') {
           goToStep(10);
+        } else if (currentStep === 4) {
+          const isCustomNeed = selectedStep2 && !['prep', 'nomad', 'family', 'find_job', 'transfer', 'business', 'credit', 'banking', 'taxes'].includes(selectedStep2);
+          if (isCustomNeed) {
+            goToStep(2);
+          } else {
+            goToStep(3);
+          }
         } else if (currentStep > 1) {
           goToStep(currentStep - 1);
         }
@@ -1189,6 +1351,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (selectedFocus === 'career') {
           if (selectedStep2 === 'hired') {
             activeStep3Slide = quizCard.querySelector('.quiz-step-slide[data-step="3-career-hired"]');
+          } else if (selectedStep2 === 'transfer') {
+            activeStep3Slide = quizCard.querySelector('.quiz-step-slide[data-step="3-career-transfer"]');
           } else {
             activeStep3Slide = quizCard.querySelector('.quiz-step-slide[data-step="3-career-business"]');
           }
@@ -1202,7 +1366,17 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
         
-        selectedStep3 = activeRow.getAttribute('data-step3');
+        if (activeRow.classList.contains('other-trigger-row')) {
+          const inputField = activeStep3Slide.querySelector('.other-text-input');
+          const val = inputField ? inputField.value.trim() : '';
+          if (!val) {
+            alert("Please specify details for your custom preference!");
+            return;
+          }
+          selectedStep3 = val;
+        } else {
+          selectedStep3 = activeRow.getAttribute('data-step3');
+        }
         goToStep(4);
       });
     });
@@ -1434,9 +1608,69 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => goToStep('signup'), 600);
           }
         });
-        
         container.appendChild(btn);
       });
+
+      if (step === 7 || step === 8 || step === 10) {
+        const otherBtn = document.createElement('button');
+        otherBtn.type = 'button';
+        otherBtn.className = 'quiz-choice-row other-trigger-row';
+        
+        let isOtherActive = false;
+        let currentSelection = '';
+        if (step === 7) currentSelection = selectedStep7;
+        else if (step === 8) currentSelection = selectedStep8;
+        else if (step === 10) currentSelection = selectedStep10;
+        
+        if (currentSelection && !config.choices.some(ch => ch.val === currentSelection)) {
+          isOtherActive = true;
+        }
+        
+        if (isOtherActive) {
+          otherBtn.classList.add('active');
+          setTimeout(() => {
+            let inputContainer = slide.querySelector('.other-input-container');
+            if (!inputContainer) {
+              inputContainer = document.createElement('div');
+              inputContainer.className = 'other-input-container';
+              inputContainer.style.marginTop = '16px';
+              inputContainer.style.width = '100%';
+              inputContainer.innerHTML = `
+                <input type="text" class="form-input other-text-input" placeholder="Specify your details..." style="width: 100%; box-sizing: border-box; margin-bottom: 12px;" />
+                <button class="btn btn-primary other-confirm-btn" type="button" style="width: 100%;">Confirm</button>
+              `;
+              slide.appendChild(inputContainer);
+            }
+            inputContainer.style.display = 'block';
+            const inputField = inputContainer.querySelector('.other-text-input');
+            inputField.value = currentSelection;
+            
+            const confirmBtn = inputContainer.querySelector('.other-confirm-btn');
+            confirmBtn.onclick = () => {
+              const val = inputField.value.trim() || "Other";
+              if (step === 7) {
+                selectedStep7 = val;
+                goToStep(8);
+              } else if (step === 8) {
+                selectedStep8 = val;
+                goToStep(9);
+              } else if (step === 10) {
+                selectedStep10 = val;
+                goToStep('signup');
+              }
+            };
+          }, 100);
+        }
+        
+        otherBtn.innerHTML = `
+          <div class="quiz-radio-indicator"></div>
+          <div class="choice-row-text">
+            <span class="choice-row-title">Other</span>
+            <span class="choice-row-desc">Specify your custom need...</span>
+          </div>
+        `;
+        container.appendChild(otherBtn);
+      }
     }
 
     function renderDynamicChecklist(slide, config, bottleneck) {
@@ -1522,7 +1756,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof step === 'number' && step >= 4) {
         const slide = quizCard.querySelector(`.quiz-step-slide[data-step="${step}"]`);
         if (slide) {
-          const config = quizContentConfig[selectedFocus][step];
+          const configKey = (selectedFocus && selectedStep2) ? `${selectedFocus}-${selectedStep2}` : selectedFocus;
+          const currentConfig = quizContentConfig[configKey] || quizContentConfig[selectedFocus];
+          const config = currentConfig ? currentConfig[step] : null;
           if (config) {
             const badge = slide.querySelector('.dynamic-badge');
             if (badge) {
@@ -1546,12 +1782,12 @@ document.addEventListener('DOMContentLoaded', () => {
               lowestScore = ratings.finance;
               bottleneck = 'finance';
             }
-
+ 
           if (step === 9) {
               let bottleneckIndex = 0;
               if (bottleneck === 'career') bottleneckIndex = 1;
               else if (bottleneck === 'finance') bottleneckIndex = 2;
-              const bottleneckName = quizContentConfig[selectedFocus].categories[bottleneckIndex];
+              const bottleneckName = currentConfig.categories[bottleneckIndex];
               const bottleneckScore = ratings[bottleneck] || '-';
               if (title) {
                 if (bottleneckScore === 10) {
@@ -1662,6 +1898,8 @@ document.addEventListener('DOMContentLoaded', () => {
           } else if (selectedFocus === 'career') {
             if (selectedStep2 === 'hired') {
               slideSelector = '.quiz-step-slide[data-step="3-career-hired"]';
+            } else if (selectedStep2 === 'transfer') {
+              slideSelector = '.quiz-step-slide[data-step="3-career-transfer"]';
             } else {
               slideSelector = '.quiz-step-slide[data-step="3-career-business"]';
             }
@@ -1676,12 +1914,186 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const slide = quizCard.querySelector(slideSelector);
         if (slide) {
+          // If the slide is shown, check if the current selection is a custom "Other" value
+          const choicesStack = slide.querySelector('.quiz-choices-stack');
+          if (choicesStack && !choicesStack.classList.contains('dynamic-choices-container')) {
+            let currentVal = '';
+            let attrName = '';
+            if (step === 2) {
+              currentVal = selectedStep2;
+              attrName = 'data-step2';
+            } else if (step === 3) {
+              currentVal = selectedStep3;
+              attrName = 'data-step3';
+            }
+            
+            if (currentVal) {
+              const hasMatchingRow = Array.from(choicesStack.querySelectorAll('.quiz-choice-row:not(.other-trigger-row)')).some(row => row.getAttribute(attrName) === currentVal);
+              if (!hasMatchingRow) {
+                const otherBtn = choicesStack.querySelector('.other-trigger-row');
+                if (otherBtn) {
+                  choicesStack.querySelectorAll('.quiz-choice-row').forEach(r => r.classList.remove('active'));
+                  otherBtn.classList.add('active');
+                  
+                  let inputContainer = slide.querySelector('.other-input-container');
+                  if (!inputContainer) {
+                    inputContainer = document.createElement('div');
+                    inputContainer.className = 'other-input-container';
+                    inputContainer.style.marginTop = '16px';
+                    inputContainer.style.width = '100%';
+                    inputContainer.innerHTML = `
+                      <input type="text" class="form-input other-text-input" placeholder="Specify your details..." style="width: 100%; box-sizing: border-box; margin-bottom: 12px;" />
+                      <button class="btn btn-primary other-confirm-btn" type="button" style="width: 100%;">Confirm</button>
+                    `;
+                    slide.appendChild(inputContainer);
+                  }
+                  inputContainer.style.display = 'block';
+                  const inputField = inputContainer.querySelector('.other-text-input');
+                  inputField.value = currentVal;
+                  
+                  const confirmBtn = inputContainer.querySelector('.other-confirm-btn');
+                  confirmBtn.onclick = () => {
+                    const val = inputField.value.trim() || "Other";
+                    if (step === 2) {
+                      selectedStep2 = val;
+                      selectedStep3 = '';
+                      goToStep(3);
+                    } else if (step === 3) {
+                      selectedStep3 = val;
+                      goToStep(4);
+                    }
+                  };
+                }
+              }
+            } else {
+              const inputContainer = slide.querySelector('.other-input-container');
+              if (inputContainer) {
+                inputContainer.style.display = 'none';
+                const inputField = inputContainer.querySelector('.other-text-input');
+                if (inputField) inputField.value = '';
+              }
+            }
+          }
+          
           slide.style.display = 'block';
           setTimeout(() => slide.classList.add('active'), 10);
         }
       }
-    }
+    } // End goToStep
+
+    // Bind event delegation for other-trigger-row and other-confirm-btn click events
+    quizCard.addEventListener('click', (e) => {
+      // 1. Check if Confirm button was clicked
+      const confirmBtn = e.target.closest('.other-confirm-btn');
+      if (confirmBtn) {
+        e.stopPropagation();
+        try {
+          const slide = confirmBtn.closest('.quiz-step-slide');
+          const inputField = slide.querySelector('.other-text-input');
+          const val = inputField.value.trim();
+          
+          if (!val) {
+            inputField.style.border = '1px solid #ef4444';
+            inputField.style.backgroundColor = '#fef2f2';
+            inputField.placeholder = "Please enter your need to continue...";
+            inputField.focus();
+            return;
+          }
+          
+          inputField.style.border = '';
+          inputField.style.backgroundColor = '';
+          
+          const stepVal = slide.getAttribute('data-step');
+          
+          if (stepVal.startsWith('2-') || stepVal.startsWith('3-')) {
+            selectedStep2 = val;
+            selectedStep3 = '';
+            
+            const configKey = `${selectedFocus}-${val}`;
+            if (typeof quizContentConfig !== 'undefined') {
+              quizContentConfig[configKey] = generateDynamicQuizConfig(selectedFocus, val);
+            }
+            
+            ratings.status = 5;
+            ratings.career = 5;
+            ratings.finance = 5;
+            
+            goToStep(7);
+          } else if (stepVal === '7') {
+            selectedStep7 = val;
+            const configKey = (selectedFocus && selectedStep2) ? `${selectedFocus}-${selectedStep2}` : selectedFocus;
+            if (typeof quizContentConfig !== 'undefined') {
+              quizContentConfig[configKey] = generateDynamicQuizConfig(selectedFocus, val);
+            }
+            goToStep(8);
+          } else if (stepVal === '8') {
+            selectedStep8 = val;
+            const configKey = (selectedFocus && selectedStep2) ? `${selectedFocus}-${selectedStep2}` : selectedFocus;
+            if (typeof quizContentConfig !== 'undefined') {
+              quizContentConfig[configKey] = generateDynamicQuizConfig(selectedFocus, val);
+            }
+            goToStep(9);
+          } else if (stepVal === '10') {
+            selectedStep10 = val;
+            goToStep('signup');
+          }
+        } catch (err) {
+          alert("Error in confirm button: " + err.message);
+        }
+        return; // Stop execution for this click
+      }
+
+      // 2. Check if Other row was clicked
+      const otherRow = e.target.closest('.other-trigger-row');
+      if (otherRow) {
+        e.stopPropagation();
+        const slide = otherRow.closest('.quiz-step-slide');
+        const choicesStack = slide.querySelector('.quiz-choices-stack') || slide.querySelector('.dynamic-choices-container');
+        
+        choicesStack.querySelectorAll('.quiz-choice-row').forEach(r => r.classList.remove('active'));
+        otherRow.classList.add('active');
+        
+        let inputContainer = slide.querySelector('.other-input-container');
+        if (!inputContainer) {
+          inputContainer = document.createElement('div');
+          inputContainer.className = 'other-input-container';
+          inputContainer.style.marginTop = '16px';
+          inputContainer.style.width = '100%';
+          inputContainer.innerHTML = `
+            <input type="text" class="form-input other-text-input" placeholder="Specify your details..." style="width: 100%; box-sizing: border-box; margin-bottom: 12px; transition: all 0.2s ease;" />
+            <div class="btn btn-primary other-confirm-btn" style="width: 100%; text-align: center; cursor: pointer;">Confirm</div>
+          `;
+          slide.appendChild(inputContainer);
+        }
+        
+        inputContainer.style.display = 'block';
+        const inputField = inputContainer.querySelector('.other-text-input');
+        inputField.style.border = '';
+        inputField.style.backgroundColor = '';
+        inputField.focus();
+        return; 
+      }
+      
+      // 3. Check if normal row was clicked
+      const normalRow = e.target.closest('.quiz-choice-row');
+      if (normalRow && !normalRow.classList.contains('other-trigger-row')) {
+        const slide = normalRow.closest('.quiz-step-slide');
+        if (slide) {
+          const inputContainer = slide.querySelector('.other-input-container');
+          if (inputContainer) {
+            inputContainer.style.display = 'none';
+            const inputField = inputContainer.querySelector('.other-text-input');
+            if (inputField) {
+              inputField.value = '';
+              inputField.style.border = '';
+              inputField.style.backgroundColor = '';
+            }
+          }
+        }
+      }
+    });
   }
+
 
   // Quiz matching logic
   const radios = document.querySelectorAll('input[name="focus_area"]');
@@ -2178,7 +2590,28 @@ document.addEventListener('DOMContentLoaded', () => {
 file_taxes: { title: "Dual-Status Tax Filings", desc: "Get mapped to expat tax preparers for clean dual-status or resident tax returns." },
     asset_report: { title: "Foreign Assets Disclosures (FBAR)", desc: "Map required FBAR/FATCA compliance forms to avoid high penalty fees." },
     mortgage: { title: "Expat Mortgage Qualification", desc: "Prepare document checklists and map expat-friendly lenders for home buying." },
-    investments: { title: "Cross-Border Wealth Setup", desc: "Safeguard assets, avoid double taxes, and set up local broker accounts." }
+    investments: { title: "Cross-Border Wealth Setup", desc: "Safeguard assets, avoid double taxes, and set up local broker accounts." },
+    degree_translation: { title: "Degree Translation & Evaluation", desc: "Your advisor will guide you on course-by-course evaluations (e.g. WES, ECE) for foreign credential equivalency." },
+    recertification: { title: "Professional Licensing Audits", desc: "Detailed breakdown of local board exams, state certifications, and regulatory checklists." },
+    bridging_gaps: { title: "Bridging Gaps Roadmap", desc: "Map local courses, certification tests, and study plans to fill compliance voids." },
+    translate_docs: { title: "Official Translation Service", desc: "Translate foreign transcripts, degree certificates, and syllabi for official boards." },
+    wes_evaluation: { title: "Academic Credential Evaluators", desc: "Select and submit files to accredited credential evaluation services without delays." },
+    board_requirements: { title: "Verify Board Eligibility", desc: "Identify and audit state-specific regulatory board guidelines for international professionals." },
+    exam_study: { title: "Licensing Exam Prep", desc: "Draft structured study routines and compile review materials for professional board exams." },
+    bridging_courses: { title: "Accredited Bridging Programs", desc: "Find recognized fast-track university courses or local training modules to fill credit gaps." },
+    transfer_funding: { title: "Relocation Grants & Loans", desc: "Access grants, micro-loans, or funding specifically for immigrant re-certification fees." },
+    custom_rules: { title: "Review Guidelines & Rules", desc: "Identify official regulations and compliance requirements." },
+    custom_help: { title: "Find Professional Contacts", desc: "Connect with vetted specialists and local guides." },
+    custom_forms: { title: "Fill & Submit Applications", desc: "Compile paperwork, fill out web forms, and complete submissions." },
+    custom_info_blocker: { title: "Research Gap", desc: "Locate checklist guides to clarify local laws." },
+    custom_cost_blocker: { title: "Financial Feasibility", desc: "Audit expected fees and source funding or payment plans." },
+    custom_time_blocker: { title: "Timeline Constraints", desc: "Structure target completion dates to bypass scheduling bottlenecks." },
+    custom_action_research: { title: "Compile Guidelines", desc: "Research and document official guidelines and requirements." },
+    custom_action_budget: { title: "Define Budget Roadmap", desc: "Establish a clear financial and relocation cost forecast." },
+    custom_action_experts: { title: "Connect with Specialists", desc: "Engage with advisors or settled expats who have achieved this." },
+    custom_action_docs: { title: "Gather Records", desc: "Collect required background checks, translations, and certificates." },
+    custom_action_apply: { title: "Submit Form Applications", desc: "Complete registrations and submit online file packets." },
+    custom_action_sign: { title: "Review Local Contracts", desc: "Perform due diligence audits on rental leases or service contracts." }
   };
 
   function renderResultsPage() {
@@ -2244,7 +2677,7 @@ file_taxes: { title: "Dual-Status Tax Filings", desc: "Get mapped to expat tax p
         }
       }
     } else if (selectedFocus === 'career') {
-      if (selectedStep2 === 'hired') {
+      if (selectedStep2 === 'hired' || selectedStep2 === 'transfer') {
         matchId = 'david';
       } else {
         matchId = 'michael';
@@ -3416,6 +3849,50 @@ file_taxes: { title: "Dual-Status Tax Filings", desc: "Get mapped to expat tax p
         focusArea = portalActiveFocusArea || 'Status & Visas';
       }
 
+      // Populate bottleneck text
+      const bottleneckTxt = document.getElementById('overview-bottleneck-txt');
+      if (bottleneckTxt) {
+        let displayBottleneck = 'Status & Visas';
+        if (bottleneck === 'career') displayBottleneck = 'Career & Jobs';
+        if (bottleneck === 'finance') displayBottleneck = 'Housing & Finance';
+        bottleneckTxt.innerText = displayBottleneck;
+      }
+
+      // Populate scorecards
+      const scorecardsContainer = document.getElementById('overview-scorecards-container');
+      if (scorecardsContainer) {
+        const scores = quizResults.scores || { status: 3, career: 3, finance: 3 };
+        
+        const renderScoreRing = (score, max, label) => {
+          const pct = Math.round((score / max) * 100);
+          const color = score >= 4 ? '#10b981' : score >= 3 ? '#f59e0b' : '#ef4444';
+          const circ = 2 * Math.PI * 18;
+          const strokeDasharray = circ;
+          const strokeDashoffset = circ - (pct / 100) * circ;
+          
+          return `
+            <div style="display: flex; flex-direction: column; align-items: center; background: white; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="position: relative; width: 48px; height: 48px; margin-bottom: 8px;">
+                <svg width="48" height="48" viewBox="0 0 40 40">
+                  <circle cx="20" cy="20" r="18" fill="none" stroke="#e5e7eb" stroke-width="4"></circle>
+                  <circle cx="20" cy="20" r="18" fill="none" stroke="${color}" stroke-width="4" stroke-dasharray="${strokeDasharray}" stroke-dashoffset="${strokeDashoffset}" stroke-linecap="round" transform="rotate(-90 20 20)"></circle>
+                </svg>
+                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.95rem; color: var(--text-primary);">
+                  ${score}/${max}
+                </div>
+              </div>
+              <span style="font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); text-align: center;">${label}</span>
+            </div>
+          `;
+        };
+
+        scorecardsContainer.innerHTML = `
+          ${renderScoreRing(scores.status || 0, 5, 'Visas')}
+          ${renderScoreRing(scores.career || 0, 5, 'Career')}
+          ${renderScoreRing(scores.finance || 0, 5, 'Housing')}
+        `;
+      }
+
       // Update subheading details on success hub header
       const subheading = document.getElementById('db-user-subheading');
       if (subheading) {
@@ -3582,7 +4059,10 @@ file_taxes: { title: "Dual-Status Tax Filings", desc: "Get mapped to expat tax p
           <div style="display: flex; align-items: center; gap: 10px;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-secondary);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             <div>
-              <span style="font-weight: 600; color: var(--text-primary); font-size: 0.85rem; display: block;">${fileData.name}</span>
+              ${fileData.url 
+                ? `<a href="${fileData.url}" target="_blank" style="font-weight: 600; color: var(--brand-primary); font-size: 0.85rem; display: block; text-decoration: underline;">${fileData.name}</a>`
+                : `<span style="font-weight: 600; color: var(--text-primary); font-size: 0.85rem; display: block;">${fileData.name}</span>`
+              }
               <span style="font-size: 0.75rem; color: var(--text-secondary);">${fileData.size} • ${fileData.uploadedAt ? (typeof fileData.uploadedAt === 'string' ? new Date(fileData.uploadedAt).toLocaleDateString() : new Date(fileData.uploadedAt.seconds * 1000).toLocaleDateString()) : (fileData.dateStr || 'Just now')}</span>
             </div>
           </div>
@@ -3634,17 +4114,33 @@ file_taxes: { title: "Dual-Status Tax Filings", desc: "Get mapped to expat tax p
     };
   }
 
-  // Simulated File Upload (save metadata details to Firestore)
+  // Real File Upload to Firebase Storage
   async function handleFileUpload(userId, file) {
     // Format file size
     const sizeStr = file.size > 1024 * 1024 
       ? (file.size / (1024 * 1024)).toFixed(1) + ' MB' 
       : (file.size / 1024).toFixed(0) + ' KB';
 
+    let downloadUrl = null;
+
+    if (storage) {
+      try {
+        const fileRef = ref(storage, `users/${userId}/documents/${Date.now()}_${file.name}`);
+        await uploadBytes(fileRef, file);
+        downloadUrl = await getDownloadURL(fileRef);
+        console.log("File uploaded to Firebase Storage successfully.");
+      } catch (err) {
+        console.error("Firebase Storage upload failed:", err);
+        alert("Upload failed. Check your Firebase Storage Security Rules.");
+        return; // Stop execution if upload fails
+      }
+    }
+
     const fileData = {
       name: file.name,
       size: sizeStr,
-      uploadedAt: new Date().toISOString()
+      uploadedAt: new Date().toISOString(),
+      url: downloadUrl
     };
 
     if (db) {
@@ -4380,4 +4876,111 @@ file_taxes: { title: "Dual-Status Tax Filings", desc: "Get mapped to expat tax p
       categories
     };
   };
+
+  function generateDynamicQuizConfig(focus, need) {
+    const capitalizedNeed = need.charAt(0).toUpperCase() + need.slice(1);
+    return {
+      categories: ["Research", "Action Plan", "Execution"],
+      4: {
+        badge: "Research",
+        title: `${capitalizedNeed}: Discovery & Planning`,
+        desc: `How clear is your research, budget, and planning for "${need}"?`,
+        type: "rating",
+        category: "status"
+      },
+      5: {
+        badge: "Action Plan",
+        title: `${capitalizedNeed}: Preparation & Setup`,
+        desc: `How prepared are you with the initial documents or steps required for "${need}"?`,
+        type: "rating",
+        category: "career"
+      },
+      6: {
+        badge: "Execution",
+        title: `${capitalizedNeed}: Final Steps & Launch`,
+        desc: `How confident are you in executing the final phase of "${need}"?`,
+        type: "rating",
+        category: "finance"
+      },
+      7: {
+        badge: "NEXT ACTION",
+        title: `What is your primary focus for "${need}" right now?`,
+        desc: "Select the area where you need the most guidance:",
+        type: "choice",
+        choices: [
+          { label: `Reviewing rules & requirements for "${need}"`, val: "custom_rules" },
+          { label: `Finding contacts & professional help for "${need}"`, val: "custom_help" },
+          { label: `Filling out applications & submitting forms for "${need}"`, val: "custom_forms" }
+        ]
+      },
+      8: {
+        badge: "PRIMARY BLOCKER",
+        title: `What is your biggest hurdle with "${need}"?`,
+        desc: "Identify the main bottleneck preventing your progress:",
+        type: "choice",
+        choices: [
+          { label: `Lack of clear local rules & step-by-step checklists`, val: "custom_info_blocker" },
+          { label: `High costs, fees, or funding options`, val: "custom_cost_blocker" },
+          { label: `Complex paperwork, language barrier, or timing`, val: "custom_time_blocker" }
+        ]
+      },
+      9: {
+        badge: "STRATEGIC GOALS",
+        title: `What would it take to move your "${need}" closer to 10?`,
+        desc: "Select the actions you want to prioritize:",
+        type: "checklist",
+        checklists: {
+          status: [
+            { label: `Research and compile official guidelines for "${need}"`, val: "custom_action_research" },
+            { label: `Define a clear timeline and budget roadmap`, val: "custom_action_budget" }
+          ],
+          career: [
+            { label: `Connect with local experts or settled expat peers`, val: "custom_action_experts" },
+            { label: `Gather necessary certificates, IDs, and records`, val: "custom_action_docs" }
+          ],
+          finance: [
+            { label: `Submit applications or register for local services`, val: "custom_action_apply" },
+            { label: `Review legal drafts, contracts, or agreements`, val: "custom_action_sign" }
+          ]
+        }
+      },
+      10: {
+        badge: "ADVISOR SUPPORT",
+        title: `How do you want your advisor to help with "${need}"?`,
+        desc: "Choose the support area that fits your needs:",
+        type: "choice",
+        choices: [
+          { label: `Auditing my current state and identifying missing steps`, val: "custom_advisor_audit" },
+          { label: `Connecting me with vetted local specialists or templates`, val: "custom_advisor_connections" },
+          { label: `Providing active matching and direct coordination`, val: "custom_advisor_coordination" }
+        ]
+      }
+    };
+  }
+
+  function injectStaticOtherOptions() {
+    const staticSlides = quizCard.querySelectorAll('.quiz-step-slide');
+    staticSlides.forEach(slide => {
+      const stepVal = slide.getAttribute('data-step');
+      if (!stepVal || stepVal === '1' || stepVal === 'signup' || stepVal === 'loading') return;
+      
+      const choicesStack = slide.querySelector('.quiz-choices-stack');
+      if (choicesStack && !choicesStack.classList.contains('dynamic-choices-container')) {
+        if (!choicesStack.querySelector('.other-trigger-row')) {
+          const otherBtn = document.createElement('button');
+          otherBtn.type = 'button';
+          otherBtn.className = 'quiz-choice-row other-trigger-row';
+          otherBtn.innerHTML = `
+            <div class="quiz-radio-indicator"></div>
+            <div class="choice-row-text">
+              <span class="choice-row-title">Other</span>
+              <span class="choice-row-desc">Specify your custom need...</span>
+            </div>
+          `;
+          choicesStack.appendChild(otherBtn);
+        }
+      }
+    });
+  }
+  injectStaticOtherOptions();
 });

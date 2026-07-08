@@ -4774,3 +4774,137 @@ button, input, textarea {
 }
 
 
+
+/* ---------------------------------------------------- */
+/* U-STYLE DASHBOARD LAYOUT */
+/* ---------------------------------------------------- */
+
+.dashboard-wrapper {
+  background-color: var(--bg-primary);
+  min-height: calc(100vh - 120px);
+  padding: 60px 0 100px;
+}
+
+.dashboard-container {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+/* Sidebar */
+.dashboard-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 100px;
+}
+
+.dashboard-sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dashboard-sidebar-profile .avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.dashboard-sidebar-profile h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.dashboard-sidebar-profile p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.dashboard-nav-group {
+  margin-bottom: 24px;
+}
+
+.dashboard-nav-group h4 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.dashboard-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dashboard-nav li {
+  margin-bottom: 4px;
+}
+
+.dashboard-nav a {
+  display: block;
+  padding: 10px 16px;
+  color: var(--text-primary);
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background-color 0.2s, color 0.2s;
+  font-size: 0.95rem;
+}
+
+.dashboard-nav a:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.dashboard-nav a.active {
+  background-color: var(--accent);
+  color: white;
+}
+
+/* Content Area */
+.dashboard-content {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.dashboard-content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+  font-family: 'Instrument Serif', serif;
+}
+
+.dashboard-card {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+@media (max-width: 900px) {
+  .dashboard-container {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .dashboard-sidebar {
+    width: 100%;
+    position: static;
+  }
+}

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Settings — same Path</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
+          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; margin-right: 6px;" fill="none" stroke="#112F20" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16h8a4 4 0 0 0 4-4V4"/><path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706"/></svg>
+          same Path
+        </a>
+      </div>
+      <ul class="nav-links portal-nav-links">
+        <li><a href="/" class="nav-link active">Expat Hub</a></li>
+        <li><a href="/" class="nav-link">Browse Guides</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="user-avatar" style="background-color: var(--sage); color: white; display: flex; align-items: center; justify-content: center;">O</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard -->
+  <div class="dashboard-wrapper">
+    <div class="container dashboard-container">
+      
+      <!-- Sidebar -->
+      <aside class="dashboard-sidebar">
+        <div class="dashboard-sidebar-profile">
+          <div class="avatar-container" style="position: relative; cursor: pointer;" onclick="document.getElementById('sidebar-avatar-upload').click()">
+            <div class="avatar" style="width: 64px; height: 64px; border-radius: 50%; background-color: var(--sage); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 600;">O</div>
+            <div style="position: absolute; bottom: 0; right: 0; background: white; border: 1px solid var(--border-color); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+              <svg width="12" height="12" fill="none" stroke="var(--text-primary)" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+            </div>
+            <input type="file" id="sidebar-avatar-upload" style="display: none;" accept="image/*">
+          </div>
+          <div>
+            <h3>oluwashinayomi...</h3>
+            <p>Client Account</p>
+          </div>
+        </div>
+
+        <div class="dashboard-nav-group">
+          <h4>My Workspace</h4>
+          <ul class="dashboard-nav">
+            <li><a href="/bookings.html" class="">My 1-1 Bookings</a></li>
+            <li><a href="/vault.html" class="">Document Vault</a></li>
+            <li><a href="/roadmap.html" class="">My Action Roadmap</a></li>
+            <li><a href="/messages.html" class="">Message Center</a></li>
+            <li><a href="/saved-guides.html" class="">My Saved Guides</a></li>
+          </ul>
+        </div>
+
+        <div class="dashboard-nav-group">
+          <h4>Account</h4>
+          <ul class="dashboard-nav">
+            <li><a href="/profile.html" class="">Public Profile</a></li>
+            <li><a href="/settings.html" class="active">Account Settings</a></li>
+            <li><a href="/billing.html" class="">Payment Methods</a></li>
+            <li><a href="/credits.html" class="">Platform Credits</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="dashboard-content">
+        <h1>Account Settings</h1>
+        
+      <div class="dashboard-card" style="position: relative;">
+        <!-- Toast Notification (Hidden) -->
+        <div id="settings-toast" style="display: none; position: absolute; top: 24px; right: 24px; background: #10b981; color: white; padding: 12px 24px; border-radius: 8px; font-weight: 500; font-size: 0.95rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+          Settings saved successfully!
+        </div>
+
+        <div style="margin-bottom: 40px;">
+          <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 20px;">Email Notifications</h3>
+          <label style="display: flex; align-items: flex-start; margin-bottom: 16px; cursor: pointer;">
+            <input type="checkbox" class="setting-toggle" checked style="margin-top: 4px; margin-right: 12px; width: 16px; height: 16px;"> 
+            <div>
+              <div style="font-weight: 500;">Direct Messages</div>
+              <div style="font-size: 0.85rem; color: var(--text-secondary);">Email me when an advisor replies to my messages.</div>
+            </div>
+          </label>
+          <label style="display: flex; align-items: flex-start; margin-bottom: 16px; cursor: pointer;">
+            <input type="checkbox" class="setting-toggle" checked style="margin-top: 4px; margin-right: 12px; width: 16px; height: 16px;"> 
+            <div>
+              <div style="font-weight: 500;">Booking Reminders</div>
+              <div style="font-size: 0.85rem; color: var(--text-secondary);">Email me reminders for upcoming consultations.</div>
+            </div>
+          </label>
+        </div>
+        
+        <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+        
+        <div>
+          <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: #dc2626;">Danger Zone</h3>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 16px;">Permanently delete your account and all associated data.</p>
+          <button id="btn-delete-account" class="btn btn-outline" style="border-color: #dc2626; color: #dc2626;">Delete Account</button>
+        </div>
+      </div>
+      
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const toggles = document.querySelectorAll('.setting-toggle');
+          const toast = document.getElementById('settings-toast');
+          const btnDelete = document.getElementById('btn-delete-account');
+          let toastTimeout;
+
+          const showToast = () => {
+            toast.style.display = 'block';
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+              toast.style.display = 'none';
+            }, 3000);
+          };
+
+          toggles.forEach(toggle => {
+            toggle.addEventListener('change', showToast);
+          });
+
+          btnDelete.addEventListener('click', () => {
+            const confirmed = confirm("Are you absolutely sure you want to delete your account? This action cannot be undone.");
+            if (confirmed) {
+              alert("Your account deletion request has been submitted. You will be logged out shortly.");
+              // Mock logout
+              window.location.href = '/';
+            }
+          });
+        });
+      </script>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="color: white;">
+            <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; display: inline-block; vertical-align: middle; margin-right: 6px;" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 16h8a4 4 0 0 0 4-4V4" stroke="#FAF9F5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            same Path
+          </div>
+          <p style="color: #9ca3af; margin-top: 16px; font-size: 0.9rem;">Connecting global talent with local expertise.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Browse Directory</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/help-center.html">Help Center</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 same Path. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+      <script type="module">
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, collection, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        // Initialize Firebase with the same config as app.js
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyANoB6-PHmSVQ9OuiyNX2L_ORfATsB_Gs8",
+          authDomain: "samepath-c3749.firebaseapp.com",
+          projectId: "samepath-c3749",
+          storageBucket: "samepath-c3749.firebasestorage.app",
+          messagingSenderId: "543979822804",
+          appId: "1:543979822804:web:eb6f606455f54258bca541",
+          measurementId: "G-BV27FDTK8G"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.auth = auth;
+      </script>
+
+
+      <script type="module">
+        import { doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
+        document.addEventListener('DOMContentLoaded', () => {
+          const toggles = document.querySelectorAll('input[type="checkbox"]');
+          toggles.forEach(toggle => {
+            toggle.addEventListener('change', async (e) => {
+              const user = window.auth.currentUser;
+              if(user) {
+                try {
+                  await updateDoc(doc(window.db, "users", user.uid), {
+                    "settings.updatedAt": new Date()
+                  });
+                } catch(err) {
+                  console.error(err);
+                }
+              }
+            });
+          });
+        });
+      </script>
+  
+</body>
+</html>

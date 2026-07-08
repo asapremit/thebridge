@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — same Path</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .page-container {
+      max-width: 800px;
+      margin: 120px auto 80px;
+      padding: 0 24px;
+      min-height: 50vh;
+    }
+    .page-container h1 {
+      font-size: 3rem;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+    }
+    .page-container p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
+          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; margin-right: 6px;" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 16h8a4 4 0 0 0 4-4V4" stroke="#112F20" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          same Path
+        </a>
+      </div>
+      <ul class="nav-links portal-nav-links">
+        <li><a href="/" class="nav-link">Expat Hub</a></li>
+        <li><a href="/" class="nav-link">Browse Guides</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="/profile.html" style="text-decoration: none;">
+          <div class="user-avatar" style="background-color: var(--sage); color: white; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%;">O</div>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-container">
+    <h1>Contact Us</h1>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 32px;">
+      <div>
+        <p style="margin-bottom: 24px;">Have questions about our platform or need assistance with your advisor match? Our team is here to help.</p>
+        
+        <h4 style="font-weight: 600; margin-bottom: 8px;">Email Us</h4>
+        <p style="margin-bottom: 24px;"><a href="mailto:support@samepath.com" style="color: var(--accent);">support@samepath.com</a></p>
+        
+        <h4 style="font-weight: 600; margin-bottom: 8px;">Business Hours</h4>
+        <p style="margin-bottom: 24px;">Monday - Friday: 9:00 AM - 6:00 PM (EST)<br>Saturday - Sunday: Closed</p>
+
+        <h4 style="font-weight: 600; margin-bottom: 8px;">Headquarters</h4>
+        <p>123 Global Mobility Way<br>Suite 400<br>New York, NY 10001</p>
+      </div>
+
+      <div style="background-color: #f9fafb; padding: 32px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <form onsubmit="event.preventDefault(); alert('Thank you for contacting us! We will get back to you shortly.');">
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; font-weight: 500; margin-bottom: 8px;">Full Name</label>
+            <input type="text" required style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box;">
+          </div>
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; font-weight: 500; margin-bottom: 8px;">Email Address</label>
+            <input type="email" required style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box;">
+          </div>
+          <div style="margin-bottom: 24px;">
+            <label style="display: block; font-weight: 500; margin-bottom: 8px;">Message</label>
+            <textarea required rows="4" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; resize: vertical;"></textarea>
+          </div>
+          <button type="submit" style="width: 100%; padding: 14px; background-color: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="color: white;">
+            <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; display: inline-block; vertical-align: middle; margin-right: 6px;" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 16h8a4 4 0 0 0 4-4V4" stroke="#FAF9F5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            same Path
+          </div>
+          <p style="color: #9ca3af; margin-top: 16px; font-size: 0.9rem;">Connecting global talent with local expertise.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/help-center.html">Help Center</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 same Path. All rights reserved.
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

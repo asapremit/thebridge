@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Public Profile — same Path</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
+          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; margin-right: 6px;" fill="none" stroke="#112F20" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16h8a4 4 0 0 0 4-4V4"/><path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706"/></svg>
+          same Path
+        </a>
+      </div>
+      <ul class="nav-links portal-nav-links">
+        <li><a href="/" class="nav-link active">Expat Hub</a></li>
+        <li><a href="/" class="nav-link">Browse Guides</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="user-avatar" style="background-color: var(--sage); color: white; display: flex; align-items: center; justify-content: center;">O</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard -->
+  <div class="dashboard-wrapper">
+    <div class="container dashboard-container">
+      
+      <!-- Sidebar -->
+      <aside class="dashboard-sidebar">
+        <div class="dashboard-sidebar-profile">
+          <div class="avatar-container" style="position: relative; cursor: pointer;" onclick="document.getElementById('sidebar-avatar-upload').click()">
+            <div class="avatar" style="width: 64px; height: 64px; border-radius: 50%; background-color: var(--sage); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 600;">O</div>
+            <div style="position: absolute; bottom: 0; right: 0; background: white; border: 1px solid var(--border-color); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+              <svg width="12" height="12" fill="none" stroke="var(--text-primary)" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+            </div>
+            <input type="file" id="sidebar-avatar-upload" style="display: none;" accept="image/*">
+          </div>
+          <div>
+            <h3>oluwashinayomi...</h3>
+            <p>Client Account</p>
+          </div>
+        </div>
+
+        <div class="dashboard-nav-group">
+          <h4>My Workspace</h4>
+          <ul class="dashboard-nav">
+            <li><a href="/bookings.html" class="">My 1-1 Bookings</a></li>
+            <li><a href="/vault.html" class="">Document Vault</a></li>
+            <li><a href="/roadmap.html" class="">My Action Roadmap</a></li>
+            <li><a href="/messages.html" class="">Message Center</a></li>
+            <li><a href="/saved-guides.html" class="">My Saved Guides</a></li>
+          </ul>
+        </div>
+
+        <div class="dashboard-nav-group">
+          <h4>Account</h4>
+          <ul class="dashboard-nav">
+            <li><a href="/profile.html" class="active">Public Profile</a></li>
+            <li><a href="/settings.html" class="">Account Settings</a></li>
+            <li><a href="/billing.html" class="">Payment Methods</a></li>
+            <li><a href="/credits.html" class="">Platform Credits</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="dashboard-content">
+        <h1>Public Profile</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 24px;">Add information about yourself</p>
+        
+      <div class="dashboard-card">
+        <form id="profile-form">
+          <div style="margin-bottom: 32px;">
+            <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 16px;">Basics:</h4>
+            <div style="margin-bottom: 16px;">
+              <input type="text" id="prof-fname" placeholder="First Name" value="oluwashinayomi" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; font-size: 1rem;">
+            </div>
+            <div style="margin-bottom: 16px;">
+              <input type="text" id="prof-lname" placeholder="Last Name" value="ademiluyi" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; font-size: 1rem;">
+            </div>
+            <div style="margin-bottom: 16px;">
+              <input type="text" id="prof-headline" placeholder="Headline" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; font-size: 1rem;">
+              <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 6px;">Add a professional headline like, "Instructor at Udemy" or "Architect."</p>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 32px;">
+            <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 16px;">Biography:</h4>
+            <!-- Mock WYSIWYG Toolbar -->
+            <div style="border: 1px solid var(--border-color); border-bottom: none; border-top-left-radius: 4px; border-top-right-radius: 4px; padding: 8px 12px; background: #f9f9f9; display: flex; gap: 12px;">
+              <span style="font-weight: bold; cursor: pointer;">B</span>
+              <span style="font-style: italic; cursor: pointer;">I</span>
+            </div>
+            <textarea id="prof-bio" rows="5" placeholder="Biography" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; font-family: inherit; font-size: 1rem; resize: vertical;"></textarea>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 6px;">Links and coupon codes are not permitted in this section.</p>
+          </div>
+
+          <div style="margin-bottom: 32px;">
+            <select style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; font-size: 1rem; background: white; cursor: pointer;">
+              <option>English (US)</option>
+              <option>Spanish</option>
+              <option>French</option>
+            </select>
+          </div>
+          
+          <div style="margin-bottom: 32px;">
+            <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 16px;">Links:</h4>
+            
+            <div style="margin-bottom: 16px;">
+              <input type="text" id="prof-web" placeholder="Website (http(s)://..)" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; font-size: 1rem;">
+            </div>
+            
+            <div style="margin-bottom: 16px; display: flex;">
+              <div style="padding: 12px; background: #f3f4f6; border: 1px solid var(--border-color); border-right: none; border-top-left-radius: 4px; border-bottom-left-radius: 4px; color: var(--text-secondary); width: 150px;">facebook.com/</div>
+              <input type="text" id="prof-twitter" placeholder="Username" style="flex-grow: 1; padding: 12px; border: 1px solid var(--border-color); border-top-right-radius: 4px; border-bottom-right-radius: 4px; font-family: inherit; font-size: 1rem;">
+            </div>
+            
+            <div style="margin-bottom: 16px; display: flex;">
+              <div style="padding: 12px; background: #f3f4f6; border: 1px solid var(--border-color); border-right: none; border-top-left-radius: 4px; border-bottom-left-radius: 4px; color: var(--text-secondary); width: 150px;">instagram.com/</div>
+              <input type="text" placeholder="Username" style="flex-grow: 1; padding: 12px; border: 1px solid var(--border-color); border-top-right-radius: 4px; border-bottom-right-radius: 4px; font-family: inherit; font-size: 1rem;">
+            </div>
+            
+            <div style="margin-bottom: 16px; display: flex;">
+              <div style="padding: 12px; background: #f3f4f6; border: 1px solid var(--border-color); border-right: none; border-top-left-radius: 4px; border-bottom-left-radius: 4px; color: var(--text-secondary); width: 150px;">linkedin.com/</div>
+              <input type="text" placeholder="Public Profile URL" style="flex-grow: 1; padding: 12px; border: 1px solid var(--border-color); border-top-right-radius: 4px; border-bottom-right-radius: 4px; font-family: inherit; font-size: 1rem;">
+            </div>
+            
+            <div style="margin-bottom: 16px; display: flex;">
+              <div style="padding: 12px; background: #f3f4f6; border: 1px solid var(--border-color); border-right: none; border-top-left-radius: 4px; border-bottom-left-radius: 4px; color: var(--text-secondary); width: 150px;">tiktok.com/</div>
+              <input type="text" placeholder="@Username" style="flex-grow: 1; padding: 12px; border: 1px solid var(--border-color); border-top-right-radius: 4px; border-bottom-right-radius: 4px; font-family: inherit; font-size: 1rem;">
+            </div>
+            
+            <div style="margin-bottom: 16px; display: flex;">
+              <div style="padding: 12px; background: #f3f4f6; border: 1px solid var(--border-color); border-right: none; border-top-left-radius: 4px; border-bottom-left-radius: 4px; color: var(--text-secondary); width: 150px;">x.com/</div>
+              <input type="text" placeholder="Username" style="flex-grow: 1; padding: 12px; border: 1px solid var(--border-color); border-top-right-radius: 4px; border-bottom-right-radius: 4px; font-family: inherit; font-size: 1rem;">
+            </div>
+            
+            <div style="margin-bottom: 16px; display: flex;">
+              <div style="padding: 12px; background: #f3f4f6; border: 1px solid var(--border-color); border-right: none; border-top-left-radius: 4px; border-bottom-left-radius: 4px; color: var(--text-secondary); width: 150px;">youtube.com/</div>
+              <input type="text" placeholder="Username" style="flex-grow: 1; padding: 12px; border: 1px solid var(--border-color); border-top-right-radius: 4px; border-bottom-right-radius: 4px; font-family: inherit; font-size: 1rem;">
+            </div>
+          </div>
+          
+          <div style="padding-top: 24px; border-top: 1px solid var(--border-color);">
+            <button type="submit" class="btn btn-primary" style="padding: 12px 32px; background-color: #5624d0; border: none;">Save</button>
+          </div>
+        </form>
+      </div>
+    
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="color: white;">
+            <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; display: inline-block; vertical-align: middle; margin-right: 6px;" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 16h8a4 4 0 0 0 4-4V4" stroke="#FAF9F5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            same Path
+          </div>
+          <p style="color: #9ca3af; margin-top: 16px; font-size: 0.9rem;">Connecting global talent with local expertise.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Browse Directory</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/help-center.html">Help Center</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 same Path. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+      <script type="module">
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, collection, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        // Initialize Firebase with the same config as app.js
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyANoB6-PHmSVQ9OuiyNX2L_ORfATsB_Gs8",
+          authDomain: "samepath-c3749.firebaseapp.com",
+          projectId: "samepath-c3749",
+          storageBucket: "samepath-c3749.firebasestorage.app",
+          messagingSenderId: "543979822804",
+          appId: "1:543979822804:web:eb6f606455f54258bca541",
+          measurementId: "G-BV27FDTK8G"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.auth = auth;
+      </script>
+
+
+      <script type="module">
+        import { doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
+        document.addEventListener('DOMContentLoaded', () => {
+          const form = document.getElementById('profile-form');
+          if(form) {
+            form.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const user = window.auth.currentUser;
+              if(!user) {
+                alert("You must be logged in to save.");
+                return;
+              }
+              
+              const fname = document.getElementById('prof-fname').value;
+              const lname = document.getElementById('prof-lname').value;
+              const headline = document.getElementById('prof-headline').value;
+              const bio = document.getElementById('prof-bio').value;
+              const web = document.getElementById('prof-web').value;
+              
+              const btn = form.querySelector('button[type="submit"]');
+              btn.innerText = "Saving...";
+              
+              try {
+                await updateDoc(doc(window.db, "users", user.uid), {
+                  "profile.firstName": fname,
+                  "profile.lastName": lname,
+                  "profile.headline": headline,
+                  "profile.bio": bio,
+                  "socialLinks.website": web
+                });
+                alert("Profile updated successfully!");
+              } catch(err) {
+                console.error(err);
+                alert("Failed to save profile.");
+              }
+              btn.innerText = "Save";
+            });
+          }
+        });
+      </script>
+  
+</body>
+</html>

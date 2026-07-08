@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Methods — same Path</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
+          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; margin-right: 6px;" fill="none" stroke="#112F20" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16h8a4 4 0 0 0 4-4V4"/><path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706"/></svg>
+          same Path
+        </a>
+      </div>
+      <ul class="nav-links portal-nav-links">
+        <li><a href="/" class="nav-link active">Expat Hub</a></li>
+        <li><a href="/" class="nav-link">Browse Guides</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="user-avatar" style="background-color: var(--sage); color: white; display: flex; align-items: center; justify-content: center;">O</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard -->
+  <div class="dashboard-wrapper">
+    <div class="container dashboard-container">
+      
+      <!-- Sidebar -->
+      <aside class="dashboard-sidebar">
+        <div class="dashboard-sidebar-profile">
+          <div class="avatar-container" style="position: relative; cursor: pointer;" onclick="document.getElementById('sidebar-avatar-upload').click()">
+            <div class="avatar" style="width: 64px; height: 64px; border-radius: 50%; background-color: var(--sage); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 600;">O</div>
+            <div style="position: absolute; bottom: 0; right: 0; background: white; border: 1px solid var(--border-color); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+              <svg width="12" height="12" fill="none" stroke="var(--text-primary)" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+            </div>
+            <input type="file" id="sidebar-avatar-upload" style="display: none;" accept="image/*">
+          </div>
+          <div>
+            <h3>oluwashinayomi...</h3>
+            <p>Client Account</p>
+          </div>
+        </div>
+
+        <div class="dashboard-nav-group">
+          <h4>My Workspace</h4>
+          <ul class="dashboard-nav">
+            <li><a href="/bookings.html" class="">My 1-1 Bookings</a></li>
+            <li><a href="/vault.html" class="">Document Vault</a></li>
+            <li><a href="/roadmap.html" class="">My Action Roadmap</a></li>
+            <li><a href="/messages.html" class="">Message Center</a></li>
+            <li><a href="/saved-guides.html" class="">My Saved Guides</a></li>
+          </ul>
+        </div>
+
+        <div class="dashboard-nav-group">
+          <h4>Account</h4>
+          <ul class="dashboard-nav">
+            <li><a href="/profile.html" class="">Public Profile</a></li>
+            <li><a href="/settings.html" class="">Account Settings</a></li>
+            <li><a href="/billing.html" class="active">Payment Methods</a></li>
+            <li><a href="/credits.html" class="">Platform Credits</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="dashboard-content">
+        <h1>Payment Methods</h1>
+        
+      <div class="dashboard-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+          <h3 style="font-size: 1.25rem; font-weight: 600;">Saved Cards</h3>
+          <button id="btn-add-card" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.9rem;">+ Add Card</button>
+        </div>
+        
+        <!-- Add Card Form (Hidden by default) -->
+        <div id="add-card-form" style="display: none; background: #f9f9f9; padding: 24px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 24px;">
+          <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 16px;">Add a new card</h4>
+          <div style="margin-bottom: 16px;">
+            <input type="text" id="card-number" placeholder="Card Number (e.g. 4242 4242 4242 4242)" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit;">
+          </div>
+          <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+            <input type="text" id="card-expiry" placeholder="MM/YY" style="flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit;">
+            <input type="text" id="card-cvc" placeholder="CVC" style="flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit;">
+          </div>
+          <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <button id="btn-cancel-card" class="btn btn-outline" style="padding: 8px 16px;">Cancel</button>
+            <button id="btn-save-card" class="btn btn-primary" style="padding: 8px 16px; background-color: #5624d0; border: none;">Save Card</button>
+          </div>
+        </div>
+
+        <div id="billing-empty-state" class="empty-state" style="text-align: center; padding: 48px 0; color: var(--text-secondary);">
+          <svg style="width: 48px; height: 48px; margin: 0 auto 16px; opacity: 0.3; display: block;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+          <p>No payment methods on file.</p>
+          <p style="font-size: 0.95rem; margin-top: 8px;">Add a credit or debit card to quickly book sessions.</p>
+        </div>
+        
+        <div id="cards-list" style="display: none;">
+          <ul id="ul-cards" style="list-style: none; padding: 0; margin: 0;"></ul>
+        </div>
+      </div>
+      
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const btnAddCard = document.getElementById('btn-add-card');
+          const formAddCard = document.getElementById('add-card-form');
+          const btnCancel = document.getElementById('btn-cancel-card');
+          const btnSave = document.getElementById('btn-save-card');
+          const emptyState = document.getElementById('billing-empty-state');
+          const cardsListContainer = document.getElementById('cards-list');
+          const ulCards = document.getElementById('ul-cards');
+          
+          const cardNumberInput = document.getElementById('card-number');
+          const cardExpiryInput = document.getElementById('card-expiry');
+          const cardCvcInput = document.getElementById('card-cvc');
+
+          btnAddCard.addEventListener('click', () => {
+            formAddCard.style.display = 'block';
+            btnAddCard.style.display = 'none';
+          });
+
+          btnCancel.addEventListener('click', () => {
+            formAddCard.style.display = 'none';
+            btnAddCard.style.display = 'inline-block';
+            // clear inputs
+            cardNumberInput.value = '';
+            cardExpiryInput.value = '';
+            cardCvcInput.value = '';
+          });
+
+          btnSave.addEventListener('click', () => {
+            const num = cardNumberInput.value.trim() || '**** **** **** 4242';
+            const exp = cardExpiryInput.value.trim() || '12/28';
+            
+            // Hide form, show button
+            formAddCard.style.display = 'none';
+            btnAddCard.style.display = 'inline-block';
+            
+            // Hide empty state
+            emptyState.style.display = 'none';
+            cardsListContainer.style.display = 'block';
+            
+            // Add card to list
+            const li = document.createElement('li');
+            li.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px; background: white;';
+            
+            const last4 = num.slice(-4);
+            
+            li.innerHTML = `
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="background: #f3f4f6; padding: 8px 12px; border-radius: 4px; font-weight: bold; color: #1f2937;">VISA</div>
+                <div>
+                  <div style="font-weight: 500; font-size: 1rem;">Visa ending in ${last4}</div>
+                  <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Expires ${exp}</div>
+                </div>
+              </div>
+              <button class="btn-remove-card" style="border: none; background: transparent; color: #dc2626; cursor: pointer; font-size: 0.85rem; font-weight: 500;">Remove</button>
+            `;
+            
+            li.querySelector('.btn-remove-card').addEventListener('click', () => {
+              li.remove();
+              if (ulCards.children.length === 0) {
+                emptyState.style.display = 'block';
+                cardsListContainer.style.display = 'none';
+              }
+            });
+            
+            ulCards.appendChild(li);
+            
+            // Clear inputs
+            cardNumberInput.value = '';
+            cardExpiryInput.value = '';
+            cardCvcInput.value = '';
+          });
+        });
+      </script>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="color: white;">
+            <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; display: inline-block; vertical-align: middle; margin-right: 6px;" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 16h8a4 4 0 0 0 4-4V4" stroke="#FAF9F5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            same Path
+          </div>
+          <p style="color: #9ca3af; margin-top: 16px; font-size: 0.9rem;">Connecting global talent with local expertise.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Browse Directory</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/help-center.html">Help Center</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 same Path. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+      <script type="module">
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, collection, addDoc, getDoc, getDocs, query, orderBy, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyANoB6-PHmSVQ9OuiyNX2L_ORfATsB_Gs8",
+          authDomain: "samepath-c3749.firebaseapp.com",
+          projectId: "samepath-c3749",
+          storageBucket: "samepath-c3749.firebasestorage.app",
+          messagingSenderId: "543979822804",
+          appId: "1:543979822804:web:eb6f606455f54258bca541",
+          measurementId: "G-BV27FDTK8G"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.auth = auth;
+        window.firebaseCol = collection;
+        window.firebaseAdd = addDoc;
+        window.firebaseGet = getDocs;
+        window.firebaseDoc = doc;
+        window.firebaseUpdate = updateDoc;
+        window.firebaseQuery = query;
+        window.firebaseOrderBy = orderBy;
+        window.firebaseOnSnap = onSnapshot;
+        window.firebaseDel = deleteDoc;
+      </script>
+
+
+<script type="module">
+  document.addEventListener('DOMContentLoaded', () => {
+    window.auth.onAuthStateChanged((user) => {
+      if(!user) return;
+      const billingRef = window.firebaseCol(window.db, "users", user.uid, "payment_methods");
+      
+      const renderCards = async () => {
+        const snap = await window.firebaseGet(billingRef);
+        // We will just append them below the main dashboard card
+        const mainCard = document.querySelector('.dashboard-card');
+        
+        // Remove old dynamic ones
+        document.querySelectorAll('.dynamic-card').forEach(e => e.remove());
+        
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          const item = document.createElement('div');
+          item.className = 'dashboard-card dynamic-card';
+          item.style.marginTop = '16px';
+          item.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 48px; height: 32px; background: #f3f4f6; border-radius: 4px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.8rem;">${data.brand}</div>
+                <div>
+                  <div style="font-weight: 600;">•••• •••• •••• ${data.last4}</div>
+                  <div style="font-size: 0.85rem; color: var(--text-secondary);">Expires ${data.expiry}</div>
+                </div>
+              </div>
+              <button class="btn btn-outline btn-del-card" data-id="${docSnap.id}" style="padding: 6px 12px; font-size: 0.8rem; color: #ef4444; border-color: #ef4444;">Remove</button>
+            </div>
+          `;
+          mainCard.parentNode.insertBefore(item, mainCard.nextSibling);
+        });
+        
+        document.querySelectorAll('.btn-del-card').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            if(confirm('Remove this card?')) {
+              await window.firebaseDel(window.firebaseDoc(window.db, 'users', user.uid, 'payment_methods', btn.getAttribute('data-id')));
+              renderCards();
+            }
+          });
+        });
+      };
+      
+      renderCards();
+      
+      const addBtn = document.querySelector('.btn-primary');
+      if(addBtn) {
+        const newAdd = addBtn.cloneNode(true);
+        addBtn.parentNode.replaceChild(newAdd, addBtn);
+        newAdd.addEventListener('click', async () => {
+          await window.firebaseAdd(billingRef, {
+            brand: "VISA",
+            last4: Math.floor(1000 + Math.random() * 9000).toString(),
+            expiry: "12/28"
+          });
+          renderCards();
+        });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

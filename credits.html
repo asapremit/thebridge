@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Methods — same Path</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
+          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; margin-right: 6px;" fill="none" stroke="#112F20" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16h8a4 4 0 0 0 4-4V4"/><path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706"/></svg>
+          same Path
+        </a>
+      </div>
+      <ul class="nav-links portal-nav-links">
+        <li><a href="/" class="nav-link active">Expat Hub</a></li>
+        <li><a href="/" class="nav-link">Browse Guides</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="user-avatar" style="background-color: var(--sage); color: white; display: flex; align-items: center; justify-content: center;">O</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard -->
+  <div class="dashboard-wrapper">
+    <div class="container dashboard-container">
+      
+      <!-- Sidebar -->
+      <aside class="dashboard-sidebar">
+        <div class="dashboard-sidebar-profile">
+          <div class="avatar-container" style="position: relative; cursor: pointer;" onclick="document.getElementById('sidebar-avatar-upload').click()">
+            <div class="avatar" style="width: 64px; height: 64px; border-radius: 50%; background-color: var(--sage); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 600;">O</div>
+            <div style="position: absolute; bottom: 0; right: 0; background: white; border: 1px solid var(--border-color); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+              <svg width="12" height="12" fill="none" stroke="var(--text-primary)" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+            </div>
+            <input type="file" id="sidebar-avatar-upload" style="display: none;" accept="image/*">
+          </div>
+          <div>
+            <h3>oluwashinayomi...</h3>
+            <p>Client Account</p>
+          </div>
+        </div>
+
+        <div class="dashboard-nav-group">
+          <h4>My Workspace</h4>
+          <ul class="dashboard-nav">
+            <li><a href="/bookings.html" class="">My 1-1 Bookings</a></li>
+            <li><a href="/vault.html" class="">Document Vault</a></li>
+            <li><a href="/roadmap.html" class="">My Action Roadmap</a></li>
+            <li><a href="/messages.html" class="">Message Center</a></li>
+            <li><a href="/saved-guides.html" class="">My Saved Guides</a></li>
+          </ul>
+        </div>
+
+        <div class="dashboard-nav-group">
+          <h4>Account</h4>
+          <ul class="dashboard-nav">
+            <li><a href="/profile.html" class="">Public Profile</a></li>
+            <li><a href="/settings.html" class="">Account Settings</a></li>
+            <li><a href="/billing.html" class="">Payment Methods</a></li>
+            <li><a href="/credits.html" class="active">Platform Credits</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="dashboard-content">
+        <h1>Platform Credits</h1>
+        
+        <div class="dashboard-card" style="margin-bottom: 32px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;">
+            <div>
+              <h3 style="font-size: 1.25rem; font-weight: 400; color: var(--text-secondary); margin-bottom: 8px;">Your credits: <span id="credit-balance" style="color: var(--text-primary); font-weight: 600;">$0.00</span></h3>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="credit-input" placeholder="Enter credit code" style="padding: 10px 16px; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; font-size: 0.95rem; min-width: 200px;">
+              <button id="btn-redeem" class="btn btn-primary" style="padding: 10px 24px; border-radius: 4px; background-color: #5624d0; color: white; border: none; font-weight: 600; font-size: 0.95rem;">Redeem</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+          <h3 style="font-size: 1.1rem; font-weight: 600;">Credit balance history</h3>
+        </div>
+
+        <div id="credit-history">
+          <div class="empty-state" style="text-align: center; padding: 64px 0; color: var(--text-secondary);">
+            <p style="margin-bottom: 8px; font-size: 0.95rem;">You don't have any credit history to display yet.</p>
+            <a href="/help-center.html" style="color: #5624d0; text-decoration: none; font-size: 0.95rem;">Learn more about credits</a>
+          </div>
+        </div>
+      </main>
+
+      
+      <script type="module">
+        import { doc, updateDoc, getDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        
+        document.addEventListener('DOMContentLoaded', () => {
+          const btnRedeem = document.getElementById('btn-redeem');
+          const inputCredit = document.getElementById('credit-input');
+          const balanceEl = document.getElementById('credit-balance');
+          const historyContainer = document.getElementById('credit-history');
+          let currentBalance = 0;
+
+          // Fetch current balance
+          onAuthStateChanged(window.auth, async (user) => {
+            if (user) {
+              const userDoc = await getDoc(doc(window.db, "users", user.uid));
+              if (userDoc.exists()) {
+                const data = userDoc.data();
+                currentBalance = data.wallet ? (data.wallet.creditBalance || 0) : 0;
+                if(balanceEl) balanceEl.innerText = '
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="color: white;">
+            <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; display: inline-block; vertical-align: middle; margin-right: 6px;" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 16h8a4 4 0 0 0 4-4V4" stroke="#FAF9F5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            same Path
+          </div>
+          <p style="color: #9ca3af; margin-top: 16px; font-size: 0.9rem;">Connecting global talent with local expertise.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Browse Directory</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/help-center.html">Help Center</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 same Path. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+      <script type="module">
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, collection, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        // Initialize Firebase with the same config as app.js
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyANoB6-PHmSVQ9OuiyNX2L_ORfATsB_Gs8",
+          authDomain: "samepath-c3749.firebaseapp.com",
+          projectId: "samepath-c3749",
+          storageBucket: "samepath-c3749.firebasestorage.app",
+          messagingSenderId: "543979822804",
+          appId: "1:543979822804:web:eb6f606455f54258bca541",
+          measurementId: "G-BV27FDTK8G"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.auth = auth;
+      </script>
+
+</body>
+</html> + currentBalance.toFixed(2);
+              }
+            }
+          });
+
+          if(btnRedeem) {
+            // Remove previous event listeners by cloning
+            const newBtn = btnRedeem.cloneNode(true);
+            btnRedeem.parentNode.replaceChild(newBtn, btnRedeem);
+            
+            newBtn.addEventListener('click', async () => {
+              const code = inputCredit.value.trim();
+              if (!code) {
+                alert('Please enter a valid credit code.');
+                return;
+              }
+
+              const user = window.auth.currentUser;
+              if(!user) {
+                alert("Please log in.");
+                return;
+              }
+
+              const amount = 50;
+              currentBalance += amount;
+              
+              newBtn.innerText = "Redeeming...";
+              try {
+                // Update wallet
+                await updateDoc(doc(window.db, "users", user.uid), {
+                  "wallet.creditBalance": currentBalance
+                });
+                
+                // Add transaction history
+                await addDoc(collection(window.db, "users", user.uid, "credit_transactions"), {
+                  amount: amount,
+                  type: "promo_code",
+                  referenceCode: code.toUpperCase(),
+                  timestamp: new Date(),
+                  description: "Redeemed promo code"
+                });
+
+                if(balanceEl) balanceEl.innerText = '
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="color: white;">
+            <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; display: inline-block; vertical-align: middle; margin-right: 6px;" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 16h8a4 4 0 0 0 4-4V4" stroke="#FAF9F5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            same Path
+          </div>
+          <p style="color: #9ca3af; margin-top: 16px; font-size: 0.9rem;">Connecting global talent with local expertise.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Browse Directory</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/help-center.html">Help Center</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 same Path. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+      <script type="module">
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, collection, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        // Initialize Firebase with the same config as app.js
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyANoB6-PHmSVQ9OuiyNX2L_ORfATsB_Gs8",
+          authDomain: "samepath-c3749.firebaseapp.com",
+          projectId: "samepath-c3749",
+          storageBucket: "samepath-c3749.firebasestorage.app",
+          messagingSenderId: "543979822804",
+          appId: "1:543979822804:web:eb6f606455f54258bca541",
+          measurementId: "G-BV27FDTK8G"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.auth = auth;
+      </script>
+
+</body>
+</html> + currentBalance.toFixed(2);
+                
+                const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                if (historyContainer.querySelector('.empty-state')) {
+                  historyContainer.innerHTML = '';
+                }
+                const item = document.createElement('div');
+                item.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid var(--border-color);';
+                item.innerHTML = `
+                  <div>
+                    <div style="font-weight: 600; font-size: 0.95rem;">Redeemed Promo Code: ${code.toUpperCase()}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">${date}</div>
+                  </div>
+                  <div style="font-weight: 600; color: #10b981;">+${amount.toFixed(2)}</div>
+                `;
+                historyContainer.insertBefore(item, historyContainer.firstChild);
+                
+                inputCredit.value = '';
+                alert(`Success! ${amount} has been added to your balance.`);
+              } catch(err) {
+                console.error(err);
+                alert("Failed to redeem code.");
+              }
+              newBtn.innerText = "Redeem";
+            });
+          }
+        });
+      </script>
+  
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="color: white;">
+            <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; display: inline-block; vertical-align: middle; margin-right: 6px;" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 16h8a4 4 0 0 0 4-4V4" stroke="#FAF9F5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 20h9a4 4 0 0 0 4-4V7" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            same Path
+          </div>
+          <p style="color: #9ca3af; margin-top: 16px; font-size: 0.9rem;">Connecting global talent with local expertise.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Browse Directory</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/help-center.html">Help Center</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 same Path. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+      <script type="module">
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, collection, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        // Initialize Firebase with the same config as app.js
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyANoB6-PHmSVQ9OuiyNX2L_ORfATsB_Gs8",
+          authDomain: "samepath-c3749.firebaseapp.com",
+          projectId: "samepath-c3749",
+          storageBucket: "samepath-c3749.firebasestorage.app",
+          messagingSenderId: "543979822804",
+          appId: "1:543979822804:web:eb6f606455f54258bca541",
+          measurementId: "G-BV27FDTK8G"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.auth = auth;
+      </script>
+
+</body>
+</html>
